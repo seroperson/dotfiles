@@ -1,0 +1,106 @@
+let g:type="code"
+
+" {{{ plugin initialization
+
+function! PluginInitialization()
+    call dein#add('guns/xterm-color-table.vim')
+
+    call dein#add('keith/tmux.vim', {'on_ft': 'tmux'})
+    call dein#add('vim-scripts/proguard.vim', {'on_ft': 'proguard'})
+    call dein#add('vim-scripts/VimClojure', {'on_ft': 'clojure'})
+    call dein#add('udalov/kotlin-vim', {'on_ft': 'kotlin'})
+    call dein#add('chochos/ceylon-vim', {'on_ft': 'ceylon'})
+    call dein#add('derekwyatt/vim-scala', {'on_ft': 'scala'})
+    call dein#add('vim-jp/vim-java', {'on_ft': 'java'})
+    call dein#add('stephpy/vim-yaml', {'on_ft': 'yaml'})
+    call dein#add('clones/vim-zsh', {'on_ft': 'zsh'})
+    call dein#add('aklt/plantuml-syntax', {'on_ft': 'plantuml'})
+    call dein#add('gentoo/gentoo-syntax', {'on_ft': ['ebuild','glep','gentoo-changelog','gentoo-init-d','gentoo-conf-d','gentoo-env-d','crontab','gentoo-package-mask','gentoo-package-keywords','gentoo-package-use','gentoo-package-license','gentoo-package-properties','gentoo-mirrors','gentoo-make-conf','gentoo-use-desc','gentoo-metadata','guidexml']})
+
+    " fixes indentation for groovy
+    call dein#add('vim-scripts/groovyindent-unix', {'on_ft': 'groovy'})
+
+    " json syntax and conceal
+    call dein#add('elzr/vim-json', {'on_ft': 'json'})
+
+    " rainbow brackets
+    call dein#add('luochen1990/rainbow')
+
+    " display indent levels
+    call dein#add('Yggdroot/indentLine')
+
+    " json pretty print
+    call dein#add('tpope/vim-jdaddy')
+
+    " shows a git diff in the 'gutter' (sign column)
+    call dein#add('airblade/vim-gitgutter')
+
+    " extremely easy tool to toggle commentary in lines and visual selections | gc, gcap, gcc; C-l
+    call dein#add('tpope/vim-commentary')
+
+    " highlights the matching html tag when the cursor is positioned on a tag
+    call dein#add('gregsexton/MatchTag')
+endfunction
+
+" }}}
+
+source $XDG_CONFIG_HOME/vim/vimrc.core
+
+" {{{ rainbow configuration
+
+let g:rainbow_active=1
+let g:rainbow_conf={ 'ctermfgs': ['red', 'yellow', 'blue', 'magenta'], 'operators': '_,_', 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'] }
+
+" }}}
+
+" {{{ indentline configuration
+
+let g:indentLine_color_term=7
+let g:indentLine_indentLevel=4
+let g:indentLine_char='|'
+let g:indentLine_conceallevel=2
+let g:indentLine_concealcursor='cv'
+
+" }}}
+
+" {{{ gitgutter configuration
+
+let g:gitgutter_map_keys=0
+
+" }}}
+
+" {{{ filetypes
+
+" *.pro files is a proguard configuration
+au BufRead,BufNewFile *.pro setf proguard
+" gradle buildconfig is written in groovy (and jenkinsfile too)
+au BufRead,BufNewFile {*.gradle,Jenkinsfile} setf groovy
+" xkb keyboard configuration
+au BufRead,BufNewFile *.xkb setf xkb
+
+" }}}
+
+" {{{ tips and tricks
+
+" {{{ extend syntax with my own 'todo' pattern
+
+augroup vimrc_todo
+    au!
+    au Syntax * syn match MyTodo /\v<(todo|discuss)/ containedin=.*Comment,vimCommentTitle
+augroup END
+hi def link MyTodo Todo
+
+" }}}
+
+" }}}
+
+" {{{ shortcuts
+
+" <leader>j makes json pretty
+command! JsonPretty exe jdaddy#reformat('jdaddy#outer_pos', v:count1)
+nmap <silent> <leader>j :JsonPretty<CR>
+
+" <leader>ev edits .vimrc
+nnoremap <leader>ev :vsplit ~/.config/vim/vimrc<CR>
+
+" }}}

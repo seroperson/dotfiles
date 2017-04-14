@@ -1,0 +1,21 @@
+# don't track my history
+.zsh_history
+# don't track some completion stuff
+.zcompdump*
+# don't track machine based stuff
+machine-based.*
+# don't track zgen directory
+.config/zsh/zgen
+
+# don't track base16 repositories
+.config/base16
+
+# don't track tmux plugins
+.config/tmux/plugin
+
+# don't track vim file info stuff
+viminfo
+# don't track temporary files
+*.tmp
+# don't track vim plugin manager directory
+dein

@@ -1,0 +1,61 @@
+[user]
+    email = seroperson@gmail.com
+    name = seroperson
+    signingkey = FD554A20
+[core]
+    excludesfile = "~/.config/git/ignore"
+    editor = vim
+[alias]
+    cl = clone
+    a = add --all
+    bc = branch
+    bd = branch -d
+    phf = push --force
+    ph = push
+    uc = reset --soft HEAD^
+    clear = clean -fd
+    cm = commit
+    cma = commit --all --amend
+    # short status
+    st = status -s --branch
+    la = log --oneline
+    # last 30 commits with graph
+    lg = log -30 --oneline --graph --decorate
+    # last 30 commits with graph and short info
+    le = log -30 --oneline --graph --decorate --stat
+    # shows the file changelog
+    hist = log --follow -p
+    d = diff
+    # show diff on staged files
+    sd = diff --staged
+    # makes file unstaged
+    ue = reset HEAD --
+    reha = reset --hard HEAD
+    # list of contributors
+    contributors = shortlog --summary --numbered
+    # discard file changes
+    dd = checkout --
+    # apply command for each submodule
+    sf = submodule foreach
+    # zarino.co.uk/post/git-set-upstream
+    su = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
+    up = pull --rebase --autostash --all
+    # pushes all what you have
+    pha = "!f() { git push --all && git push --tags; }; f"
+    # checkout to branch and create it if it not exists
+    co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+    # see changes which will be pushed / pulled
+    in = "!git remote update -p; git log ..@{u}"
+    out = "log @{u}.."
+    # modern git-pull (habrahabr.ru/post/155391)
+    up = "!(git add . && git stash && git pull --rebase >&2) | grep -v \"No local changes to save\" && git stash pop"
+    # pseudo-random commit message
+    fix = "!am() { curl -s http://whatthecommit.com/ | grep '<p>' | cut -c4-; }; git commit -em \"# $(am)\" \"$@\""
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+[push]
+    default = current
+[commit]
+    gpgsign = true

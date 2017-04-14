@@ -1,0 +1,71 @@
+let g:type="prose"
+
+function! PluginInitialization()
+    " the neatest markdown plugin
+    call dein#add('plasticboy/vim-markdown', {'on_ft': 'markdown'})
+
+    " nice 'matchadd' interface
+    call dein#add('dirkwallenstein/vim-match-control')
+
+    " removes all redundant ui components if enabled
+    call dein#add('junegunn/goyo.vim')
+
+    " highlight just only current paragraph (or something like that)
+    call dein#add('junegunn/limelight.vim')
+
+    " sometimes i have to edit some specific markdowns
+    " so that's why the plugin is here
+    call dein#add('MarcWeber/vim-addon-local-vimrc')
+endfunction
+
+source $XDG_CONFIG_HOME/vim/vimrc.core
+
+" {{{ vim-markdown configuration
+
+let g:vim_markdown_fenced_languages=['viml=vim', 'bash=sh', 'ini=dosini']
+let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_frontmatter=1
+
+" }}}
+
+" {{{ vim-addon-local-vimrc configuration
+
+let g:local_vimrc = {'names': ['.vimrc-local'], 'hash_fun': 'LVRHashOfFile'}
+
+" }}}
+
+" {{{ goyo configuration
+
+let g:goyo_width = 200
+
+" }}}
+
+" {{{ trivial stuff
+
+" Read more at blog.ezyang.com/2010/03/vim-textwidth/
+set fo=ant
+" Controls the wrap width you would like to use
+set tw=80
+set wm=0
+
+" }}}
+
+" {{{ tips and tricks
+
+" {{{ highlight all characters past 80 columns
+
+augroup highlight_long
+    autocmd BufEnter * highlight OverLength ctermbg=darkgrey guibg=#592929
+    autocmd BufEnter * match OverLength /\%81v.*/
+augroup END
+
+" }}}
+
+" }}}
+
+" {{{ shortcuts
+
+" enter 'writing' mode
+map <leader>w :Goyo<bar>:Limelight!!<CR>
+
+" }}}

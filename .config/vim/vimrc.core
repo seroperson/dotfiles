@@ -1,0 +1,270 @@
+" {{{ initial preparations
+
+if !exists("g:type")
+    echo "You must set 'type' variable to some value to be able to use vimrc.core"
+    finish
+endif
+
+" environment (according to tlvince.com/vim-respect-xdg)
+set directory=$XDG_CACHE_HOME/vim
+set backupdir=$XDG_CACHE_HOME/vim
+let s:dein_path=expand('$XDG_DATA_HOME').'/vim/dein/'.type
+let s:dein_repo=s:dein_path.'/repos/github.com/Shougo/dein.vim'
+" automatically 'install' dein if it not exists
+if !isdirectory(s:dein_repo)
+    exe '!git clone https://github.com/Shougo/dein.vim' s:dein_repo
+endif
+exe 'set rtp='.s:dein_repo.','.expand('$XDG_CONFIG_HOME').'/vim,'.expand('$VIMRUNTIME')
+
+if &compatible
+    set nocompatible " be iMproved
+endif
+
+" }}}
+
+" {{{ dein initialization
+
+if dein#load_state(s:dein_path)
+    call dein#begin(s:dein_path)
+
+    " let dein manage dein
+    call dein#add(s:dein_repo)
+
+    " base16 or some default colorscheme
+    if !empty($BASE16_SHELL_DIRECTORY)
+        call dein#add('chriskempson/base16-vim')
+    else
+        call dein#add('cocopon/iceberg.vim')
+    endif
+
+    " modern statusline
+    call dein#add('vim-airline/vim-airline-themes')
+    call dein#add('vim-airline/vim-airline')
+
+    " powerful incremental search
+    call dein#add('haya14busa/incsearch.vim')
+
+    " buffer manager
+    call dein#add('ctrlpvim/ctrlp.vim')
+
+    " allows you to save files into directories that don't exists
+    call dein#add('DataWraith/auto_mkdir')
+
+    " helps to toggle, display and navigate marks
+    call dein#add('kshenoy/vim-signature')
+
+    " restoring previous viewstate (cursor position, folding etc)
+    call dein#add('vim-scripts/restore_view.vim')
+
+    " underlines the word under the cursor
+    call dein#add('vim-scripts/vim-cursorword')
+
+    " automatically closes brackets, quotes etc ...
+    call dein#add('Raimondi/delimitMate')
+
+    " fixes 'file was changed' error
+    call dein#add('tmux-plugins/vim-tmux-focus-events')
+
+    " automatically configure indent settings
+    call dein#add('tpope/vim-sleuth')
+
+    " adding plugins depending on current type
+    call PluginInitialization()
+
+    call dein#end()
+    call dein#save_state()
+endif
+
+" install not installed plugins on startup
+if dein#check_install()
+    call dein#install()
+endif
+
+" {{{ colorscheme configuration
+
+if !empty($BASE16_SHELL_DIRECTORY)
+    let g:base16colorspace=256
+    let s:my_theme='base16-'.$BASE16_THEME_NAME
+    " necessary while using any base16 dark theme
+    if func#has_colorscheme(s:my_theme.'-'.$BASE16_THEME_PREFIX)
+        let s:my_theme.='-'.expand('$BASE16_THEME_PREFIX')
+    endif
+else
+    let s:my_theme='iceberg'
+endif
+exe 'colorscheme '.s:my_theme
+
+" }}}
+
+" {{{ incsearch configuration
+
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+" }}}
+
+" {{{ ctrlp configuration
+
+let g:ctrlp_map='<c-p>'
+" github.com/kien/ctrlp.vim/issues/174#issuecomment-218866242
+if executable('ag')
+    " use The Silver Searcher github.com/ggreer/the_silver_searcher
+    set grepprg=ag\ --nogroup\ --nocolor\ --hidden
+    let g:ctrlp_user_command='ag %s -l --hidden --nocolor -f -g ""'
+else
+    " ctrl+p ignore files in .gitignore
+    let g:ctrlp_user_command=['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+endif
+
+" }}}
+
+" {{{ airline configuration
+
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#hunks#enabled=0
+let g:airline_powerline_fonts=0
+let g:airline_theme=empty($BASE16_THEME_NAME) ? 'jellybeans' : 'base16_'.$BASE16_THEME_NAME
+let g:airline_mode_map={ '__': '-', 'n': 'N', 'i': 'I', 'R': 'R', 'c': 'C', 'v': 'V', 'V': 'V', '': 'V', 's': 'S', 'S': 'S', '': 'S', }
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+
+" }}}
+
+filetype plugin indent on
+syntax on
+
+" }}}
+
+" {{{ trivial stuff
+
+" don't track my network activity!
+let g:netrw_dirhistmax = 0
+
+" highlight current line
+set cursorline
+" search on steriods
+set incsearch hlsearch ignorecase smartcase
+" don't redraw while executing macros (good performance config)
+set lazyredraw
+" set 16 lines to the cursor - when moving vertically using j/k
+set so=16
+" line numbers
+set relativenumber number
+" don't display welcome
+set shortmess+=I
+" sets how many lines of history vim has to remember
+set history=1000
+" set to auto read when a file is changed from the outside
+set autoread
+" no annoying sound on errors
+set noerrorbells novisualbell
+set tm=500
+" turn bullshit backup off
+set noswapfile
+set encoding=utf-8
+" for regular expressions turn magic on
+set magic
+" show matching brackets when text indicator is over them
+set showmatch
+" keep indentation from previous line
+set autoindent
+" automatically inserts indentation in some cases
+set smartindent
+" like smartindent, but stricter and more customisable
+set cindent
+set updatetime=1000
+set fillchars=stl:\ ,stlnc:\ ,vert:│
+" completion for : commands
+set wildmenu
+" don't print '$' at the line endings
+set lcs=tab:\|\
+" display status line always
+set laststatus=2
+" hides '--INSERT--', --NORMAL-- and so on
+set nosmd
+" don't show me "press enter ..."
+set shortmess=a
+set cmdheight=2
+set foldmethod=marker
+set conceallevel=2
+set concealcursor=cv
+set viewoptions=cursor,folds,slash,unix
+
+" }}}
+
+" {{{ tips and tricks
+
+" {{{ saving automatically when text is changed
+"     see searene.github.io/2015/12/26/auto-save-in-vim/ for more information
+
+set updatetime=200
+au CursorHold * silent! update
+
+" }}}
+
+" {{{ trim spaces when file saves
+
+match ErrorMsg '\s\+$'
+au BufWritePre * :call func#trim_spaces()
+
+" }}}
+
+" }}}
+
+" {{{ shortcuts
+
+" leader key
+let mapleader = "\<space>"
+
+" shortcut for :%s//
+map <leader>s :%s//g<left><left>
+map <leader> <NOP>
+
+" use <leader>l to clear the highlighting of :set hlsearch (from tpope/vim-sensible)
+nnoremap <silent> <leader>l :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR>
+
+" comment the line and move down
+map <C-l> gcc<cr>
+
+" adds a new line empty to below/above
+map <c-j> o<c-c>k
+map <c-k> O<c-c>j
+
+" fast exit
+map Q :q<CR>
+
+" format without position loosing
+map <C-i> mzgg=G`zmz
+
+" todo: don't know why, but pastetoggle isn't working
+map <C-u> :set invpaste<CR>
+
+" tab switching
+map <Leader>n :bn<CR>
+map <Leader>p :bp<CR>
+map <Leader>d :bdelete<CR>
+
+" read more at robots.thoughtbot.com/faster-grepping-in-vim
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" the leader
+map <C-t> <NOP>
+
+" inserts single character
+" see vim.wikia.com/wiki/Insert_a_single_character for more information
+function! RepeatChar(char, count)
+    return repeat(a:char, a:count)
+endfunction
+nnoremap s :<C-U>exe "normal i".RepeatChar(nr2char(getchar()), v:count1)<CR>
+nnoremap S :<C-U>exe "normal a".RepeatChar(nr2char(getchar()), v:count1)<CR>
+
+" allow saving of files as sudo when I forgot to start vim using sudo. w!!
+cmap w!! w !sudo tee > /dev/null %
+
+" like B and W, but E
+map E el
+
+map <leader>e :syntax sync fromstart<cr>
+
+" }}}
