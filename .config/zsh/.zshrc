@@ -5,7 +5,7 @@
 local zgen_file=$ZDOTDIR/zgen/zgen.zsh
 
 if ! [ -e $zgen_file ]; then
-  git clone git@github.com:tarjoilija/zgen.git $ZDOTDIR/zgen/
+  git clone https://github.com/tarjoilija/zgen.git $ZDOTDIR/zgen/
 fi
 
 source $zgen_file
