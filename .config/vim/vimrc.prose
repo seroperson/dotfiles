@@ -1,5 +1,7 @@
 let g:type="prose"
 
+" {{{ plugin initialization
+
 function! PluginInitialization()
     " the neatest markdown plugin
     call dein#add('plasticboy/vim-markdown', {'on_ft': 'markdown'})
@@ -18,6 +20,8 @@ function! PluginInitialization()
     call dein#add('MarcWeber/vim-addon-local-vimrc')
 endfunction
 
+" }}}
+
 source $XDG_CONFIG_HOME/vim/vimrc.core
 
 " {{{ vim-markdown configuration
@@ -25,6 +29,7 @@ source $XDG_CONFIG_HOME/vim/vimrc.core
 let g:vim_markdown_fenced_languages=['viml=vim', 'bash=sh', 'ini=dosini']
 let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_frontmatter=1
+let g:vim_markdown_toc_autofit = 1
 
 " shiftwidth depends on vim-sleuth
 autocmd FileType * let g:vim_markdown_new_list_item_indent=&shiftwidth
