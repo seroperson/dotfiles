@@ -26,6 +26,9 @@ let g:vim_markdown_fenced_languages=['viml=vim', 'bash=sh', 'ini=dosini']
 let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_frontmatter=1
 
+" shiftwidth depends on vim-sleuth
+autocmd FileType * let g:vim_markdown_new_list_item_indent=&shiftwidth
+
 " }}}
 
 " {{{ vim-addon-local-vimrc configuration
@@ -42,8 +45,11 @@ let g:goyo_width = 200
 
 " {{{ trivial stuff
 
-" Read more at blog.ezyang.com/2010/03/vim-textwidth/
-set fo=ant
+" Read more at
+"  blog.ezyang.com/2010/03/vim-textwidth/
+"  alols.github.io/2012/11/07/writing-prose-with-vim/
+"  :help fo-table
+set fo=awnt1
 " Controls the wrap width you would like to use
 set tw=80
 set wm=0
@@ -67,5 +73,8 @@ augroup END
 
 " enter 'writing' mode
 map <leader>w :Goyo<bar>:Limelight!!<CR>
+
+" format the paragraph
+map <leader>q :set fo-=w<cr>gwap:set fo+=w<cr>
 
 " }}}
