@@ -68,6 +68,10 @@ if dein#load_state(s:dein_path)
     " automatically configure indent settings
     call dein#add('tpope/vim-sleuth')
 
+    " seems like core yaml syntax is really slow
+    " additionally it can be not presented out-of-box
+    call dein#add('stephpy/vim-yaml')
+
     " adding plugins depending on current type
     call PluginInitialization()
 
