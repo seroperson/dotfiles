@@ -8,6 +8,13 @@ if ! [ -e $zgen_file ]; then
   git clone https://github.com/tarjoilija/zgen.git $ZDOTDIR/zgen/
 fi
 
+# {{{ z configuration
+
+_Z_DATA=$XDG_DATA_HOME/zsh_z
+_Z_CMD=j
+
+# }}}
+
 source $zgen_file
 if ! zgen saved; then
   # change directory to git repository root directory
@@ -18,6 +25,8 @@ if ! zgen saved; then
   zgen load Tarrasch/zsh-bd
   # the best theme ever
   zgen load subnixr/minimal
+  # jumping around (alternative to fasd)
+  zgen load rupa/z
   zgen save
 fi
 
@@ -65,7 +74,6 @@ include_source "bindkey.zsh" "bindkey.$OS.zsh"
 
 is_base16_shell_available && source "$ZDOTDIR/soft/base16.zsh"
 is_tmux_enabled && source "$ZDOTDIR/soft/tmux.zsh"
-is_fasd_enabled && source "$ZDOTDIR/soft/fasd.zsh"
 
 # }}}
 
