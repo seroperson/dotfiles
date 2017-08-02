@@ -8,17 +8,6 @@ export KEYTIMEOUT=1
 
 # }}}
 
-# {{{ c-s inserts "sudo " at the start of line
-
-function insert_sudo () {
-    zle beginning-of-line
-    zle -U "sudo "
-}
-zle -N insert-sudo insert_sudo
-bindkey "^s" insert-sudo
-
-# }}}
-
 # {{{ bind ^c to change mode to normal
 
 bindkey -M viins '^c' vi-cmd-mode
@@ -44,15 +33,26 @@ bindkey '^m' do_enter
 
 # }}}
 
-# {{{ c-r starts searching history backward
+# {{{ bind c-j to go to ..
 
-bindkey '^r' history-incremental-search-backward
+function cd_up () {
+    zle push-line
+    LBUFFER='cd ..'
+    zle accept-line
+}
+
+zle -N cd_up
+
+bindkey '^j' cd_up
 
 # }}}
 
-# {{{ allow c-k, c-j to navigate history (standard behaviour)
+# {{{ zaw configuration
 
-bindkey '^k' up-line-or-search
-bindkey '^j' down-line-or-search
+bindkey '^r' zaw-history
+bindkey -M filterselect '^r' down-line-or-history
+bindkey -M filterselect '^j' down-line-or-history
+bindkey -M filterselect '^k' up-line-or-history
+bindkey -M filterselect '^t' accept-search
 
 # }}}

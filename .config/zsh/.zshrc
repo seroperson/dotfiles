@@ -27,6 +27,8 @@ if ! zgen saved; then
   zgen load subnixr/minimal
   # jumping around (alternative to fasd)
   zgen load rupa/z
+  # zsh anything.el-like widget
+  zgen load zsh-users/zaw
   zgen save
 fi
 
