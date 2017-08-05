@@ -72,6 +72,9 @@ if dein#load_state(s:dein_path)
     " additionally it can be not presented out-of-box
     call dein#add('stephpy/vim-yaml')
 
+    " intellij's syntax aware selection
+    call dein#add('terryma/vim-expand-region')
+
     " adding plugins depending on current type
     call PluginInitialization()
 
@@ -113,9 +116,12 @@ map g/ <Plug>(incsearch-stay)
 let g:ctrlp_map='<c-p>'
 " github.com/kien/ctrlp.vim/issues/174#issuecomment-218866242
 if executable('ag')
-    " use The Silver Searcher github.com/ggreer/the_silver_searcher
+    " use the_silver_searcher github.com/ggreer/the_silver_searcher
     set grepprg=ag\ --nogroup\ --nocolor\ --hidden
+
     let g:ctrlp_user_command='ag %s -l --hidden --nocolor -f -g ""'
+    " ag is fast enough that CtrlP doesn't need to cache
+    let g:ctrlp_use_caching=0
 else
     " ctrl+p ignore files in .gitignore
     let g:ctrlp_user_command=['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
@@ -211,6 +217,16 @@ au CursorHold * silent! update
 
 match ErrorMsg '\s\+$'
 au BufWritePre * :call func#trim_spaces()
+
+" }}}
+
+" {{{ defines a new command Ag to search for the provided text and open a “quickfix” window
+"     see robots.thoughtbot.com/faster-grepping-in-vim
+
+command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+
+" bind \ (backward slash) to grep shortcut
+nnoremap \ :Ag<SPACE>
 
 " }}}
 
