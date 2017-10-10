@@ -82,7 +82,7 @@ naughty.config.defaults.icon_size = 32
 
 -- }}}
 
--- {{{ Tags
+-- {{{ tags
 
 -- we're using images instead of text for tags, so there is " " strings
 local tags = {
@@ -157,54 +157,84 @@ end))
 -- {{{ applying ui for each available screen
 
 for s = 1, screen.count() do
+  taglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist.buttons)
+  tasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist.buttons)
   layoutbox[s] = wibox.widget.imagebox(beautiful["layout_" .. awful.layout.getname(awful.layout.get(s))])
   local callback = function () update_layoutbox(layoutbox[s], s) end
   awful.tag.attached_connect_signal(s, "property::selected", callback)
   awful.tag.attached_connect_signal(s, "property::layout", callback)
+
+  -- {{{ setting up layout_top
+
+  local layout_top = wibox.layout.align.horizontal()
+
+  -- {{{ setting up left_layout_top
+
   local layoutbox_margin = wibox.layout.margin()
   layoutbox_margin:set_left(7)
   layoutbox_margin:set_right(5)
   layoutbox_margin:set_widget(layoutbox[s])
 
-  taglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist.buttons)
-
-  tasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist.buttons)
-
-  topwibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
-  bottomwibox[s] = awful.wibox({ position = "bottom", screen = s, height = 22 })
-
-  local right_layout_bottom = wibox.layout.fixed.horizontal()
-  right_layout_bottom:add(battery_icon)
-  right_layout_bottom:add(battery_line)
-  right_layout_bottom:add(spr_med)
-  right_layout_bottom:add(clock_icon)
-  right_layout_bottom:add(clock_line)
-  right_layout_bottom:add(spr_med)
-
-  local layout_bottom = wibox.layout.align.horizontal()
-  layout_bottom:set_left(left_layout_bottom)
-  layout_bottom:set_right(right_layout_bottom)
-
   local left_layout_top = wibox.layout.fixed.horizontal()
   left_layout_top:add(taglist[s])
   left_layout_top:add(layoutbox_margin)
 
-  local right_layout_top = wibox.layout.fixed.horizontal()
-  if s == 1 then right_layout_top:add(wibox.widget.systray()) end
+  layout_top:set_left(left_layout_top)
+
+  -- }}}
+
+  -- {{{ setting up middle_layout_top
 
   local tasklist_margin = wibox.layout.margin()
   tasklist_margin:set_bottom(3)
   tasklist_margin:set_widget(tasklist[s])
 
-  local layout = wibox.layout.align.horizontal()
-  layout:set_left(left_layout_top)
-  layout:set_middle(tasklist_margin)
-  layout:set_right(right_layout_top)
+  layout_top:set_middle(tasklist_margin)
 
-  topwibox[s]:set_widget(layout)
+  -- }}}
+
+  -- {{{ setting up right_layout_top
+
+  local right_layout_top = wibox.layout.fixed.horizontal()
+
+  layout_top:set_right(right_layout_top)
+
+  -- }}}
+
+  topwibox[s] = awful.wibox({ position = "top", screen = s, height = 18 })
+  topwibox[s]:set_widget(layout_top)
   topwibox[s]:set_bg(theme.top_bg)
-  bottomwibox[s]:set_widget(layout_bottom)
-  bottomwibox[s]:set_bg(theme.bottom_bg)
+
+  -- }}}
+
+  -- bottom layout is available just for main screen
+  if s == 1 then
+
+    -- {{{ setting up layout_bottom
+
+    local layout_bottom = wibox.layout.align.horizontal()
+
+    -- {{{ setting up right_layout_bottom
+
+    local right_layout_bottom = wibox.layout.fixed.horizontal()
+    right_layout_bottom:add(battery_icon)
+    right_layout_bottom:add(battery_line)
+    right_layout_bottom:add(spr_med)
+    right_layout_bottom:add(clock_icon)
+    right_layout_bottom:add(clock_line)
+    right_layout_bottom:add(spr_med)
+
+    layout_bottom:set_right(right_layout_bottom)
+
+    -- }}}
+
+    bottomwibox[s] = awful.wibox({ position = "bottom", screen = s, height = 22 })
+    bottomwibox[s]:set_widget(layout_bottom)
+    bottomwibox[s]:set_bg(theme.bottom_bg)
+
+    -- }}}
+
+  end
 end
 
 -- }}}
@@ -305,7 +335,7 @@ root.keys(globalkeys)
 
 -- }}}
 
--- {{{ Rules
+-- {{{ rules
 
 -- tip: use xprop to discover the window class
 rules.rules = {
