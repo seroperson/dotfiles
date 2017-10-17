@@ -55,6 +55,27 @@ local function maximize(c)
   c:raise()
 end
 
+-- returns the next screen index
+local function next_screen(d)
+  local next_screen = mouse.screen + d
+  local real_next_screen = math.fmod(next_screen, screen.count())
+  if real_next_screen == 0 then
+    if not next_screen == 0 then
+      real_next_screen = 1
+    else
+      real_next_screen = screen.count()
+    end
+  end
+  return real_next_screen
+end
+
+-- returns the function that moves client to the screen + d
+local function move_client_by(d)
+  return function (c)
+    awful.client.movetoscreen(c, next_screen(d))
+  end
+end
+
 -- todo: should be moved out
 run_once("urxvtd --quiet --opendisplay --fork")
 
@@ -274,6 +295,8 @@ local globalkeys = awful.util.table.join(
   -- todo: move such settings to 'per-machine-rc.lua' or sth like that
   awful.key({ altkey }, "F4", function () os.execute("echo $((`cat "..brightness_path.."`-10)) | sudo tee "..brightness_path) end),
   awful.key({ altkey }, "F5", function () os.execute("echo $((`cat "..brightness_path.."`+10)) | sudo tee "..brightness_path) end),
+
+  -- focusing windows
   awful.key({ modkey }, "k", function ()
     awful.client.focus.byidx(1)
     if client.focus then client.focus:raise() end
@@ -283,27 +306,35 @@ local globalkeys = awful.util.table.join(
     if client.focus then client.focus:raise() end
   end),
 
+  -- change window ordering
   awful.key({ modkey, "Shift" }, ";", function () awful.client.swap.byidx(-1) end),
   awful.key({ modkey, "Shift" }, "g", function () awful.client.swap.byidx(1) end),
 
-  -- move functions ( mod + shift + jkhl )
-  awful.key({ modkey, "Shift" }, "j", function () awful.client.moveresize(0, 20, 0, 0) end),
-  awful.key({ modkey, "Shift" }, "k", function () awful.client.moveresize(0, -20, 0, 0) end),
-  awful.key({ modkey, "Shift" }, "h", function () awful.client.moveresize(-20, 0, 0, 0) end),
-  awful.key({ modkey, "Shift" }, "l", function () awful.client.moveresize(20, 0, 0, 0) end),
+  -- move functions (mod + shift + control + jkhl)
+  awful.key({ modkey, "Shift", "Control" }, "j", function () awful.client.moveresize(0, 20, 0, 0) end),
+  awful.key({ modkey, "Shift", "Control" }, "k", function () awful.client.moveresize(0, -20, 0, 0) end),
+  awful.key({ modkey, "Shift", "Control" }, "h", function () awful.client.moveresize(-20, 0, 0, 0) end),
+  awful.key({ modkey, "Shift", "Control" }, "l", function () awful.client.moveresize(20, 0, 0, 0) end),
 
   -- resize by xy axis
-  awful.key({ modkey, altkey }, ";", function () awful.client.moveresize(0, 0, 20, 20) end),
-  awful.key({ modkey, altkey }, "g", function () awful.client.moveresize(0, 0, -20, -20) end),
+  awful.key({ modkey, "Shift", altkey }, ";", function () awful.client.moveresize(0, 0, 20, 20) end),
+  awful.key({ modkey, "Shift", altkey }, "g", function () awful.client.moveresize(0, 0, -20, -20) end),
 
-  -- resize functions ( mod + altkey + jkhl )
-  awful.key({ modkey, altkey }, "j", function () awful.client.moveresize(0, 0, 0, 20) end),
-  awful.key({ modkey, altkey }, "k", function () awful.client.moveresize(0, 0, 0, -20) end),
-  awful.key({ modkey, altkey }, "h", function () awful.client.moveresize(0, 0, -20, 0) end),
-  awful.key({ modkey, altkey }, "l", function () awful.client.moveresize(0, 0, 20, 0) end),
+  -- resize functions (mod + shift + altkey + jkhl)
+  awful.key({ modkey, "Shift", altkey }, "j", function () awful.client.moveresize(0, 0, 0, 20) end),
+  awful.key({ modkey, "Shift", altkey }, "k", function () awful.client.moveresize(0, 0, 0, -20) end),
+  awful.key({ modkey, "Shift", altkey }, "h", function () awful.client.moveresize(0, 0, -20, 0) end),
+  awful.key({ modkey, "Shift", altkey }, "l", function () awful.client.moveresize(0, 0, 20, 0) end),
 
   -- layout manipulation
   awful.key({ modkey, altkey }, "space", function () awful.layout.inc(layouts, 1) end),
+
+  awful.key({ modkey, "Shift" }, "j", function ()
+    awful.screen.focus(next_screen(-1))
+  end),
+  awful.key({ modkey, "Shift" }, "k", function ()
+    awful.screen.focus(next_screen(1))
+  end),
 
   awful.key({ "Control" }, "F12", awesome.restart))
 
@@ -368,7 +399,9 @@ rules.rules = {
       awful.key({ modkey, }, "m", function (c)
         c.maximized_horizontal = not c.maximized_horizontal
         c.maximized_vertical = not c.maximized_vertical
-      end)),
+      end),
+      awful.key({ modkey, altkey }, "j", move_client_by(-1)),
+      awful.key({ modkey, altkey }, "k", move_client_by(1))),
     buttons = awful.util.table.join(
       awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
       awful.button({ modkey }, 1, awful.mouse.client.move),
