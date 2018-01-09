@@ -1,7 +1,8 @@
 # don't track my history
 .zsh_history
 # don't track some completion stuff
-.zcompdump*
+.zcompdump
+.zcompcache
 # don't track machine based stuff
 machine-based.*
 # don't track zgen directory
@@ -15,11 +16,11 @@ machine-based.*
 
 # don't track vim file info stuff
 viminfo
-# don't track my wordlist
-.config/vim/wordlist.utf-8.add
-# don't track temporary files
-*.tmp
-# don't track vim plugin manager directory
-dein
 # don't track spelling files
 *.spl
+# don't track my own wordlist
+.config/vim/wordlist.utf-8.add
+# don't track vim plugin manager directory
+dein
+# don't track temporary files
+*.tmp
