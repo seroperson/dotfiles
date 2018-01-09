@@ -151,6 +151,9 @@ syntax on
 " don't track my network activity!
 let g:netrw_dirhistmax = 0
 
+" disables default tex conceal
+let g:tex_conceal = ""
+
 " highlight current line
 set cursorline
 " search on steriods

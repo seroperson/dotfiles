@@ -15,7 +15,11 @@ machine-based.*
 
 # don't track vim file info stuff
 viminfo
+# don't track my wordlist
+.config/vim/wordlist.utf-8.add
 # don't track temporary files
 *.tmp
 # don't track vim plugin manager directory
 dein
+# don't track spelling files
+*.spl

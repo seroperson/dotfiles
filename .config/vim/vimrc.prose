@@ -44,7 +44,7 @@ let g:local_vimrc = {'names': ['.vimrc-local'], 'hash_fun': 'LVRHashOfFile'}
 
 " {{{ goyo configuration
 
-let g:goyo_width = 200
+let g:goyo_width = 100
 
 " }}}
 
@@ -58,6 +58,16 @@ set fo=awnt1
 " Controls the wrap width you would like to use
 set tw=80
 set wm=0
+
+set spell
+" i'm writing prose just in russian
+set spelllang=ru
+" saving words within git repository
+exe 'set spellfile='.expand('$XDG_CONFIG_HOME').'/vim/wordlist.utf-8.add'
+" limit the spelling suggestions list to 10 words
+set spellsuggest=best,10
+" autocomplete with dictionary words
+set complete+=kspell
 
 " }}}
 
@@ -81,5 +91,8 @@ map <leader>w :Goyo<bar>:Limelight!!<CR>
 
 " format the paragraph
 map <leader>q :set fo-=w<cr>gwap:set fo+=w<cr>
+
+" autocorrect the word
+map <leader>a 1z=
 
 " }}}
