@@ -39,7 +39,8 @@ export SAVEHIST=$HISTSIZE
 typeset -U path
 
 typeset -TU SBT_OPTS sbt_opts " "
-sbt_opts=("-Xmx512M")
+sbt_opts=("-Xmx4096M"\
+    "-XX:MaxPermSize=4G")
 
 typeset -TU _JAVA_OPTIONS java_opts " "
 java_opts=("-XX:+OptimizeStringConcat" \
