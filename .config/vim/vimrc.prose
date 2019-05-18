@@ -82,6 +82,13 @@ augroup END
 
 " }}}
 
+" {{{ make spelling errors underlined and bold
+
+hi clear SpellBad
+hi SpellBad cterm=underline,bold
+
+" }}}
+
 " }}}
 
 " {{{ shortcuts

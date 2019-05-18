@@ -72,9 +72,6 @@ if dein#load_state(s:dein_path)
     " additionally it can be not presented out-of-box
     call dein#add('stephpy/vim-yaml')
 
-    " intellij's syntax aware selection
-    call dein#add('terryma/vim-expand-region')
-
     " adding plugins depending on current type
     call PluginInitialization()
 
