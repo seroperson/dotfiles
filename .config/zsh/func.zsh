@@ -173,7 +173,7 @@ search() {
 # kills anyone who is using the given port
 #   github.com/kevinSuttle/dotfiles/commit/9458141f40094d96952adc7c423cbdddeb909a81#commitcomment-4953601
 free_port() {
-  if is_arg_present "$1"; then
+  if ! is_arg_present "$1"; then
     echo "Usage: free_port [numeric port identifier]" >&2
     return 1
   fi
