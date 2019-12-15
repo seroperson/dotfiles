@@ -49,6 +49,8 @@ bindkey '^j' cd_up
 
 # {{{ zaw configuration
 
+bindkey '^g' zaw-git-recent-branches
+
 bindkey '^r' zaw-history
 bindkey -M filterselect '^r' down-line-or-history
 bindkey -M filterselect '^j' down-line-or-history

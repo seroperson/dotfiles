@@ -20,8 +20,7 @@ alias lx='ls -X'
 
 alias .='ls'
 alias ..='cd ..'
-alias ...='cd ../../'
-alias ....='cd ../../../'
+alias ...='cd ../..'
 alias cd..='..'
 alias cdu='cd-gitroot'
 
@@ -45,7 +44,6 @@ alias vp="vim -u $XDG_CONFIG_HOME/vim/vimrc.prose"
 alias vc="vim -u $XDG_CONFIG_HOME/vim/vimrc.code"
 alias v='vc'
 alias f='find ./'
-alias mkd='mkdir'
 alias rmd='rm -rf'
 alias ta='tmux attach'
 alias g='git'

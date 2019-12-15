@@ -19,10 +19,6 @@ source $zgen_file
 if ! zgen saved; then
   # change directory to git repository root directory
   zgen load mollifier/cd-gitroot
-  # per-directory custom environment
-  zgen load Tarrasch/zsh-autoenv
-  # quickly go back to a specific parent directory instead of ../../..
-  zgen load Tarrasch/zsh-bd
   # the best theme ever
   zgen load subnixr/minimal
   # jumping around (alternative to fasd)
@@ -34,18 +30,21 @@ fi
 
 # {{{ theme configuration
 
-# 'minimal' theme's redundant feature
-MINIMAL_MAGIC_ENTER=""
-MINIMAL_USER_CHAR="$"
-MINIMAL_INSERT_CHAR=">"
-MINIMAL_NORMAL_CHAR="-"
-# overriding because i don't want to strip my path
-function minimal_path {
-  local w="%{\e[0m%}"
-  local cwd="%2~"
-  cwd="${(%)cwd}"
-  cwd=("${(@s:/:)cwd}")
-  echo "$_greyp${(j:/:)cwd//\//$w/$_greyp}$w"
+MNML_MAGICENTER=(mnml_me_git)
+MNML_USER_CHAR="$"
+MNML_INSERT_CHAR=">"
+MNML_NORMAL_CHAR="-"
+MNML_ELLIPSIS_CHAR="..."
+MNML_RPROMPT=('mnml_cwd 2 256' mnml_git git_count_modified_files)
+
+function git_count_modified_files() {
+  local has_git="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
+  if [ -n "$has_git" ]; then
+    local count=$(git diff --numstat)
+    if [ "x$count" != "x" ]; then
+      echo $count | awk "{add+=\$1; del+=\$2} END {printf \"%%{\\033[3${MNML_OK_COLOR}m%%}+%s %%{\\033[3${MNML_ERR_COLOR}m%%}-%s%%{\\033[0m%%}\", add, del}"
+    fi
+  fi
 }
 
 # }}}

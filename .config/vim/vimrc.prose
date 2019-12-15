@@ -61,7 +61,7 @@ set wm=0
 
 set spell
 " i'm writing prose just in russian
-set spelllang=ru
+set spelllang=ru,en
 " saving words within git repository
 exe 'set spellfile='.expand('$XDG_CONFIG_HOME').'/vim/wordlist.utf-8.add'
 " limit the spelling suggestions list to 10 words
