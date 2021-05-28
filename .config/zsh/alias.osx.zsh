@@ -1,3 +1,3 @@
 #!/bin/zsh
 
-alias ls='ls -Flcrahtb -G'
+alias ls='ls -1Fcrahtb -G'

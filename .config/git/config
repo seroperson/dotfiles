@@ -1,7 +1,7 @@
 [user]
     email = seroperson@gmail.com
     name = seroperson
-    signingkey = FD554A20
+    signingkey = 0B3C08C5FD554A20
 [core]
     excludesfile = "~/.config/git/ignore"
     editor = vim

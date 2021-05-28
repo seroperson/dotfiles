@@ -22,5 +22,12 @@ viminfo
 .config/vim/wordlist.utf-8.add
 # don't track vim plugin manager directory
 dein
+
 # don't track temporary files
 *.tmp
+
+# don't track iterm2 directory
+.config/iterm2
+
+# don't track pgcli directory
+.config/pgcli

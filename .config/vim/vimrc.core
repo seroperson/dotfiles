@@ -22,6 +22,9 @@ endif
 
 " }}}
 
+" leader key
+let mapleader = "\<space>"
+
 " {{{ dein initialization
 
 if dein#load_state(s:dein_path)
@@ -117,9 +120,9 @@ let g:ctrlp_map='<c-p>'
 " github.com/kien/ctrlp.vim/issues/174#issuecomment-218866242
 if executable('ag')
     " use the_silver_searcher github.com/ggreer/the_silver_searcher
-    set grepprg=ag\ --nogroup\ --nocolor\ --hidden
+    set grepprg=ag\ --nogroup\ --nocolor\ --hidden\ --ignore\ .git
 
-    let g:ctrlp_user_command='ag %s -l --hidden --nocolor -f -g ""'
+    let g:ctrlp_user_command='ag %s -l --hidden --nocolor --ignore .git -f -g ""'
     " ag is fast enough that CtrlP doesn't need to cache
     let g:ctrlp_use_caching=0
 else
@@ -204,6 +207,12 @@ set conceallevel=2
 set concealcursor=cv
 set viewoptions=cursor,folds,slash,unix
 
+" sometimes backupdir is initialized with some strange value
+set backupdir=~/.vim/backups
+
+" github.com/vim/vim/issues/7280
+set regexpengine=0
+
 " }}}
 
 " {{{ tips and tricks
@@ -236,9 +245,6 @@ nnoremap \ :Ag<SPACE>
 " }}}
 
 " {{{ shortcuts
-
-" leader key
-let mapleader = "\<space>"
 
 " shortcut for :%s//
 map <leader>s :%s//g<left><left>

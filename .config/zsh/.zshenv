@@ -13,6 +13,8 @@ export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ADOTDIR="$XDG_CACHE_HOME/antigen"
 
+export PATH=$PATH:$HOME/.local/share/bin
+
 # }}}
 
 # {{{ language
@@ -25,7 +27,7 @@ export LC_ALL=en_US.UTF-8
 # {{{ history
 
 export HISTFILE="$XDG_DATA_HOME/zsh_history"
-export HISTSIZE=10000
+export HISTSIZE=65536
 export SAVEHIST=$HISTSIZE
 
 # }}}

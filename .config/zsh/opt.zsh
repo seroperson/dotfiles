@@ -38,6 +38,8 @@ setopt NO_HUP
 setopt NO_CHECK_JOBS
 setopt COMPLETE_IN_WORD
 unsetopt LIST_AMBIGUOUS
+# https://unix.stackexchange.com/a/34012
+setopt nullglob
 
 # }}}
 
