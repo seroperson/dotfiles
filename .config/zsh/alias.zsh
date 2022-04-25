@@ -54,6 +54,11 @@ if is_command_present mutt; then
     alias mutt="mutt -F $HOME/.config/mutt/muttrc"
 fi
 
+if is_command_present kubectl; then
+    alias k='kubectl'
+    alias kctx='kubectx'
+fi
+
 if is_command_present sudo; then
     alias svim="sudo $EDITOR"
     alias srm='sudo rm'

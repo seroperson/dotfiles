@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+export PATH="$PATH:$ZDOTDIR/bin"
+
 # {{{ zgen configuration
 
 local zgen_file=$ZDOTDIR/zgen/zgen.zsh
@@ -82,7 +84,16 @@ include_source "machine-based.zsh"
 
 # }}}
 
+# {{{ history
+
+export HISTFILE="$XDG_DATA_HOME/zsh_history"
+export HISTSIZE=2147483647 # LONG_MAX
+export SAVEHIST=$HISTSIZE
+
+# }}}
+
 rationalize_path path
 
 init_ssh_key >&/dev/null
 init_gpg_key >&/dev/null
+

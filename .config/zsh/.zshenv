@@ -24,14 +24,6 @@ export LC_ALL=en_US.UTF-8
 
 # }}}
 
-# {{{ history
-
-export HISTFILE="$XDG_DATA_HOME/zsh_history"
-export HISTSIZE=65536
-export SAVEHIST=$HISTSIZE
-
-# }}}
-
 # {{{ typeset
 #     read more at:
 #     * linux-mag.com/id/1079/
