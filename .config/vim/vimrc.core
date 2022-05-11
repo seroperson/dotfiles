@@ -23,7 +23,7 @@ endif
 " }}}
 
 " leader key
-let mapleader = "\<space>"
+let mapleader="\<space>"
 
 " {{{ dein initialization
 
@@ -117,6 +117,9 @@ map g/ <Plug>(incsearch-stay)
 " {{{ ctrlp configuration
 
 let g:ctrlp_map='<c-p>'
+let g:ctrlp_cmd='CtrlPMixed'
+let g:ctrlp_working_path_mode='wa'
+let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
 " github.com/kien/ctrlp.vim/issues/174#issuecomment-218866242
 if executable('ag')
     " use the_silver_searcher github.com/ggreer/the_silver_searcher
@@ -152,11 +155,15 @@ syntax on
 " {{{ trivial stuff
 
 " don't track my network activity!
-let g:netrw_dirhistmax = 0
+let g:netrw_dirhistmax=0
 
 " disables default tex conceal
-let g:tex_conceal = ""
+let g:tex_conceal=""
 
+" allows ctrlp to do hard requests
+set maxmempattern=10000
+" ignore some useless files
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 " highlight current line
 set cursorline
 " search on steriods
@@ -177,7 +184,7 @@ set autoread
 set noerrorbells novisualbell
 set tm=500
 " turn bullshit backup off
-set noswapfile
+set nobackup noswapfile nowritebackup
 set encoding=utf-8
 " for regular expressions turn magic on
 set magic
@@ -206,9 +213,6 @@ set foldmethod=marker
 set conceallevel=2
 set concealcursor=cv
 set viewoptions=cursor,folds,slash,unix
-
-" sometimes backupdir is initialized with some strange value
-set backupdir=~/.vim/backups
 
 " github.com/vim/vim/issues/7280
 set regexpengine=0
