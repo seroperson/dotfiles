@@ -214,6 +214,9 @@ set conceallevel=2
 set concealcursor=cv
 set viewoptions=cursor,folds,slash,unix
 
+" sometimes backupdir is initialized with some strange value
+set backupdir=~/.local/share/vim/backups
+
 " github.com/vim/vim/issues/7280
 set regexpengine=0
 

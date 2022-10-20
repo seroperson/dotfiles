@@ -16,6 +16,7 @@ xkb_keymap {
 
     include "pc"
     include "us"
+    include "inet(evdev)"
     include "ru:2"
     # changes layout while right alt is pressed
     include "group(switch)"

@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+import datetime
+import argparse
+import requests
+import json
+import sys
+
+# Get coin/fiat from arguments, set to btc/usd as default
+parser = argparse.ArgumentParser(description="Set Coin/Fiat pair")
+parser.add_argument('-c', '--coin',
+                    action='store',
+                    default='BTC')
+parser.add_argument('-f', '--fiat',
+                    action='store',
+                    default='USD')
+parser.add_argument('-m', '--movement',
+                    dest='movement',
+                    action='store_true')
+parser.add_argument('-p', '--polybar',
+                    dest='polybar',
+                    action='store_true')
+parser.set_defaults(movement=False)
+parser.set_defaults(polybar=False)
+args = parser.parse_args()
+
+coin = args.coin.upper()
+fiat = args.fiat.upper()
+hist_time = datetime.datetime.now() - datetime.timedelta(days=30)
+hist_time = int(hist_time.timestamp())
+
+lookup = {
+    "USD": "$",
+    "BTC": "BTC"
+}
+
+curr_url = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms={}&tsyms={}'.format(coin, fiat)
+hist_url = 'https://min-api.cryptocompare.com/data/pricehistorical?fsym={}&tsyms={}&ts={}'.format(coin, fiat, hist_time)
+
+curr_r = requests.get(curr_url)
+curr_j = curr_r.json()
+
+hist_r = requests.get(hist_url)
+hist_j = hist_r.json()
+
+price = curr_j['RAW'][coin][fiat]['PRICE']
+change = round(curr_j['RAW'][coin][fiat]['CHANGE24HOUR'], 2)
+change_pct = round(curr_j['RAW'][coin][fiat]['CHANGEPCT24HOUR'], 2)
+
+# Shift the minus symbol to be before the fiat symbol if negative so it looks
+# better, add coloured ↑↓s for market movement.
+if change > 0:
+    change = '{}{}'.format(lookup[fiat], change)
+    if args.polybar:
+        change_direction = '%{T2}%{F#00ff00}↑%{F-}%{T-}'
+    else:
+        change_direction = '↑'
+else:
+    change = str(change)
+    change = '-{}{}'.format(lookup[fiat], change[1:])
+    if args.polybar:
+        change_direction = '%{T2}%{F#f00}↓%{F-}%{T-}'
+    else:
+        change_direction = '↓'
+
+output = '{}{} {}'.format(lookup[fiat],
+                          round(price, 1),
+                          # change,
+                          # change_pct,
+                          change_direction)
+
+print(output)
