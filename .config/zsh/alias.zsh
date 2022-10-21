@@ -40,6 +40,10 @@ alias du='du -ch'
 
 # {{{ just abbrevations
 
+if is_command_present nvim; then
+    alias vim='nvim'
+fi
+
 alias vp="vim -u $XDG_CONFIG_HOME/vim/vimrc.prose"
 alias vc="vim -u $XDG_CONFIG_HOME/vim/vimrc.code"
 alias v='vc'

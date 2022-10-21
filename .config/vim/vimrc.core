@@ -47,9 +47,6 @@ if dein#load_state(s:dein_path)
     " powerful incremental search
     call dein#add('haya14busa/incsearch.vim')
 
-    " buffer manager
-    call dein#add('ctrlpvim/ctrlp.vim')
-
     " allows you to save files into directories that don't exists
     call dein#add('DataWraith/auto_mkdir')
 
@@ -77,6 +74,14 @@ if dein#load_state(s:dein_path)
 
     " :DeinUpdate
     call dein#add('wsdjeg/dein-ui.vim')
+
+    " CtrlP replacement
+    call dein#add('nvim-lua/plenary.nvim')
+    call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.0' })
+
+    " project files tree
+    call dein#add('nvim-tree/nvim-web-devicons')
+    call dein#add('nvim-tree/nvim-tree.lua')
 
     " adding plugins depending on current type
     call PluginInitialization()
@@ -114,24 +119,69 @@ map g/ <Plug>(incsearch-stay)
 
 " }}}
 
+" {{{ nerdtree configuration
+
+lua << EOF
+  -- OR setup with some options
+  require("nvim-tree").setup({
+    disable_netrw = true,
+    open_on_setup = true,
+    sort_by = "case_sensitive",
+    view = {
+      adaptive_size = false,
+      width = 40,
+      mappings = {
+        list = {
+          { key = "u", action = "dir_up" },
+        },
+      },
+    },
+    update_focused_file = {
+      enable = true,
+      update_root = false,
+      ignore_list = {},
+    },
+    renderer = {
+      group_empty = true,
+      highlight_git = true,
+      full_name = false,
+    },
+    filters = {
+      dotfiles = false,
+      custom = { "^.git$" }
+    },
+  })
+
+  require('nvim-web-devicons').setup({
+    -- globally enable different highlight colors per icon (default to true)
+    -- if set to false all icons will have the default icon's color
+    color_icons = true;
+    -- globally enable default icons (default to false)
+    -- will get overriden by `get_icons` option
+    default = true;
+  })
+EOF
+
+" }}}
+
 " {{{ ctrlp configuration
 
-let g:ctrlp_map='<c-p>'
-let g:ctrlp_cmd='CtrlPMixed'
-let g:ctrlp_working_path_mode='wa'
-let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
-" github.com/kien/ctrlp.vim/issues/174#issuecomment-218866242
-if executable('ag')
-    " use the_silver_searcher github.com/ggreer/the_silver_searcher
-    set grepprg=ag\ --nogroup\ --nocolor\ --hidden\ --ignore\ .git
+lua << EOF
+  require('telescope').setup({
+    defaults = {
+    },
+    pickers = {
+      find_files = {
+        theme = "dropdown",
+      }
+    },
+    extensions = {
+    }
+  })
+EOF
 
-    let g:ctrlp_user_command='ag %s -l --hidden --nocolor --ignore .git -f -g ""'
-    " ag is fast enough that CtrlP doesn't need to cache
-    let g:ctrlp_use_caching=0
-else
-    " ctrl+p ignore files in .gitignore
-    let g:ctrlp_user_command=['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
-endif
+nnoremap <c-p> <cmd>Telescope find_files find_command=ag,-l,--hidden,--nocolor,--ignore,.git,-f<cr>
+nnoremap <c-o> <cmd>Telescope live_grep<cr>
 
 " }}}
 
@@ -213,6 +263,8 @@ set foldmethod=marker
 set conceallevel=2
 set concealcursor=cv
 set viewoptions=cursor,folds,slash,unix
+" ignore mouse completely
+set mouse=
 
 " sometimes backupdir is initialized with some strange value
 set backupdir=~/.local/share/vim/backups
@@ -279,7 +331,9 @@ map <C-u> :set invpaste<CR>
 " tab switching
 map <Leader>n :bn<CR>
 map <Leader>p :bp<CR>
-map <Leader>d :bdelete<CR>
+" close buffer but not the window
+" https://stackoverflow.com/a/8585343
+map <Leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " read more at robots.thoughtbot.com/faster-grepping-in-vim
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
