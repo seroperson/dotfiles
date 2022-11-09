@@ -4,7 +4,7 @@
     signingkey = 0B3C08C5FD554A20
 [core]
     excludesfile = "~/.config/git/ignore"
-    editor = vim
+    editor = nvim
 [alias]
     cl = clone
     a = add --all

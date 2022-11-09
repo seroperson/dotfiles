@@ -9,9 +9,6 @@ function! PluginInitialization()
     " nice 'matchadd' interface
     call dein#add('dirkwallenstein/vim-match-control')
 
-    " removes all redundant ui components if enabled
-    call dein#add('junegunn/goyo.vim')
-
     " highlight just only current paragraph (or something like that)
     call dein#add('junegunn/limelight.vim')
 
@@ -29,7 +26,7 @@ source $XDG_CONFIG_HOME/vim/vimrc.core
 let g:vim_markdown_fenced_languages=['viml=vim', 'bash=sh', 'ini=dosini']
 let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_frontmatter=1
-let g:vim_markdown_toc_autofit = 1
+let g:vim_markdown_toc_autofit=1
 
 " shiftwidth depends on vim-sleuth
 autocmd FileType * let g:vim_markdown_new_list_item_indent=&shiftwidth
@@ -39,12 +36,6 @@ autocmd FileType * let g:vim_markdown_new_list_item_indent=&shiftwidth
 " {{{ vim-addon-local-vimrc configuration
 
 let g:local_vimrc = {'names': ['.vimrc-local'], 'hash_fun': 'LVRHashOfFile'}
-
-" }}}
-
-" {{{ goyo configuration
-
-let g:goyo_width = 100
 
 " }}}
 
@@ -61,7 +52,7 @@ set wm=0
 
 set spell
 " i'm writing prose just in russian
-set spelllang=ru,en
+set spelllang=en
 " saving words within git repository
 exe 'set spellfile='.expand('$XDG_CONFIG_HOME').'/vim/wordlist.utf-8.add'
 " limit the spelling suggestions list to 10 words
@@ -92,9 +83,6 @@ hi SpellBad cterm=underline,bold
 " }}}
 
 " {{{ shortcuts
-
-" enter 'writing' mode
-map <leader>w :Goyo<bar>:Limelight!!<CR>
 
 " format the paragraph
 map <leader>q :set fo-=w<cr>gwap:set fo+=w<cr>

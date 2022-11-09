@@ -58,7 +58,7 @@ java_opts=("-XX:+OptimizeStringConcat" \
 
 # {{{ identity
 
-export EDITOR="vim"
+export EDITOR="nvim"
 export VISUAL=$EDITOR
 export PAGER="less -FX"
 export BROWSER="chromium"

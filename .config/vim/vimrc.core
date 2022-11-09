@@ -72,9 +72,6 @@ if dein#load_state(s:dein_path)
     " additionally it can be not presented out-of-box
     call dein#add('stephpy/vim-yaml')
 
-    " :DeinUpdate
-    call dein#add('wsdjeg/dein-ui.vim')
-
     " CtrlP replacement
     call dein#add('nvim-lua/plenary.nvim')
     call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.0' })
@@ -119,12 +116,12 @@ map g/ <Plug>(incsearch-stay)
 
 " }}}
 
-" {{{ nerdtree configuration
+" {{{ lua configuration
 
 lua << EOF
   -- OR setup with some options
   require("nvim-tree").setup({
-    disable_netrw = true,
+    disable_netrw = false,
     open_on_setup = true,
     sort_by = "case_sensitive",
     view = {
@@ -212,50 +209,71 @@ let g:tex_conceal=""
 
 " allows ctrlp to do hard requests
 set maxmempattern=10000
+
 " ignore some useless files
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+
 " highlight current line
 set cursorline
+
 " search on steriods
 set incsearch hlsearch ignorecase smartcase
+
 " don't redraw while executing macros (good performance config)
 set lazyredraw
+
 " set 16 lines to the cursor - when moving vertically using j/k
 set so=16
+
 " line numbers
 set relativenumber number
+
 " don't display welcome
 set shortmess+=I
+
 " sets how many lines of history vim has to remember
 set history=1000
+
 " set to auto read when a file is changed from the outside
 set autoread
+
 " no annoying sound on errors
 set noerrorbells novisualbell
 set tm=500
+
 " turn bullshit backup off
 set nobackup noswapfile nowritebackup
 set encoding=utf-8
+
 " for regular expressions turn magic on
 set magic
+
 " show matching brackets when text indicator is over them
 set showmatch
+
 " keep indentation from previous line
 set autoindent
+
 " automatically inserts indentation in some cases
 set smartindent
+
 " like smartindent, but stricter and more customisable
 set cindent
 set updatetime=1000
 set fillchars=stl:\ ,stlnc:\ ,vert:│
+
 " completion for : commands
 set wildmenu
+
 " don't print '$' at the line endings
 set lcs=tab:\|\
+
 " display status line always
 set laststatus=2
+
 " hides '--INSERT--', --NORMAL-- and so on
 set nosmd
+
 " don't show me "press enter ..."
 set shortmess=a
 set cmdheight=2
@@ -263,8 +281,12 @@ set foldmethod=marker
 set conceallevel=2
 set concealcursor=cv
 set viewoptions=cursor,folds,slash,unix
+
 " ignore mouse completely
 set mouse=
+
+" enable copying from vim to the system-clipboard
+set clipboard=unnamedplus
 
 " sometimes backupdir is initialized with some strange value
 set backupdir=~/.local/share/vim/backups

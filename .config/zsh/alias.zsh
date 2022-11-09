@@ -26,7 +26,6 @@ alias cdu='cd-gitroot'
 
 # }}}
 
-
 # {{{ aliases just with additional parameters
 
 alias mkdir='mkdir -pv'
@@ -46,8 +45,6 @@ fi
 
 alias vp="vim -u $XDG_CONFIG_HOME/vim/vimrc.prose"
 alias vc="vim -u $XDG_CONFIG_HOME/vim/vimrc.code"
-alias v='vc'
-alias f='find ./'
 alias rmd='rm -rf'
 alias ta='tmux attach'
 alias g='git'
