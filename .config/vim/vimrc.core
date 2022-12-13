@@ -121,7 +121,7 @@ map g/ <Plug>(incsearch-stay)
 lua << EOF
   -- OR setup with some options
   require("nvim-tree").setup({
-    disable_netrw = false,
+    disable_netrw = true,
     open_on_setup = true,
     sort_by = "case_sensitive",
     view = {
