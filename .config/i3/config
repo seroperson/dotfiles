@@ -133,6 +133,7 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20
 
 ## App shortcuts
 bindsym --release $mod+Shift+s exec scrot -s -e 'xclip -selection clipboard -t image/png -i $f && rm $f'
+bindsym --release $mod+Print exec scrot -e 'xclip -selection clipboard -t image/png -i $f && rm $f'
 
 ##########################################
 # configuration for workspace behaviour: #
