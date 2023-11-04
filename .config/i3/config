@@ -195,7 +195,15 @@ exec --no-startup-id udiskie --automount --notify --tray
 
 # Set floating (nontiling) for special apps
 for_window [class="Pavucontrol" instance="pavucontrol"] floating enable
-for_window [floating_from="user"] border pixel 4
+
+# hunt: showdown
+for_window [class="steam_app_594650"] floating enable, border none, move position 1920 1080, move to workspace $ws5
+assign [class="steam_app_594650"] $ws5
+no_focus [class="steam_app_594650"]
+
+for_window [workspace="5"] floating enable
+
+focus_follows_mouse no
 
 ######################################
 # color settings for bar and windows #
