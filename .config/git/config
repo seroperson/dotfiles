@@ -51,6 +51,7 @@
     up = "!(git add . && git stash && git pull --rebase >&2) | grep -v \"No local changes to save\" && git stash pop"
     # pseudo-random commit message
     fix = "!am() { curl -s http://whatthecommit.com/ | grep '<p>' | cut -c4-; }; git commit -em \"# $(am)\" \"$@\""
+    amend-to = "!f() { SHA=`git rev-parse \"$1\"`; git stash -k && git commit --fixup \"$SHA\" && GIT_SEQUENCE_EDITOR=true git rebase --interactive --autosquash \"$SHA^\" && git stash pop; }; f"
 [color]
     diff = auto
     status = auto
