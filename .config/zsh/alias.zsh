@@ -51,13 +51,21 @@ alias g='git'
 
 # }}}
 
-if is_command_present mutt; then
-    alias mutt="mutt -F $HOME/.config/mutt/muttrc"
-fi
+# {{{ k8s
 
 if is_command_present kubectl; then
     alias k='kubectl'
+fi
+
+if is_command_present kubectx; then
     alias kctx='kubectx'
+    alias kens='kubens'
+fi
+
+# }}}
+
+if is_command_present mutt; then
+    alias mutt="mutt -F $HOME/.config/mutt/muttrc"
 fi
 
 if is_command_present sudo; then
@@ -66,6 +74,10 @@ if is_command_present sudo; then
     alias srmd='sudo rm -rf'
     alias smv='sudo mv'
     alias smkd='sudo mkdir'
+fi
+
+if is_command_present bat; then
+    alias cat="bat --decorations never"
 fi
 
 # {{{ common typos
