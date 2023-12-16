@@ -67,6 +67,8 @@ include_source() {
   [ "x$2" != "x" ] && include_source $2
 }
 
+include_source "machine-based.zsh"
+
 include_source "func.zsh" "func.$OS.zsh"
 include_source "opt.zsh" "opt.$OS.zsh"
 include_source "zstyle.zsh" "zstyle.$OS.zsh"
@@ -75,12 +77,9 @@ include_source "bindkey.zsh" "bindkey.$OS.zsh"
 
 # {{{ including soft-based configurations
 
-is_base16_shell_available && source "$ZDOTDIR/soft/base16.zsh"
 is_tmux_enabled && source "$ZDOTDIR/soft/tmux.zsh"
 
 # }}}
-
-include_source "machine-based.zsh"
 
 # }}}
 

@@ -23,9 +23,6 @@ get_or_else() {
 
 # {{{ 'is_*_(available|enabled)' functions
 
-is_base16_shell_available() {
-  file_exists "$BASE16_SHELL_DIRECTORY"
-}
 is_tmux_enabled() {
   is_command_present tmux
 }
@@ -42,38 +39,6 @@ is_in_x() {
 }
 is_in_tmux() {
   is_arg_present "$TMUX"
-}
-
-# }}}
-
-# {{{ base16 functions
-
-enable_base16_shell() {
-    local theme_name=$(get_or_else "$1" "$BASE16_THEME_NAME")
-    if is_arg_present "$theme_name"; then
-        local path_prefix="$BASE16_SHELL_DIRECTORY/base16-"
-        local theme_prefix=$(get_or_else "$2" "$BASE16_THEME_PREFIX")
-        local theme_path="$path_prefix`echo $theme_name$(is_arg_present \"$theme_prefix\" && echo "-$theme_prefix")`.sh"
-        if ! file_exists "$theme_path"; then
-            theme_path="$path_prefix$theme_name.sh"
-        fi
-        if file_exists "$theme_path"; then
-            export BASE16_THEME_NAME=$theme_name
-            export BASE16_THEME_PREFIX=$theme_prefix
-            . $theme_path
-        else
-            echo "Seems like the theme $theme_path isn't exists"
-            false
-        fi
-    else
-        echo "You shold pass first argument or set \$BASE16_THEME_NAME env variable"
-        false
-    fi
-}
-
-# todo: 'autocomplete' stuff?
-list_base16_shell_themes() {
-  ls "$BASE16_SHELL_DIRECTORY" | grep ".sh"
 }
 
 # }}}

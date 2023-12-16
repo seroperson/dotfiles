@@ -26,8 +26,3 @@ dein
 # don't track temporary files
 *.tmp
 
-# don't track iterm2 directory
-.config/iterm2
-
-# don't track pgcli directory
-.config/pgcli

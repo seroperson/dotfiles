@@ -6,9 +6,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 
-# make vim honor my .config directory
-export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
-
 # managing zsh dot directory
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ADOTDIR="$XDG_CACHE_HOME/antigen"
@@ -76,8 +73,5 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # 'ls' coloring
 export LS_COLORS="di=34;40:ln=35;40:so=32;40:pi=33;40:"
-
-# if you would to enable base16, just clone the repository into .. of directory below
-export BASE16_SHELL_DIRECTORY="$XDG_CONFIG_HOME/base16/base16-shell/scripts/"
 
 # }}}

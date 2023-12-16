@@ -14,6 +14,12 @@ alias lk='ls -S'
 # sorts by extension
 alias lx='ls -X'
 
+if is_command_present exa; then
+    alias ls='exa -Flrah --group-directories-first'
+else
+    alias ls='ls -Failh'
+fi
+
 # }}}
 
 # {{{ 'cd' aliases
@@ -43,8 +49,6 @@ if is_command_present nvim; then
     alias vim='nvim'
 fi
 
-alias vp="vim -u $XDG_CONFIG_HOME/vim/vimrc.prose"
-alias vc="vim -u $XDG_CONFIG_HOME/vim/vimrc.code"
 alias rmd='rm -rf'
 alias ta='tmux attach'
 alias g='git'

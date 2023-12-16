@@ -1,7 +1,0 @@
-let s:prose_types = ['md', 'txt']
-
-if index(s:prose_types, expand('%:e')) != -1
-  source $XDG_CONFIG_HOME/vim/vimrc.prose
-else
-  source $XDG_CONFIG_HOME/vim/vimrc.code
-endif

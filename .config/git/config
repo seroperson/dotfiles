@@ -63,6 +63,6 @@
 [fetch]
     # https://stackoverflow.com/a/8255687/5246998
     prune = true
-# https://stackoverflow.com/a/6849424/5246998
 [http]
+    # https://stackoverflow.com/a/6849424/5246998
     postBuffer = 1048576000
