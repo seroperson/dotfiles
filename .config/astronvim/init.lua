@@ -76,6 +76,7 @@ return {
     -- { import = "astrocommunity.colorscheme.tokyonight-nvim" },
     { import = "astrocommunity.colorscheme.catppuccin" },
     { import = "astrocommunity.editing-support.auto-save-nvim" },
+    { import = "astrocommunity.programming-language-support.csv-vim" },
     {
       "pocco81/auto-save.nvim",
       opts = {

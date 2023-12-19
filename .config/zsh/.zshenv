@@ -8,7 +8,6 @@ export XDG_DATA_HOME="$HOME/.local/share"
 
 # managing zsh dot directory
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export ADOTDIR="$XDG_CACHE_HOME/antigen"
 
 export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin
 

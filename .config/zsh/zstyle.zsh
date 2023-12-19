@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-
 # {{{ completion configuration
 #     stackoverflow.com/questions/171563/whats-in-your-zshrc
 

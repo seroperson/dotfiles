@@ -2,12 +2,12 @@
 
 export PATH="$PATH:$ZDOTDIR/bin"
 
-# {{{ zgen configuration
+# {{{ zgenom configuration
 
-local zgen_file=$ZDOTDIR/zgen/zgen.zsh
+local zgenom_file=$XDG_DATA_HOME/zgenom/zgenom.zsh
 
-if ! [ -e $zgen_file ]; then
-  git clone https://github.com/tarjoilija/zgen.git $ZDOTDIR/zgen/
+if ! [ -e $zgenom_file ]; then
+  git clone https://github.com/jandamm/zgenom.git $XDG_DATA_HOME/zgenom/
 fi
 
 # {{{ z configuration
@@ -17,17 +17,24 @@ _Z_CMD=j
 
 # }}}
 
-source $zgen_file
-if ! zgen saved; then
+export ZGEN_CUSTOM_COMPDUMP="$XDG_DATA_HOME/zcompdump_$ZSH_VERSION"
+
+source $zgenom_file
+if ! zgenom saved; then
   # change directory to git repository root directory
-  zgen load mollifier/cd-gitroot
+  zgenom load mollifier/cd-gitroot
   # the best theme ever
-  zgen load subnixr/minimal
+  zgenom load subnixr/minimal
   # jumping around (alternative to fasd)
-  zgen load rupa/z
+  zgenom load rupa/z
   # zsh anything.el-like widget
-  zgen load zsh-users/zaw
-  zgen save
+  zgenom load zsh-users/zaw
+  # completions
+  zgenom load zsh-users/zsh-completions
+
+  zgenom compile $ZDOTDIR
+
+  zgenom save
 fi
 
 # {{{ theme configuration
