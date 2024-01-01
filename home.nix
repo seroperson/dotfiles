@@ -34,6 +34,11 @@
     # '')
   ];
 
+  home.file.".zshenv" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/zsh/.zshenv";
+    recursive = true;
+  };
+
   xdg.configFile = {
     "git" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/git";
