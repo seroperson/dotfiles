@@ -28,8 +28,6 @@ return {
   },
 
   -- Set colorscheme to use
-  -- colorscheme = "astrodark",
-  -- colorscheme = "tokyonight-night",
   colorscheme = "catppuccin-mocha",
 
   -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
@@ -73,7 +71,6 @@ return {
 
   plugins = {
     "AstroNvim/astrocommunity",
-    -- { import = "astrocommunity.colorscheme.tokyonight-nvim" },
     { import = "astrocommunity.colorscheme.catppuccin" },
     { import = "astrocommunity.editing-support.auto-save-nvim" },
     { import = "astrocommunity.programming-language-support.csv-vim" },

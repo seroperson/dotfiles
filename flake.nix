@@ -15,6 +15,15 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
+      devShells.${system}.default = pkgs.mkShell {
+        NIX_CONFIG = "extra-experimental-features = nix-command flakes repl-flake";
+
+        packages = [
+          pkgs.home-manager
+          pkgs.git
+        ];
+      };
+
       homeConfigurations."seroperson" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 

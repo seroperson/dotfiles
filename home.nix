@@ -1,6 +1,11 @@
-{ config, pkgs, ... }:
+{ callPackage, config, pkgs, ... }:
 
 {
+
+  imports = [
+    ./nix/tmux.nix
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "seroperson";
@@ -25,13 +30,6 @@
     pkgs.jq
     pkgs.eza
     pkgs.tmux
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
   ];
 
   home.file.".zshenv" = {
@@ -52,14 +50,11 @@
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/zsh";
       recursive = true;
     };
-    "tmux" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/tmux";
-      recursive = true;
-    };
     "nix" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/nix";
       recursive = true;
     };
+
     "nvim" = {
       source = pkgs.fetchFromGitHub {
         owner = "AstroNvim";

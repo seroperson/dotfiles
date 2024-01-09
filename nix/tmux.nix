@@ -1,26 +1,58 @@
-set-environment -g TMUX_PLUGIN_MANAGER_PATH '~/.config/tmux/plugin/'
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'catppuccin/tmux'
+{ pkgs, ... }:
+let
+  # tmux-super-fingers = pkgs.tmuxPlugins.mkTmuxPlugin {
+  #   pluginName = "tmux-super-fingers";
+  #   version = "unstable-2023-01-06";
+  #   src = pkgs.fetchFromGitHub {
+  #     owner = "artemave";
+  #     repo = "tmux_super_fingers";
+  #     rev = "2c12044984124e74e21a5a87d00f844083e4bdf7";
+  #     sha256 = "sha256-cPZCV8xk9QpU49/7H8iGhQYK6JwWjviL29eWabuqruc=";
+  #   };
+  # };
+in {
+  programs.tmux = {
+    enable = true;
+    historyLimit = 100000;
+    keyMode = "vi";
+    # address vim mode switching delay
+    # https://superuser.com/a/252717/65504
+    escapeTime = 0;
+    # start window number counting from 1 (instead of 0)
+    baseIndex = 1;
+    plugins = with pkgs;
+      [
+        {
+          plugin = tmuxPlugins.catppuccin;
+          extraConfig = ''
+set -g @catppuccin_flavour 'mocha'
 
-set -g @shell_mode 'vi'
+set -g @catppuccin_window_left_separator "█"
+set -g @catppuccin_window_right_separator "█"
+set -g @catppuccin_window_number_position "left"
+set -g @catppuccin_window_middle_separator "█ "
 
-set -g mode-keys vi
+set -g @catppuccin_status_modules_right "host date_time"
+set -g @catppuccin_status_left_separator  ""
+set -g @catppuccin_status_right_separator " "
+set -g @catppuccin_status_right_separator_inverse "yes"
+set -g @catppuccin_status_fill "all"
+set -g @catppuccin_status_connect_separator "no"
+set -g @catppuccin_date_time_text "%H:%M:%S"
+          '';
+        }
+      ];
+    extraConfig = ''
 # do not notify me about any activity
 set -g monitor-activity off
 # focus events enabled for terminals that support them
 set -g focus-events on
 # tmux messages are displayed for 3 seconds
 set -g display-time 3000
-# address vim mode switching delay
-# superuser.com/a/252717/65504
-set -s escape-time 0
 set -g status on
 set -g set-titles on
 # interval for refreshing statusline
 set -g status-interval 5
-# start window number counting from 1 (instead of 0)
-set -g base-index 1
-set -g history-limit 8192
 set -g visual-activity on
 set -g status-position bottom
 # renumber windows when some was deleted
@@ -30,9 +62,7 @@ set -g set-titles-string '#{b:pane_current_path}'
 # upgrading current terminal
 set -g terminal-overrides ",xterm-256color:Tc"
 # no spaces between windows in statusline
-set -g window-status-separator ''
-# I don't need mouse support
-set -g mouse off
+set -g window-status-separator ""
 # automatically set current window's name to current directory
 set -g status-interval 1
 set -g automatic-rename on
@@ -92,5 +122,6 @@ bind -n C-a send-prefix
 
 # reload tmux configuration
 bind C-e source-file ~/.config/tmux/tmux.conf \; display-message "Reloaded"
-
-run '~/.config/tmux/plugin/tpm/tpm'
+    '';
+  };
+}

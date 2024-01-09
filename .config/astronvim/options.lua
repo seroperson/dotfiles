@@ -20,7 +20,9 @@ return {
     -- show whitespace characters
     list = true,
     -- don't redraw immediately (helps with macros)
-    lazyredraw = true
+    lazyredraw = true,
+    -- disable mouse
+    mouse = ""
   },
   g = {
     -- sets vim.g.mapleader
