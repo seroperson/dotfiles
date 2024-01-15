@@ -29,17 +29,17 @@
     pkgs.bat
     pkgs.jq
     pkgs.eza
+    pkgs.tree
     pkgs.tmux
   ];
 
   home.file.".zshenv" = {
     source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/zsh/.zshenv";
-    recursive = true;
   };
 
   xdg.configFile = {
     "git" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/git";
+      source = config.lib.file.mkOutOfStoreSymlink "${config.nix.package}/.config/git";
       recursive = true;
     };
     "ideavim" = {
