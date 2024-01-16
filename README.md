@@ -25,7 +25,7 @@ git clone https://github.com/seroperson/dotfiles $HOME/.dotfiles/
 And then let the `home-manager` do the rest:
 
 ```
-nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager/master -- init --switch $HOME/.dotfiles/
+nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager/release-23.11 -- init --switch $HOME/.dotfiles/
 ```
 
 Next, you should do `chsh $USER $HOME/.nix-profile/bin/zsh` and re-login.

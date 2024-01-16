@@ -1,4 +1,4 @@
-{ callPackage, config, pkgs, ... }:
+{ callPackage, config, pkgs, username, homeDirectory, dotfilesPath, ... }:
 
 {
 
@@ -6,10 +6,8 @@
     ./nix/tmux.nix
   ];
 
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-  home.username = "seroperson";
-  home.homeDirectory = "/home/seroperson";
+  home.username = username;
+  home.homeDirectory = homeDirectory;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -34,24 +32,24 @@
   ];
 
   home.file.".zshenv" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/zsh/.zshenv";
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/zsh/.zshenv";
   };
 
   xdg.configFile = {
     "git" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.nix.package}/.config/git";
+      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/git";
       recursive = true;
     };
     "ideavim" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/ideavim";
+      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/ideavim";
       recursive = true;
     };
     "zsh" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/zsh";
+      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/zsh";
       recursive = true;
     };
     "nix" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/nix";
+      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/nix";
       recursive = true;
     };
 
@@ -66,7 +64,7 @@
     # AstronVim allows you to separate custom configuration from repository itself
     # docs.astronvim.com/configuration/manage_user_config/#setting-up-a-user-configuration
     "astronvim/lua/user" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/astronvim";
+      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/astronvim";
       recursive = true;
     };
   };
