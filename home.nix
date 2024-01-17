@@ -1,4 +1,13 @@
-{ callPackage, config, pkgs, username, homeDirectory, dotfilesPath, ... }:
+{
+  callPackage,
+  config,
+  pkgs,
+  username,
+  homeDirectory,
+  dotfilesPath,
+  lib,
+  ...
+}:
 
 {
 

@@ -3,7 +3,9 @@
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
-    nixpkgs.url = "github:nixos/nixpkgs/release-23.11";
+    nixpkgs = {
+      url = "github:nixos/nixpkgs/release-23.11";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,9 +32,26 @@
       homeConfigurations."seroperson" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [ ./home.nix ];
+        modules = [
+          {
+            # Fixing treesitter
+            # https://github.com/NixOS/nixpkgs/issues/207003
+            # https://github.com/NixOS/nixpkgs/issues/130152
+            # https://github.com/NixOS/nixpkgs/pull/261103
+            nixpkgs.overlays = [
+              (self: super: {
+                neovim = super.neovim.overrideAttrs (o: {
+                  installPhase = ''
+                    wrapProgram $out/bin/nvim \
+                      --set LD_LIBRARY_PATH ${pkgs.stdenv.cc.cc.lib}/lib
+                  '';
+                });
+              })
+            ];
+          }
+
+          ./home.nix
+        ];
 
         extraSpecialArgs = {
           homeDirectory = homeDirectory;

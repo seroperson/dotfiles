@@ -42,7 +42,7 @@ return {
       -- control auto formatting on save
       format_on_save = {
         -- enable or disable format on save globally
-        enabled = true,
+        enabled = false,
       },
       -- disable formatting capabilities for the listed language servers
       disabled = {
@@ -74,6 +74,7 @@ return {
     { import = "astrocommunity.colorscheme.catppuccin" },
     { import = "astrocommunity.editing-support.auto-save-nvim" },
     { import = "astrocommunity.programming-language-support.csv-vim" },
+    { import = "astrocommunity.pack.ruby" },
     {
       "pocco81/auto-save.nvim",
       opts = {
