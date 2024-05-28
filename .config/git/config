@@ -66,3 +66,5 @@
 [http]
     # https://stackoverflow.com/a/6849424/5246998
     postBuffer = 1048576000
+[init]
+	defaultBranch = main

@@ -68,6 +68,9 @@ set -g status-interval 1
 set -g automatic-rename on
 set -g automatic-rename-format '#(basename "$(git -C #{pane_current_path} rev-parse --show-toplevel 2>/dev/null || echo "#{pane_current_path}")")'
 
+# matches the outside TERM
+set -g default-terminal "screen-256color"
+
 # unbinding unused keys
 unbind &
 unbind .

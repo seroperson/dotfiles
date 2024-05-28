@@ -9,7 +9,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 # managing zsh dot directory
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.nix-profile/bin
+export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.nix-profile/bin:/opt/cuda/bin
 
 # }}}
 

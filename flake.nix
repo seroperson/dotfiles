@@ -10,9 +10,12 @@
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -34,18 +37,9 @@
 
         modules = [
           {
-            # Fixing treesitter
-            # https://github.com/NixOS/nixpkgs/issues/207003
-            # https://github.com/NixOS/nixpkgs/issues/130152
-            # https://github.com/NixOS/nixpkgs/pull/261103
             nixpkgs.overlays = [
               (self: super: {
-                neovim = super.neovim.overrideAttrs (o: {
-                  installPhase = ''
-                    wrapProgram $out/bin/nvim \
-                      --set LD_LIBRARY_PATH ${pkgs.stdenv.cc.cc.lib}/lib
-                  '';
-                });
+                jre = super.jdk17;
               })
             ];
           }

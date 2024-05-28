@@ -85,6 +85,10 @@ if is_command_present bat; then
     alias cat="bat --decorations never"
 fi
 
+if is_command_present xdg-open; then
+    alias open="xdg-open"
+fi
+
 # {{{ common typos
 
 alias ks='ls'

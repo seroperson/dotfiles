@@ -1,3 +1,5 @@
+local utils = require "astronvim.utils"
+
 return {
   -- Configure AstroNvim updates
   updater = {
@@ -75,8 +77,30 @@ return {
     { import = "astrocommunity.editing-support.auto-save-nvim" },
     { import = "astrocommunity.programming-language-support.csv-vim" },
     { import = "astrocommunity.pack.ruby" },
+    { import = "astrocommunity.pack.scala" },
+    { import = "astrocommunity.pack.lua" },
+
+    -- Markdown support, copied from astrocommunity and edited
     {
-      "pocco81/auto-save.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      opts = function(_, opts)
+        if opts.ensure_installed ~= "all" then
+          opts.ensure_installed = utils.list_insert_unique(opts.ensure_installed, { "markdown", "markdown_inline" })
+        end
+      end,
+    },
+    {
+      "williamboman/mason-lspconfig.nvim",
+      opts = function(_, opts) opts.ensure_installed = utils.list_insert_unique(opts.ensure_installed, "marksman") end,
+    },
+    {
+      "jay-babu/mason-null-ls.nvim",
+      opts = function(_, opts) opts.ensure_installed = utils.list_insert_unique(opts.ensure_installed, "prettier") end,
+    },
+
+    -- Always save automatically
+    {
+      "Pocco81/auto-save.nvim",
       opts = {
         execution_message = {
           message = "Saved",
@@ -84,6 +108,8 @@ return {
         }
       }
     },
+
+    -- Tuning neo-tree a little bit
     {
       "nvim-neo-tree/neo-tree.nvim",
       opts = {
@@ -99,6 +125,8 @@ return {
         }
       }
     },
+
+    -- Always trim trailing whitespaces
     {
       "ntpeters/vim-better-whitespace",
       lazy = false,

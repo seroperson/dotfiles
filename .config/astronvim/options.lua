@@ -22,7 +22,9 @@ return {
     -- don't redraw immediately (helps with macros)
     lazyredraw = true,
     -- disable mouse
-    mouse = ""
+    mouse = "",
+    -- some additional metals config
+    completeopt = { "menuone", "noinsert", "noselect" }
   },
   g = {
     -- sets vim.g.mapleader
@@ -41,6 +43,9 @@ return {
     ui_notifications_enabled = true,
     -- enable experimental resession.nvim session management (will be default in AstroNvim v4)
     resession_enabled = false,
+    -- When a file is opened, Nvim searches all parent directories of that file for ".editorconfig" files,
+    -- parses them, and applies any properties that match the opened file
+    editorconfig = true
   },
 }
 -- If you need more control, you can use the function()...end notation

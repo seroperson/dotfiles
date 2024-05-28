@@ -28,16 +28,29 @@
   home.packages = [
     pkgs.git
 
-    pkgs.neovim
+    # using unwrapped nvim allows you to easily use it outside of NixOS
+    pkgs.neovim-unwrapped
 
     pkgs.zsh
 
     pkgs.ripgrep
+    pkgs.fd
     pkgs.bat
     pkgs.jq
     pkgs.eza
     pkgs.tree
     pkgs.tmux
+    pkgs.kubectl
+
+    pkgs.jre
+    pkgs.coursier
+    pkgs.metals
+    pkgs.bloop
+    pkgs.sbt
+    pkgs.mill
+
+    pkgs.nodejs
+    pkgs.yarn
   ];
 
   home.file.".zshenv" = {
@@ -66,7 +79,7 @@
       source = pkgs.fetchFromGitHub {
         owner = "AstroNvim";
         repo = "AstroNvim";
-        rev  = "271c9c3f71c2e315cb16c31276dec81ddca6a5a6";
+        rev  = "d36af2f75369e3621312c87bd0e377e7d562fc72";
         sha256 = "h019vKDgaOk0VL+bnAPOUoAL8VAkhY6MGDbqEy+uAKg=";
       };
     };

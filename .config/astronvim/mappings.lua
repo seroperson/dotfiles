@@ -3,41 +3,66 @@
 return {
   -- first key is the mode
   n = {
-    ["<C-s>"] = { 
-      ":w!<cr>", 
-      desc = "Save File" 
-    },
     ["<C-n>"] = {
       function()
-        require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) 
+        require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
       end,
-      desc = "Next buffer" 
+      desc = "Next buffer"
     },
     ["<C-p>"] = {
-      function() 
-        require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) 
+      function()
+        require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
       end,
-      desc = "Previous buffer" 
+      desc = "Previous buffer"
     },
     ["<C-i>"] = {
-      -- stackoverflow.com/questions/506075/how-do-i-fix-the-indentation-of-an-entire-file-in-vi#comment8742998_506079
-      "gg=G''",
-      desc = "Fix indentation and return" 
+      function()
+        vim.lsp.buf.format { async = true }
+      end,
+      desc = "Format"
+    },
+    ["<leader>lo"] = {
+      require("telescope.builtin").lsp_implementations,
+      desc = "Show implementations"
+    },
+    ["<C-o>"] = {
+      require("telescope.builtin").lsp_implementations,
+      desc = "Show implementations"
+    },
+    ["<leader>lq"] = {
+      vim.lsp.buf.hover,
+      desc = "Hover information"
+    },
+    ["<C-q>"] = {
+      vim.lsp.buf.hover,
+      desc = "Hover information"
+    },
+    ["<C-s>"] = {
+      vim.lsp.buf.definition,
+      desc = "Jump to definition"
+    },
+    ["<leader>lj"] = {
+      vim.lsp.buf.definition,
+      desc = "Jump to definition"
+    },
+    ["<leader>ls"] = {
+      require("telescope.builtin").lsp_dynamic_workspace_symbols,
+      desc = "Search workspace symbols"
     },
     -- comment current line
     -- same as default, but also moves cursor one line down
     ["<leader>/"] = {
-      function() 
+      function()
         require("Comment.api").toggle.linewise.count(vim.v.count > 0 and vim.v.count or 1)
         vim.cmd('norm! j')
       end,
       desc = "Toggle comment line",
     },
-    ["<leader>ff"] = { 
-      function() 
+    ["<leader>ff"] = {
+      function()
         require("telescope.builtin").git_files()
       end,
-      desc = "Find all git files" 
+      desc = "Find all git files"
     },
     -- Disable 'Find all files'
     ["<leader>fF"] = false,
@@ -51,9 +76,16 @@ return {
       end,
       desc = "Find words in all git files",
     },
-    Q = { 
+    ["<leader>a"] = {
+      -- todo: enable only when metals is active
+      function()
+        require("telescope").extensions.metals.commands()
+      end,
+      desc = "Metals actions"
+    },
+    Q = {
       ":q<cr>",
-      desc = ":q" 
+      desc = ":q"
     },
   },
   i = {
