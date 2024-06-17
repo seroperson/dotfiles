@@ -1,17 +1,22 @@
 {
   description = "Home Manager configuration of seroperson";
 
+  nixConfig = {
+    experimental-features = [ "nix-command" "flakes" ];
+  };
+
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
     nixpkgs = {
-      url = "github:nixos/nixpkgs/release-23.11";
+      url = "github:nixos/nixpkgs/nixos-unstable";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -19,9 +24,6 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-
-      username = "seroperson";
-      homeDirectory = "/home/${username}/";
     in {
       devShells.${system}.default = pkgs.mkShell {
         NIX_CONFIG = "extra-experimental-features = nix-command flakes repl-flake";
@@ -32,30 +34,25 @@
         ];
       };
 
-      homeConfigurations."seroperson" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      homeConfigurations = {
+        "seroperson" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
 
-        modules = [
-          {
-            nixpkgs.overlays = [
-              (self: super: {
-                jre = super.jdk17;
-              })
-            ];
-          }
-
-          ./home.nix
-        ];
-
-        extraSpecialArgs = {
-          homeDirectory = homeDirectory;
-          username = username;
-          dotfilesPath = "${homeDirectory}/.dotfiles/";
-        };
+          modules = [
+            ./home.nix
+            {
+              nixpkgs.overlays = [
+                (self: super: {
+                  jre = super.jdk17;
+                })
+              ];
+            }
+          ];
       };
 
       programs.zsh.enable = true;
       environment.shells = with pkgs; [ zsh ];
       users.defaultUserShell = pkgs.zsh;
     };
+  };
 }

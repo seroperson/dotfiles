@@ -16,21 +16,41 @@ And also some set of handy tools, such as [exa][2], [jq][3], [rg][4].
 
 ## Installation
 
-Initially, only `nix` and `git` must be installed. Clone the repository:
+Initially, only `nix` and `git` must be installed. Be sure that nix is up-to-date:
 
+```sh
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+nix-channel --updae
 ```
+
+Clone the repository:
+
+```sh
 git clone https://github.com/seroperson/dotfiles $HOME/.dotfiles/
 ```
 
 And then let the `home-manager` do the rest:
 
-```
-nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager/release-23.11 -- init --switch $HOME/.dotfiles/
+```sh
+nix --extra-experimental-features "nix-command flakes" run home-manager/release-23.11 -- init --switch $HOME/.dotfiles/
 ```
 
 Next, you should do `chsh $USER $HOME/.nix-profile/bin/zsh` and re-login.
 
 Finally, be sure to install nerd-font and catpuccin mocha theme for your terminal.
+
+## Troubleshooting
+
+Usually nix doesn't work as expected and you don't know what to do. 
+It is good idea to start your troubleshooting with global cleanup:
+
+```sh
+nix-channel --update
+nix-env -u --always
+rm /nix/var/nix/gcroots/auto/*
+rm -rf $HOME/.cache/nix
+nix-collect-garbage -d
+```
 
 ## Nix Guides
 

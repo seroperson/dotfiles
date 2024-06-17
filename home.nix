@@ -1,27 +1,22 @@
 {
-  callPackage,
   config,
   pkgs,
-  username,
-  homeDirectory,
-  dotfilesPath,
-  lib,
   ...
 }:
-
+let
+  username = "seroperson";
+  homeDirectory = "/home/${username}";
+  dotfilesPath = "${homeDirectory}/.dotfiles";
+in
 {
-
   imports = [
     ./nix/tmux.nix
   ];
 
-  home.username = username;
-  home.homeDirectory = homeDirectory;
-
-  # This value determines the Home Manager release that your configuration is
-  # compatible with. This helps avoid breakage when a new Home Manager release
-  # introduces backwards incompatible changes.
-  home.stateVersion = "23.11";
+  home = {
+    inherit username homeDirectory;
+    stateVersion = "24.05";
+  };
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
@@ -42,15 +37,21 @@
     pkgs.tmux
     pkgs.kubectl
 
+    # Java / Scala things
     pkgs.jre
     pkgs.coursier
     pkgs.metals
     pkgs.bloop
     pkgs.sbt
+    pkgs.scala-cli
     pkgs.mill
 
+    # JS things
     pkgs.nodejs
     pkgs.yarn
+
+    # Ruby
+    pkgs.ruby
   ];
 
   home.file.".zshenv" = {
@@ -76,16 +77,6 @@
     };
 
     "nvim" = {
-      source = pkgs.fetchFromGitHub {
-        owner = "AstroNvim";
-        repo = "AstroNvim";
-        rev  = "d36af2f75369e3621312c87bd0e377e7d562fc72";
-        sha256 = "h019vKDgaOk0VL+bnAPOUoAL8VAkhY6MGDbqEy+uAKg=";
-      };
-    };
-    # AstronVim allows you to separate custom configuration from repository itself
-    # docs.astronvim.com/configuration/manage_user_config/#setting-up-a-user-configuration
-    "astronvim/lua/user" = {
       source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/astronvim";
       recursive = true;
     };
