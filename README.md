@@ -20,7 +20,7 @@ Initially, only `nix` and `git` must be installed. Be sure that nix is up-to-dat
 
 ```sh
 nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-nix-channel --updae
+nix-channel --update
 ```
 
 Clone the repository:
@@ -32,10 +32,10 @@ git clone https://github.com/seroperson/dotfiles $HOME/.dotfiles/
 And then let the `home-manager` do the rest:
 
 ```sh
-nix --extra-experimental-features "nix-command flakes" run home-manager/release-23.11 -- init --switch $HOME/.dotfiles/
+nix --extra-experimental-features "nix-command flakes" run home-manager/release-24.05 -- init --switch $HOME/.dotfiles/
 ```
 
-Next, you should do `chsh $USER $HOME/.nix-profile/bin/zsh` and re-login.
+Next, you should do `chsh $USER -s $HOME/.nix-profile/bin/zsh` and re-login.
 
 Finally, be sure to install nerd-font and catpuccin mocha theme for your terminal.
 
