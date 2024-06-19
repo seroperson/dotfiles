@@ -18,8 +18,6 @@ in {
     # address vim mode switching delay
     # https://superuser.com/a/252717/65504
     escapeTime = 0;
-    # start window number counting from 1 (instead of 0)
-    baseIndex = 1;
     plugins = with pkgs;
       [
         {
@@ -34,7 +32,7 @@ set -g @catppuccin_window_middle_separator "█ "
 
 set -g @catppuccin_status_modules_right "host date_time"
 set -g @catppuccin_status_left_separator  ""
-set -g @catppuccin_status_right_separator ""
+set -g @catppuccin_status_right_separator " "
 set -g @catppuccin_status_right_separator_inverse "yes"
 set -g @catppuccin_status_fill "all"
 set -g @catppuccin_status_connect_separator "no"
@@ -43,6 +41,9 @@ set -g @catppuccin_date_time_text "%H:%M:%S"
         }
       ];
     extraConfig = ''
+# Start windows and panes at 1, not 0
+set -g base-index 1
+setw -g pane-base-index 1
 # do not notify me about any activity
 set -g monitor-activity off
 # focus events enabled for terminals that support them
