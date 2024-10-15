@@ -26,8 +26,8 @@ in
     # using unwrapped nvim allows you to easily use it outside of NixOS
     pkgs.neovim-unwrapped
 
+    # Shell and tools
     pkgs.zsh
-
     pkgs.ripgrep
     pkgs.fd
     pkgs.bat
@@ -36,8 +36,10 @@ in
     pkgs.tree
     pkgs.tmux
     pkgs.kubectl
+    pkgs.unzip
+    pkgs.ouch # universal archiver
 
-    # Java / Scala things
+    # Java / Scala
     pkgs.jre
     pkgs.coursier
     pkgs.metals
@@ -46,12 +48,23 @@ in
     pkgs.scala-cli
     pkgs.mill
 
-    # JS things
+    # JS
     pkgs.nodejs
     pkgs.yarn
 
     # Ruby
     pkgs.ruby
+    pkgs.vips
+
+    # nix
+    pkgs.nixd
+    pkgs.alejandra
+    pkgs.deadnix
+    pkgs.statix
+
+    # Lua
+    pkgs.selene
+    pkgs.stylua
   ];
 
   home.file.".zshenv" = {

@@ -13,7 +13,7 @@ let
 in {
   programs.tmux = {
     enable = true;
-    historyLimit = 100000;
+    historyLimit = 1024;
     keyMode = "vi";
     # address vim mode switching delay
     # https://superuser.com/a/252717/65504

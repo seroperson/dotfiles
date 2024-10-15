@@ -4,26 +4,26 @@
 ---@type LazySpec
 return {
   {
-    -- https://github.com/numToStr/Comment.nvim?tab=readme-ov-file#configuration-optional
+    -- https://github.com/numToStr/Comment.nvim
     "numToStr/Comment.nvim",
     opts = {
       toggler = {
-        ---Line-comment toggle keymap
-        line = '<Leader>/'
-      }
-    }
+        -- Line-comment toggle keymap
+        line = "<Leader>/",
+      },
+    },
   },
 
   -- Always save automatically
-  -- {
-  --   "Pocco81/auto-save.nvim",
-  --   opts = {
-  --     execution_message = {
-  --       message = "Saved",
-  --       cleaning_interval = 500
-  --     }
-  --   }
-  -- },
+  {
+    "okuuva/auto-save.nvim",
+    opts = {
+      -- delay after which a pending save is executed
+      debounce_delay = 3000,
+      -- don't trigger autoformat
+      noautocmd = true,
+    },
+  },
 
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -35,10 +35,10 @@ return {
           -- dotfiles are hidden by default
           hide_dotfiles = false,
           -- works only in Windows, but still
-          hide_hidden = false
-        }
-      }
-    }
+          hide_hidden = false,
+        },
+      },
+    },
   },
 
   -- Always trim trailing whitespaces
@@ -47,6 +47,25 @@ return {
     config = function()
       vim.g.strip_whitespace_confirm = 0
       vim.g.strip_whitespace_on_save = 1
-    end
-  }
+    end,
+  },
+
+  -- override nvim-cmp plugin
+  -- https://docs.astronvim.com/recipes/cmp/
+  {
+    "hrsh7th/nvim-cmp",
+    -- override the options table that is used in the `require("cmp").setup()` call
+    opts = function(_, opts)
+      -- opts parameter is the default options table
+      -- the function is lazy loaded so cmp is able to be required
+      local cmp = require "cmp"
+      -- modify the sources part of the options table
+      opts.sources = cmp.config.sources {
+        { name = "nvim_lsp", priority = 1000 },
+        { name = "luasnip", priority = 750 },
+        { name = "buffer", priority = 500 },
+        { name = "path", priority = 250 },
+      }
+    end,
+  },
 }

@@ -16,7 +16,6 @@ export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.nix-profile/bin
 # {{{ language
 
 export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 
 # }}}
 

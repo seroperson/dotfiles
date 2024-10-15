@@ -6,9 +6,9 @@
 return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.colorscheme.catppuccin" },
-  { import = "astrocommunity.editing-support.auto-save-nvim" },
-  -- { import = "astrocommunity.programming-language-support.csv-vim" },
-  -- { import = "astrocommunity.pack.ruby" },
+  { import = "astrocommunity.recipes.auto-session-restore" },
+  { import = "astrocommunity.pack.ruby" },
   { import = "astrocommunity.pack.scala" },
-  { import = "astrocommunity.pack.lua" }
+  { import = "astrocommunity.pack.lua" },
+  { import = "astrocommunity.pack.nix" },
 }
