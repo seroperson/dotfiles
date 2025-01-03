@@ -52,6 +52,12 @@ return {
           },
         },
       },
+      metals = {
+        settings = {
+          useGlobalExecutable = true,
+          superMethodLensesEnabled = false,
+        },
+      },
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
     },
     -- customize how language servers are attached

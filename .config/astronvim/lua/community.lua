@@ -11,4 +11,5 @@ return {
   { import = "astrocommunity.pack.scala" },
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.nix" },
+  { import = "astrocommunity.editing-support.chatgpt-nvim" },
 }

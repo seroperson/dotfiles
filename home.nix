@@ -15,7 +15,7 @@ in
 
   home = {
     inherit username homeDirectory;
-    stateVersion = "24.05";
+    stateVersion = "24.11";
   };
 
   # The home.packages option allows you to install Nix packages into your

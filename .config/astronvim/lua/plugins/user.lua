@@ -68,4 +68,20 @@ return {
       }
     end,
   },
+
+  {
+    "jackMort/ChatGPT.nvim",
+    -- GigaChat tweaks :clown:
+    opts = function(_, opts)
+      opts.extra_curl_params = {
+        "--insecure",
+      }
+      opts.openai_params = {
+        model = "GigaChat",
+      }
+      opts.actions_paths = {
+        vim.fn.stdpath "config" .. "/gpt-actions.json",
+      }
+    end,
+  },
 }

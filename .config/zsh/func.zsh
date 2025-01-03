@@ -145,5 +145,10 @@ free_port() {
   lsof -i TCP:$1 | awk '/LISTEN/{print $2}' | xargs kill -9
 }
 
+# reloads sber GigaChat token using SBER_API_KEY variable
+reload_gigachat_api_token() {
+  export OPENAI_API_KEY=`curl -L -X POST --silent 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/json' -H 'RqUID: b1ddb72c-039f-4fae-ae32-ed3867b76b9d' -H "Authorization: Basic $SBER_API_KEY" --data-urlencode 'scope=GIGACHAT_API_PERS' --insecure | jq -r .access_token`
+}
+
 # }}}
 

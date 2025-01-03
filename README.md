@@ -1,16 +1,16 @@
 # seroperson's dotfiles
 
-Configuration which I use for my development purposes. Not so recently I migrated all the dotfiles 
+Configuration which I use for my development purposes. Not so recently I migrated all the dotfiles
 management to `nix` and it's still WIP, but mostly should work ok.
 
 ## Used software
 
 Mostly I use well-known things:
 
-* **zsh** - powered by `zgenom` plugin manager, lightweight shell.
-* **nvim** - initially I used self-written config, but then switched to [astronvim][1] community distribution
-  as long as managing well-prepared nvim configuration is a pretty hard task as for today. 
-* **tmux** - terminal multiplexer, configuration managed by `nix` (see `nix/tmux.nix` file).
+- **zsh** - powered by `zgenom` plugin manager, lightweight shell.
+- **nvim** - initially I used self-written config, but then switched to [astronvim][1] community distribution
+  as long as managing well-prepared nvim configuration is a pretty hard task as for today.
+- **tmux** - terminal multiplexer, configuration managed by `nix` (see `nix/tmux.nix` file).
 
 And also some set of handy tools, such as [exa][2], [jq][3], [rg][4].
 
@@ -32,7 +32,7 @@ git clone https://github.com/seroperson/dotfiles $HOME/.dotfiles/
 And then let the `home-manager` do the rest:
 
 ```sh
-nix --extra-experimental-features "nix-command flakes" run home-manager/release-24.05 -- init --switch $HOME/.dotfiles/
+nix --extra-experimental-features "nix-command flakes" run home-manager/release-24.11 -- init --switch $HOME/.dotfiles/
 ```
 
 Next, you should do `chsh $USER -s $HOME/.nix-profile/bin/zsh` and re-login.
@@ -41,7 +41,7 @@ Finally, be sure to install nerd-font and catpuccin mocha theme for your termina
 
 ## Troubleshooting
 
-Usually nix doesn't work as expected and you don't know what to do. 
+Usually nix doesn't work as expected and you don't know what to do.
 It is good idea to start your troubleshooting with global cleanup:
 
 ```sh
@@ -55,7 +55,7 @@ nix-collect-garbage -d
 ## Nix Guides
 
 `nix` is not easy thing to get started with, but luckily it has a lot of guides available across the web.
-Here are some of them: 
+Here are some of them:
 
 - [Scrive Nix Workshop][7]
 - [Introduction to Flakes][5]
@@ -74,4 +74,3 @@ Here are some of them:
 [8]: https://github.com/nix-community/home-manager/tree/master/modules
 [9]: https://nix-community.github.io/home-manager/options.xhtml
 [10]: https://docs.replit.com/tutorials/replit/nix-packaging
-

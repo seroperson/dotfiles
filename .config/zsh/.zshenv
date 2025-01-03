@@ -9,7 +9,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 # managing zsh dot directory
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.nix-profile/bin:/opt/cuda/bin
+export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.nix-profile/bin:/opt/cuda/bin:$HOME/.cargo/bin
 
 # }}}
 
@@ -71,5 +71,8 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # 'ls' coloring
 export LS_COLORS="di=34;40:ln=35;40:so=32;40:pi=33;40:"
+
+# using GigaChat with nvim-chatgpt
+export OPENAI_API_HOST="https://gigachat.devices.sberbank.ru/api"
 
 # }}}
