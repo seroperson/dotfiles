@@ -28,16 +28,24 @@ in
 
     # Shell and tools
     pkgs.zsh
-    pkgs.ripgrep
-    pkgs.fd
-    pkgs.bat
-    pkgs.jq
-    pkgs.eza
-    pkgs.tree
     pkgs.tmux
-    pkgs.kubectl
+    pkgs.ripgrep # Searching file content
+    pkgs.jq # Shell json manipulation
+    pkgs.yq # Shell yaml manipulation
+    pkgs.fd # Enhanced find
+    pkgs.bat # Enhanced cat
+    pkgs.eza # Enhanced ls
+    pkgs.tree
     pkgs.unzip
-    pkgs.ouch # universal archiver
+    pkgs.ouch # Universal archiver
+
+    # pekingese control
+    pkgs.kubectl
+    pkgs.fluxcd
+    pkgs.kubernetes-helm
+    pkgs.sops
+    pkgs.postgresql_16
+    pkgs.awscli2
 
     # Java / Scala
     pkgs.jre

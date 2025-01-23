@@ -38,6 +38,17 @@ return {
           hide_hidden = false,
         },
       },
+      default_component_configs = {
+        indent = {
+          indent_size = 1,
+        },
+        container = {
+          enable_character_fade = false,
+        },
+      },
+      window = {
+        width = 30,
+      },
     },
   },
 

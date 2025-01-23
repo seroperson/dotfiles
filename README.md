@@ -39,6 +39,18 @@ Next, you should do `chsh $USER -s $HOME/.nix-profile/bin/zsh` and re-login.
 
 Finally, be sure to install nerd-font and catpuccin mocha theme for your terminal.
 
+## Update packages
+
+In order to update installed packages, use the following commands:
+
+```
+nix-channel --update
+nix-env -u --always
+nix flake update
+```
+
+And then re-init `home-mmanager` with command from section above.
+
 ## Troubleshooting
 
 Usually nix doesn't work as expected and you don't know what to do.

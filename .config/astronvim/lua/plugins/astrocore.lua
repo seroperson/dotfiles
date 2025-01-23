@@ -30,7 +30,8 @@ return {
         -- sets vim.opt.number
         number = true,
         -- sets vim.opt.spell
-        spell = false,
+        spell = true,
+        spelllang = "en_us",
         -- sets vim.opt.signcolumn to auto
         signcolumn = "auto",
         -- sets vim.opt.wrap
@@ -45,8 +46,8 @@ return {
         list = true,
         -- don't redraw immediately (helps with macros)
         lazyredraw = true,
-        -- disable mouse
-        mouse = "",
+        -- enable mouse, sometimes it's just more comfortable
+        mouse = "a",
         -- some additional metals config
         completeopt = { "menuone", "noinsert", "noselect" },
       },
