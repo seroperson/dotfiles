@@ -58,3 +58,11 @@ bindkey -M filterselect '^k' up-line-or-history
 bindkey -M filterselect '^t' accept-search
 
 # }}}
+
+# {{{ zsh-autosuggest
+
+# Key bindings for accepting suggestions
+bindkey '^ ' autosuggest-accept   # Ctrl+Space to accept full suggestion
+bindkey '^g' forward-word         # Ctrl+g to accept one word
+
+# }}}

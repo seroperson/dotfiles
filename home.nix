@@ -29,13 +29,13 @@ in
     # Shell and tools
     pkgs.zsh
     pkgs.tmux
+    pkgs.tmuxinator
     pkgs.ripgrep # Searching file content
     pkgs.jq # Shell json manipulation
     pkgs.yq # Shell yaml manipulation
     pkgs.fd # Enhanced find
     pkgs.bat # Enhanced cat
     pkgs.eza # Enhanced ls
-    pkgs.tree
     pkgs.unzip
     pkgs.ouch # Universal archiver
     pkgs.wsl-open

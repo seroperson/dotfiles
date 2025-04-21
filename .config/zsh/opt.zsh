@@ -29,7 +29,7 @@ setopt nullglob # https://unix.stackexchange.com/a/34012
 
 # }}}
 
-# {{{ history-options
+# {{{ history options
 
 setopt BANG_HIST # Treat the '!' character specially during expansion.
 setopt EXTENDED_HISTORY # Write the history file in the ":start:elapsed;command" format.
@@ -44,6 +44,7 @@ setopt HIST_SAVE_NO_DUPS # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY # Don't execute immediately upon history expansion.
 unsetopt HIST_BEEP # Don't beep when accessing nonexistent history.
+
 
 # }}}
 

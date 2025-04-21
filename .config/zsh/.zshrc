@@ -29,6 +29,8 @@ if ! zgenom saved; then
   zgenom load rupa/z
   # zsh anything.el-like widget
   zgenom load zsh-users/zaw
+  # history-based autosuggestions
+  zgenom load zsh-users/zsh-autosuggestions
   # completions
   zgenom load zsh-users/zsh-completions
 
@@ -37,7 +39,7 @@ if ! zgenom saved; then
   zgenom save
 fi
 
-# {{{ theme configuration
+# {{{ Theme configuration
 
 MNML_MAGICENTER=(mnml_me_git)
 MNML_USER_CHAR="$"
@@ -60,7 +62,7 @@ function git_count_modified_files() {
 
 # }}}
 
-# {{{ including sources
+# {{{ Including sources
 
 case `uname` in
   'Linux') OS='lin' ;;
@@ -82,19 +84,30 @@ include_source "zstyle.zsh" "zstyle.$OS.zsh"
 include_source "alias.zsh" "alias.$OS.zsh"
 include_source "bindkey.zsh" "bindkey.$OS.zsh"
 
-# {{{ including soft-based configurations
+# {{{ Including soft-based configurations
 
 is_tmux_enabled && source "$ZDOTDIR/soft/tmux.zsh"
 
-# }}}
+# Load autosuggestions config
+source "$ZDOTDIR/soft/autosuggestions.zsh"
 
 # }}}
 
-# {{{ history
+# }}}
+
+# {{{ History configuration
 
 export HISTFILE="$XDG_DATA_HOME/zsh_history"
 export HISTSIZE=2147483647 # LONG_MAX
 export SAVEHIST=$HISTSIZE
+
+HISTORY_IGNORE='(ls *|ls|cd *|cd|cdu|pwd|cat *|history|clear|cls|exit)'
+
+zshaddhistory() {
+  emulate -L zsh
+  setopt extendedglob
+  [[ $1 != ${~HISTORY_IGNORE} ]]
+}
 
 # }}}
 

@@ -1,0 +1,2 @@
+- Don't try to replace `zgenom` with any other plugin management system.
+- Don't suggest to move configuration to nix files if it wasn't already there.

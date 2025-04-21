@@ -8,7 +8,7 @@ management to `nix` and it's still WIP, but mostly should work ok.
 Mostly I use well-known things:
 
 - **zsh** - powered by `zgenom` plugin manager, lightweight shell.
-- **nvim** - initially I used self-written config, but then switched to [astronvim][1] community distribution
+- **nvim** - initially I have used self-written config, but then switched to [astronvim][1] community distribution
   as long as managing well-prepared nvim configuration is a pretty hard task as for today.
 - **tmux** - terminal multiplexer, configuration managed by `nix` (see `nix/tmux.nix` file).
 
