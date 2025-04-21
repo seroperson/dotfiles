@@ -12,5 +12,8 @@ return {
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.nix" },
   { import = "astrocommunity.pack.typescript-all-in-one" },
-  { import = "astrocommunity.editing-support.chatgpt-nvim" },
+  { import = "astrocommunity.pack.svelte" },
+  { import = "astrocommunity.pack.tailwindcss" },
+  -- { import = "astrocommunity.motion.harpoon" },
+  -- { import = "astrocommunity.editing-support.chatgpt-nvim" },
 }

@@ -38,6 +38,7 @@ in
     pkgs.tree
     pkgs.unzip
     pkgs.ouch # Universal archiver
+    pkgs.wsl-open
 
     # pekingese control
     pkgs.kubectl

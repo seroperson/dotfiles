@@ -39,6 +39,14 @@ Next, you should do `chsh $USER -s $HOME/.nix-profile/bin/zsh` and re-login.
 
 Finally, be sure to install nerd-font and catpuccin mocha theme for your terminal.
 
+## (WIP) Preview without installation
+
+To build this configuration without applying, first you have to build it:
+
+```
+nix build .#homeManagerConfigurations.seroperson.activationPackage --extra-experimental-features "nix-command flakes" && ./result/activate --dry-run
+```
+
 ## Update packages
 
 In order to update installed packages, use the following commands:

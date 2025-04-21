@@ -1,15 +1,28 @@
 -- You can also add or configure plugins by creating files in this `plugins/` folder
--- Here are some examples:
 
 ---@type LazySpec
 return {
+
+  -- customize dashboard options
   {
-    -- https://github.com/numToStr/Comment.nvim
-    "numToStr/Comment.nvim",
+    "folke/snacks.nvim",
     opts = {
-      toggler = {
-        -- Line-comment toggle keymap
-        line = "<Leader>/",
+      dashboard = {
+        preset = {
+          header = table.concat({
+            " █████  ███████ ████████ ██████   ██████ ",
+            "██   ██ ██         ██    ██   ██ ██    ██",
+            "███████ ███████    ██    ██████  ██    ██",
+            "██   ██      ██    ██    ██   ██ ██    ██",
+            "██   ██ ███████    ██    ██   ██  ██████ ",
+            "",
+            "███    ██ ██    ██ ██ ███    ███",
+            "████   ██ ██    ██ ██ ████  ████",
+            "██ ██  ██ ██    ██ ██ ██ ████ ██",
+            "██  ██ ██  ██  ██  ██ ██  ██  ██",
+            "██   ████   ████   ██ ██      ██",
+          }, "\n"),
+        },
       },
     },
   },
@@ -58,41 +71,6 @@ return {
     config = function()
       vim.g.strip_whitespace_confirm = 0
       vim.g.strip_whitespace_on_save = 1
-    end,
-  },
-
-  -- override nvim-cmp plugin
-  -- https://docs.astronvim.com/recipes/cmp/
-  {
-    "hrsh7th/nvim-cmp",
-    -- override the options table that is used in the `require("cmp").setup()` call
-    opts = function(_, opts)
-      -- opts parameter is the default options table
-      -- the function is lazy loaded so cmp is able to be required
-      local cmp = require "cmp"
-      -- modify the sources part of the options table
-      opts.sources = cmp.config.sources {
-        { name = "nvim_lsp", priority = 1000 },
-        { name = "luasnip", priority = 750 },
-        { name = "buffer", priority = 500 },
-        { name = "path", priority = 250 },
-      }
-    end,
-  },
-
-  {
-    "jackMort/ChatGPT.nvim",
-    -- GigaChat tweaks :clown:
-    opts = function(_, opts)
-      opts.extra_curl_params = {
-        "--insecure",
-      }
-      opts.openai_params = {
-        model = "GigaChat",
-      }
-      opts.actions_paths = {
-        vim.fn.stdpath "config" .. "/gpt-actions.json",
-      }
     end,
   },
 }
