@@ -4,7 +4,11 @@
 
 if ! is_in_tmux; then
     if [[ $TERM != "linux" ]]; then
-        tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf new-session -As main
+        if is_command_present tmuxinator; then
+            tmuxinator start pekingese
+        else
+            tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf new-session -As main
+        fi
     fi
 else
     export TERM="screen-256color"

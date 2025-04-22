@@ -1,0 +1,29 @@
+---
+name: pekingese
+project_root: "/home/seroperson/.dotfiles"
+windows:
+  - pekingese-svelte:
+      layout: main-vertical
+      panes:
+        - cd $HOME/Development/pekingese/pekingese-svelte
+        - cd $HOME/Development/pekingese/pekingese-svelte
+        - cd $HOME/Development/pekingese/pekingese-svelte
+  - pekingese-saver:
+      layout: main-vertical
+      panes:
+        - cd $HOME/Development/pekingese/pekingese-saver
+        - cd $HOME/Development/pekingese/pekingese-saver && nix develop
+        - cd $HOME/Development/pekingese/pekingese-saver
+  - pekingese-cluster:
+      layout: main-vertical
+      panes:
+        - cd $HOME/Development/pekingese/pekingese-cluster
+        - cd $HOME/Development/pekingese/pekingese-cluster
+        - cd $HOME/Development/pekingese/pekingese-cluster && flux events --watch
+        - cd $HOME/Development/pekingese/pekingese-cluster && k get pods --watch
+  - ".dotfiles":
+      layout: main-vertical
+      panes:
+        - cd $HOME/.dotfiles
+        - cd $HOME/.dotfiles
+        - cd $HOME/.dotfiles

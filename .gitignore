@@ -14,3 +14,6 @@ viminfo
 # don't track temporary files
 *.tmp
 
+# don't track my AI configuration
+.cursor/
+

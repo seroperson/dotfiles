@@ -97,9 +97,12 @@ in
       source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/nix";
       recursive = true;
     };
-
     "nvim" = {
       source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/astronvim";
+      recursive = true;
+    };
+    "tmuxinator" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/tmuxinator";
       recursive = true;
     };
   };

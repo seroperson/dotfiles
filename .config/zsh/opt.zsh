@@ -45,7 +45,6 @@ setopt HIST_REDUCE_BLANKS # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY # Don't execute immediately upon history expansion.
 unsetopt HIST_BEEP # Don't beep when accessing nonexistent history.
 
-
 # }}}
 
 # don't freeze by c-s
