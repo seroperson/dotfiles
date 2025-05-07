@@ -20,13 +20,27 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      myHomeManagerConfiguration = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+
+        modules = [
+          ./home.nix
+          {
+            nixpkgs.overlays = [
+              (self: super: {
+                jre = super.jdk17;
+              })
+            ];
+          }
+        ];
+      };
     in {
       devShells.${system}.default = pkgs.mkShell {
-        NIX_CONFIG = "extra-experimental-features = nix-command flakes repl-flake";
+        NIX_CONFIG = "extra-experimental-features = nix-command flakes";
 
         packages = [
           pkgs.home-manager
@@ -35,24 +49,7 @@
       };
 
       homeConfigurations = {
-        "seroperson" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-
-          modules = [
-            ./home.nix
-            {
-              nixpkgs.overlays = [
-                (self: super: {
-                  jre = super.jdk17;
-                })
-              ];
-            }
-          ];
+        "seroperson" = myHomeManagerConfiguration;
       };
-
-      programs.zsh.enable = true;
-      environment.shells = with pkgs; [ zsh ];
-      users.defaultUserShell = pkgs.zsh;
     };
-  };
 }

@@ -72,6 +72,16 @@ rm -rf $HOME/.cache/nix
 nix-collect-garbage -d
 ```
 
+Also it's possible to debug nix variables using `nix repl`. For example, to
+load flake into repl, you can do the following:
+
+```
+nix repl
+
+nix-repl> :lf ./
+nix-repl> builtins.attrNames homeConfigurations.seroperson
+```
+
 ## Nix Guides
 
 `nix` is not easy thing to get started with, but luckily it has a lot of guides available across the web.

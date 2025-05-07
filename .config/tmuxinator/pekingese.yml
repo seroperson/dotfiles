@@ -1,29 +1,32 @@
 ---
 name: pekingese
-project_root: "/home/seroperson/.dotfiles"
 windows:
   - pekingese-svelte:
+      root: "/home/seroperson/Development/pekingese/pekingese-svelte"
       layout: main-vertical
       panes:
-        - cd $HOME/Development/pekingese/pekingese-svelte
-        - cd $HOME/Development/pekingese/pekingese-svelte
-        - cd $HOME/Development/pekingese/pekingese-svelte
+        - echo "Started"
+        - echo "Started"
+        - echo "Started"
   - pekingese-saver:
+      root: "/home/seroperson/Development/pekingese/pekingese-saver"
       layout: main-vertical
       panes:
-        - cd $HOME/Development/pekingese/pekingese-saver
-        - cd $HOME/Development/pekingese/pekingese-saver && nix develop
-        - cd $HOME/Development/pekingese/pekingese-saver
+        - echo "Started"
+        - nix develop
+        - echo "Started"
   - pekingese-cluster:
+      root: "/home/seroperson/Development/pekingese/pekingese-cluster"
       layout: main-vertical
       panes:
-        - cd $HOME/Development/pekingese/pekingese-cluster
-        - cd $HOME/Development/pekingese/pekingese-cluster
-        - cd $HOME/Development/pekingese/pekingese-cluster && flux events --watch
-        - cd $HOME/Development/pekingese/pekingese-cluster && k get pods --watch
+        - echo "Started"
+        - echo "Started"
+        - flux events --watch
+        - k get pods --watch
   - ".dotfiles":
+      root: "/home/seroperson/.dotfiles"
       layout: main-vertical
       panes:
-        - cd $HOME/.dotfiles
-        - cd $HOME/.dotfiles
-        - cd $HOME/.dotfiles
+        - echo "Started"
+        - echo "Started"
+        - echo "Started"

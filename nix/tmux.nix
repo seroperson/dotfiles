@@ -23,20 +23,21 @@ in {
         {
           plugin = tmuxPlugins.catppuccin;
           extraConfig = ''
-set -g @catppuccin_flavour 'mocha'
+set -g @catppuccin_flavor 'mocha'
+set -g @catppuccin_window_status_style "slanted"
 
-set -g @catppuccin_window_left_separator "█"
-set -g @catppuccin_window_right_separator "█"
-set -g @catppuccin_window_number_position "left"
-set -g @catppuccin_window_middle_separator "█ "
+# set -g @catppuccin_window_middle_separator "█ "
+set -g @catppuccin_directory_text " #{=/-32/...:#{s|$USER|~|:#{b:pane_current_path}}} "
 
-set -g @catppuccin_status_modules_right "host date_time"
-set -g @catppuccin_status_left_separator  ""
-set -g @catppuccin_status_right_separator " "
-set -g @catppuccin_status_right_separator_inverse "yes"
-set -g @catppuccin_status_fill "all"
-set -g @catppuccin_status_connect_separator "no"
-set -g @catppuccin_date_time_text "%H:%M:%S"
+set -g @catppuccin_window_current_number ""
+set -g @catppuccin_window_current_number_color "#{E:@thm_mauve}"
+set -g @catppuccin_window_current_text "#[fg=#{@thm_mauve},bg=#{@thm_surface_1}]#I#[fg=#{@thm_surface_1},bg=#{@thm_mauve}]#[fg=#{@thm_mantle},bg=#{@thm_mauve}]#{?#{!=:#{window_name},}, #W,}"
+
+set -g @catppuccin_window_number ""
+set -g @catppuccin_window_number_color "#{E:@thm_surface_0}"
+set -g @catppuccin_window_text "#[fg=#{@thm_surface_2},bg=#{@thm_surface_0}] #I#{?#{!=:#{window_name},},  #W,}"
+
+set -g @catppuccin_window_flags "icon"
           '';
         }
       ];
@@ -64,13 +65,20 @@ set -g set-titles-string '#{b:pane_current_path}'
 set -g terminal-overrides ",xterm-256color:Tc"
 # no spaces between windows in statusline
 set -g window-status-separator ""
-# automatically set current window's name to current directory
+# status line update interval
 set -g status-interval 1
+
+# automatically set window name to current git directory
 set -g automatic-rename on
 set -g automatic-rename-format '#(basename "$(git -C #{pane_current_path} rev-parse --show-toplevel 2>/dev/null || echo "#{pane_current_path}")")'
 
-# matches the outside TERM
-set -g default-terminal "screen-256color"
+set -g window-status-separator ""
+set -g status-left-length 0
+set -g status-left ""
+set -ga status-left "#{?client_prefix,#[fg=#{@thm_red} bold]PREFIX ,#{?#{==:#{pane_mode},copy-mode},#[fg=#{@thm_yellow} bold]COPY ,#[fg=#{@thm_green} bold]NORMAL }}"
+set -g status-right ""
+
+set-option -g mouse on
 
 # unbinding unused keys
 unbind &

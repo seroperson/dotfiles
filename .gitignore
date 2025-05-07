@@ -17,3 +17,4 @@ viminfo
 # don't track my AI configuration
 .cursor/
 
+.aider*

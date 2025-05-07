@@ -9,6 +9,11 @@ let
   dotfilesPath = "${homeDirectory}/.dotfiles";
 in
 {
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (pkgs.lib.getName pkg) [
+      "yandex-cloud"
+    ];
+
   imports = [
     ./nix/tmux.nix
   ];
@@ -39,6 +44,7 @@ in
     pkgs.unzip
     pkgs.ouch # Universal archiver
     pkgs.wsl-open
+    pkgs.aider-chat
 
     # pekingese control
     pkgs.kubectl
@@ -47,6 +53,7 @@ in
     pkgs.sops
     pkgs.postgresql_16
     pkgs.awscli2
+    pkgs.yandex-cloud
 
     # Java / Scala
     pkgs.jre
@@ -65,6 +72,9 @@ in
     pkgs.ruby
     pkgs.vips
 
+    # Python
+    pkgs.uv
+
     # nix
     pkgs.nixd
     pkgs.alejandra
@@ -80,6 +90,9 @@ in
     source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/zsh/.zshenv";
   };
 
+  # systemd.user.enable = false;
+
+  xdg.mime.enable = false;
   xdg.configFile = {
     "git" = {
       source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/git";
