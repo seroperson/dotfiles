@@ -1,14 +1,28 @@
 {
   config,
   pkgs,
+  vars,
   ...
 }:
 let
-  username = "seroperson";
-  homeDirectory = "/home/${username}";
-  dotfilesPath = "${homeDirectory}/.dotfiles";
-in
-{
+  baseName = p: with builtins;
+    let
+      bp = baseNameOf ( toString p );
+      isBaseName = mb: ( baseNameOf mb ) == mb;
+      isNixStorePath = nsp:
+        let prefix = "/nix/store/"; plen = stringLength prefix; in
+        prefix == ( substring 0 plen ( toString nsp ) );
+      removeNixStorePrefix = nsp:
+        let m = match "/nix/store/[^-]+-(.*)" ( toString nsp ); in
+        if m == null then nsp else ( head m );
+    in baseNameOf ( removeNixStorePrefix ( p ) );
+
+  fileReference = path:
+    if vars.useSymlinks
+      then config.lib.file.mkOutOfStoreSymlink "${vars.dotfilesDirectory}/${baseName path}"
+      else path;
+
+in {
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (pkgs.lib.getName pkg) [
       "yandex-cloud"
@@ -19,7 +33,9 @@ in
   ];
 
   home = {
-    inherit username homeDirectory;
+    # Requires --impure flag
+    homeDirectory = vars.homeDirectory;
+    username = vars.username;
     stateVersion = "24.11";
   };
 
@@ -87,35 +103,33 @@ in
   ];
 
   home.file.".zshenv" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/zsh/.zshenv";
+    source = fileReference .config/zsh/.zshenv;
   };
-
-  # systemd.user.enable = false;
 
   xdg.mime.enable = false;
   xdg.configFile = {
     "git" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/git";
+      source = fileReference .config/git;
       recursive = true;
     };
     "ideavim" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/ideavim";
+      source = fileReference .config/ideavim;
       recursive = true;
     };
     "zsh" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/zsh";
+      source = fileReference .config/zsh;
       recursive = true;
     };
     "nix" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/nix";
+      source = fileReference .config/nix;
       recursive = true;
     };
     "nvim" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/astronvim";
+      source = fileReference .config/astronvim;
       recursive = true;
     };
     "tmuxinator" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/tmuxinator";
+      source = fileReference .config/tmuxinator;
       recursive = true;
     };
   };
