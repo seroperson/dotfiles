@@ -24,8 +24,18 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      myHomeManagerConfiguration = home-manager.lib.homeManagerConfiguration {
+      myHomeManagerConfiguration = useSymlinks: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+
+        extraSpecialArgs = {
+          inherit inputs;
+          vars = rec {
+            inherit useSymlinks;
+            homeDirectory = builtins.getEnv "HOME";
+            username = builtins.getEnv "USER";
+            dotfilesDirectory = "${homeDirectory}/.dotfiles/";
+          };
+        };
 
         modules = [
           ./home.nix
@@ -44,12 +54,25 @@
 
         packages = [
           pkgs.home-manager
-          pkgs.git
+          (myHomeManagerConfiguration false).activationPackage
         ];
+
+        pwdPath = builtins.toString ./.;
+
+        shellHook = ''
+          export USER=seroperson-preview
+          export HOME=$(mktemp -d)
+          mkdir -p $HOME/.local/state/nix/profiles
+          home-manager --impure init --switch $pwdPath --flake $pwdPath#homeConfigurations.seroperson-preview.activationPackage
+          chsh -s $HOME/.nix-profile/bin/zsh
+          $HOME/.nix-profile/bin/zsh
+          trap "rm -rf $HOME" EXIT
+        '';
       };
 
       homeConfigurations = {
-        "seroperson" = myHomeManagerConfiguration;
+        "seroperson" = myHomeManagerConfiguration true;
+        "seroperson-preview" = myHomeManagerConfiguration false;
       };
     };
 }

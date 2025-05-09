@@ -44,7 +44,7 @@ Finally, be sure to install nerd-font and catpuccin mocha theme for your termina
 To build this configuration without applying, first you have to build it:
 
 ```
-nix build .#homeManagerConfigurations.seroperson.activationPackage --extra-experimental-features "nix-command flakes" && ./result/activate --dry-run
+USER=preview nix develop --impure github:seroperson/dotfiles
 ```
 
 ## Update packages
