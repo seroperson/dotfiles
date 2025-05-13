@@ -32,7 +32,7 @@ git clone https://github.com/seroperson/dotfiles $HOME/.dotfiles/
 And then let the `home-manager` do the rest:
 
 ```sh
-nix --extra-experimental-features "nix-command flakes" run home-manager/release-24.11 -- init --switch $HOME/.dotfiles/
+home-manager init --switch $HOME/.dotfiles/
 ```
 
 Next, you should do `chsh $USER -s $HOME/.nix-profile/bin/zsh` and re-login.
@@ -44,8 +44,7 @@ Finally, be sure to install nerd-font and catpuccin mocha theme for your termina
 To build this configuration without applying, first you have to build it:
 
 ```
-docker run --rm -it --entrypoint bash cguenther/ubuntu-nix:24.04-9
-nix develop --impure github:seroperson/dotfiles
+docker run --rm -it --entrypoint bash nixos/nix -c 'USER=seroperson-preview HOME=/tmp/preview mkdir /tmp/preview && nix develop --impure github:seroperson/dotfiles --extra-experimental-features "nix-command flakes"'
 ```
 
 ## Update packages

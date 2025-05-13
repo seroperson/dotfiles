@@ -1,7 +1,8 @@
 {
   config,
+  lib,
   pkgs,
-  vars,
+  specialArgs,
   ...
 }:
 let
@@ -18,8 +19,8 @@ let
     in baseNameOf ( removeNixStorePrefix ( p ) );
 
   fileReference = path:
-    if vars.useSymlinks
-      then config.lib.file.mkOutOfStoreSymlink "${vars.dotfilesDirectory}/${baseName path}"
+    if specialArgs.useSymlinks
+      then config.lib.file.mkOutOfStoreSymlink "${specialArgs.dotfilesDirectory}/${baseName path}"
       else path;
 
 in {
@@ -34,15 +35,16 @@ in {
 
   home = {
     # Requires --impure flag
-    homeDirectory = vars.homeDirectory;
-    username = vars.username;
+    homeDirectory = specialArgs.homeDirectory;
+    username = specialArgs.username;
     stateVersion = "24.11";
   };
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
-    pkgs.git
+    # pkgs.git
+    pkgs.curl
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     pkgs.neovim-unwrapped
@@ -103,36 +105,35 @@ in {
   ];
 
   home.file.".zshenv" = {
-    source = fileReference .config/zsh/.zshenv;
+    source = fileReference ./.zshenv;
   };
 
   xdg.mime.enable = false;
   xdg.configFile = {
     "git" = {
-      source = fileReference .config/git;
+      source = fileReference ./git;
       recursive = true;
     };
     "ideavim" = {
-      source = fileReference .config/ideavim;
+      source = fileReference ./ideavim;
       recursive = true;
     };
     "zsh" = {
-      source = fileReference .config/zsh;
-      recursive = true;
-    };
-    "nix" = {
-      source = fileReference .config/nix;
+      source = fileReference ./zsh;
       recursive = true;
     };
     "nvim" = {
-      source = fileReference .config/astronvim;
+      source = fileReference ./astronvim;
       recursive = true;
     };
     "tmuxinator" = {
-      source = fileReference .config/tmuxinator;
+      source = fileReference ./tmuxinator;
       recursive = true;
     };
   };
+
+  # https://github.com/nix-community/home-manager/issues/2995
+  programs.man.enable = false;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

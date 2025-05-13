@@ -20,21 +20,15 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      myHomeManagerConfiguration = useSymlinks: home-manager.lib.homeManagerConfiguration {
+      myHomeManagerConfiguration = useSymlinks: homeDirectory: username: dotfilesDirectory: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
         extraSpecialArgs = {
-          inherit inputs;
-          vars = rec {
-            inherit useSymlinks;
-            homeDirectory = builtins.getEnv "HOME";
-            username = builtins.getEnv "USER";
-            dotfilesDirectory = "${homeDirectory}/.dotfiles/";
-          };
+          inherit useSymlinks homeDirectory username dotfilesDirectory;
         };
 
         modules = [
@@ -50,29 +44,22 @@
       };
     in {
       devShells.${system}.default = pkgs.mkShell {
-        NIX_CONFIG = "extra-experimental-features = nix-command flakes";
-
-        packages = [
-          pkgs.home-manager
-          (myHomeManagerConfiguration false).activationPackage
+        buildInputs = [
+          (myHomeManagerConfiguration false (builtins.getEnv "HOME") (builtins.getEnv "USER") "").activationPackage
         ];
 
-        pwdPath = builtins.toString ./.;
-
         shellHook = ''
-          export USER=seroperson-preview
-          export HOME=$(mktemp -d)
+          # Fixes `Could not find suitable profile directory` error
           mkdir -p $HOME/.local/state/nix/profiles
-          home-manager --impure init --switch $pwdPath --flake $pwdPath#homeConfigurations.seroperson-preview.activationPackage
-          chsh -s $HOME/.nix-profile/bin/zsh
-          $HOME/.nix-profile/bin/zsh
-          trap "rm -rf $HOME" EXIT
+          $buildInputs/activate
+          chsh -s $HOME/.nix-profile/bin/zsh $USER
+          # Run zsh and then exit
+          IS_PREVIEW=1 exec $HOME/.nix-profile/bin/zsh
         '';
       };
 
       homeConfigurations = {
-        "seroperson" = myHomeManagerConfiguration true;
-        "seroperson-preview" = myHomeManagerConfiguration false;
+        "seroperson" = myHomeManagerConfiguration true "/home/seroperson/" "seroperson" "/home/seroperson/.dotfiles";
       };
     };
 }

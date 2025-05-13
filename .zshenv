@@ -63,6 +63,8 @@ export EMAIL="seroperson@gmail.com"
 
 # {{{ other
 
+export NIX_CONFIG="extra-experimental-features = nix-command flakes"
+
 # don't create .lesshst
 export LESSHISTFILE=-
 
@@ -71,9 +73,5 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # 'ls' coloring
 export LS_COLORS="di=34;40:ln=35;40:so=32;40:pi=33;40:"
-
-export OPENAI_API_KEY="test"
-# using GigaChat with nvim-chatgpt
-# export OPENAI_API_HOST="https://gigachat.devices.sberbank.ru/api"
 
 # }}}
