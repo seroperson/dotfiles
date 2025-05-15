@@ -1,28 +1,15 @@
 {
   config,
-  lib,
   pkgs,
-  specialArgs,
+  useSymlinks,
+  homeDirectory,
+  username,
+  dotfilesDirectory,
   ...
 }:
 let
-  baseName = p: with builtins;
-    let
-      bp = baseNameOf ( toString p );
-      isBaseName = mb: ( baseNameOf mb ) == mb;
-      isNixStorePath = nsp:
-        let prefix = "/nix/store/"; plen = stringLength prefix; in
-        prefix == ( substring 0 plen ( toString nsp ) );
-      removeNixStorePrefix = nsp:
-        let m = match "/nix/store/[^-]+-(.*)" ( toString nsp ); in
-        if m == null then nsp else ( head m );
-    in baseNameOf ( removeNixStorePrefix ( p ) );
-
-  fileReference = path:
-    if specialArgs.useSymlinks
-      then config.lib.file.mkOutOfStoreSymlink "${specialArgs.dotfilesDirectory}/${baseName path}"
-      else path;
-
+  inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; })
+    fileReference;
 in {
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (pkgs.lib.getName pkg) [
@@ -34,61 +21,67 @@ in {
   ];
 
   home = {
-    # Requires --impure flag
-    homeDirectory = specialArgs.homeDirectory;
-    username = specialArgs.username;
-    stateVersion = "24.11";
+    inherit homeDirectory username;
+    stateVersion = "24.05";
   };
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-    # pkgs.git
-    pkgs.curl
+  home.packages = with pkgs.unstable; [
+    # Shell and tools
+    git
+    zsh
+    tmuxinator
+    ripgrep # Searching file content
+    jq # Json manipulation
+    yq # Yaml manipulation
+    fd # Enhanced find
+    bat # Enhanced cat
+    eza # Enhanced ls
+    ouch # Universal archiver
+    wsl-open
+    aider-chat # AI Assistant
+    comma # Runs programs without installing them
+    nix-index
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
-    pkgs.neovim-unwrapped
+    neovim-unwrapped
 
-    # Shell and tools
-    pkgs.zsh
-    pkgs.tmux
-    pkgs.tmuxinator
-    pkgs.ripgrep # Searching file content
-    pkgs.jq # Shell json manipulation
-    pkgs.yq # Shell yaml manipulation
-    pkgs.fd # Enhanced find
-    pkgs.bat # Enhanced cat
-    pkgs.eza # Enhanced ls
+    # nvim dependencies
+    pkgs.curl
     pkgs.unzip
-    pkgs.ouch # Universal archiver
-    pkgs.wsl-open
-    pkgs.aider-chat
+    pkgs.gzip
+    pkgs.gcc
+    pkgs.gnutar
+    pkgs.gnumake
+    pkgs.iconv
+    pkgs.tree-sitter
 
     # pekingese control
-    pkgs.kubectl
-    pkgs.fluxcd
-    pkgs.kubernetes-helm
-    pkgs.sops
-    pkgs.postgresql_16
-    pkgs.awscli2
-    pkgs.yandex-cloud
+    kubectl
+    fluxcd
+    kubernetes-helm
+    sops
+    postgresql_16
+    awscli2
+    yandex-cloud
 
     # Java / Scala
     pkgs.jre
-    pkgs.coursier
-    pkgs.metals
-    pkgs.bloop
-    pkgs.sbt
-    pkgs.scala-cli
-    pkgs.mill
+    coursier
+    metals
+    bloop
+    sbt
+    scala-cli
+    mill
 
     # JS
-    pkgs.nodejs
-    pkgs.yarn
+    nodejs
+    yarn
 
     # Ruby
-    pkgs.ruby
-    pkgs.vips
+    ruby
+    vips
 
     # Python
     pkgs.uv
@@ -98,10 +91,6 @@ in {
     pkgs.alejandra
     pkgs.deadnix
     pkgs.statix
-
-    # Lua
-    pkgs.selene
-    pkgs.stylua
   ];
 
   home.file.".zshenv" = {

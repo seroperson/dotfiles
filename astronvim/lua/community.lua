@@ -6,7 +6,6 @@
 return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.colorscheme.catppuccin" },
-  { import = "astrocommunity.recipes.auto-session-restore" },
   { import = "astrocommunity.pack.ruby" },
   { import = "astrocommunity.pack.scala" },
   { import = "astrocommunity.pack.lua" },
@@ -14,5 +13,4 @@ return {
   { import = "astrocommunity.pack.typescript-all-in-one" },
   { import = "astrocommunity.pack.svelte" },
   { import = "astrocommunity.pack.tailwindcss" },
-  -- { import = "astrocommunity.motion.harpoon" },
 }

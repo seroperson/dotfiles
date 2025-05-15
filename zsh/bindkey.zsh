@@ -66,3 +66,12 @@ bindkey '^ ' autosuggest-accept   # Ctrl+Space to accept full suggestion
 bindkey '^g' forward-word         # Ctrl+g to accept one word
 
 # }}}
+
+# {{{ zsh-autocomplete
+
+bindkey '^I' menu-select
+bindkey "$terminfo[kcbt]" menu-select
+bindkey -M menuselect '^I' menu-complete
+bindkey -M menuselect "$terminfo[kcbt]" reverse-menu-complete
+
+# }}}

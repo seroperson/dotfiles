@@ -1,20 +1,22 @@
-# don't track my history
+# my history
 .zsh_history
-# don't track some completion stuff
+# some completion stuff
 .zcompdump
 .zcompcache
-# don't track machine based stuff
+# machine based stuff
 machine-based.*
 
-# don't track vim file info stuff
+# vim file info stuff
 viminfo
-# don't track spelling files
+# spelling files
 *.spl
 
-# don't track temporary files
+# temporary files
 *.tmp
 
-# don't track my AI configuration
-.cursor/
+# nix output
+result
 
+# AI configuration
+.cursor/
 .aider*

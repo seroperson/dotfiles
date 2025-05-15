@@ -13,7 +13,7 @@ let
 in {
   programs.tmux = {
     enable = true;
-    historyLimit = 1024;
+    historyLimit = 4096;
     keyMode = "vi";
     # address vim mode switching delay
     # https://superuser.com/a/252717/65504
@@ -21,7 +21,7 @@ in {
     plugins = with pkgs;
       [
         {
-          plugin = tmuxPlugins.catppuccin;
+          plugin = unstable.tmuxPlugins.catppuccin;
           extraConfig = ''
 set -g @catppuccin_flavor 'mocha'
 set -g @catppuccin_window_status_style "slanted"

@@ -21,7 +21,7 @@ export ZGEN_CUSTOM_COMPDUMP="$XDG_DATA_HOME/zcompdump_$ZSH_VERSION"
 
 source $zgenom_file
 if ! zgenom saved; then
-  # change directory to git repository root directory
+  # change directory to git root
   zgenom load mollifier/cd-gitroot
   # the best theme ever
   zgenom load subnixr/minimal
@@ -29,10 +29,12 @@ if ! zgenom saved; then
   zgenom load rupa/z
   # zsh anything.el-like widget
   zgenom load zsh-users/zaw
+  # missing completions
+  zgenom load zsh-users/zsh-completions
   # history-based autosuggestions
   zgenom load zsh-users/zsh-autosuggestions
-  # completions
-  zgenom load zsh-users/zsh-completions
+  # autocomplete
+  zgenom load marlonrichert/zsh-autocomplete
 
   zgenom compile $ZDOTDIR
 

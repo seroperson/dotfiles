@@ -47,9 +47,9 @@ is_in_tmux() {
 
 init_ssh_key() {
     # TODO improve logic
-    if [ -z "$SSH_AUTH_SOCK" ]; then
+    if ! is_arg_present "$IS_PREVIEW" && ! is_arg_present "$SSH_AUTH_SOCK"; then
         SSH_AUTH_SOCK=$(find /tmp/ -name "agent.*" -user $(whoami) -print -quit)
-        if [ "x$SSH_AUTH_SOCK" != "x" ]; then
+        if is_arg_present "$SSH_AUTH_SOCK"; then
             export SSH_AUTH_SOCK
             export SSH_AGENT_PID=$(($(echo $SSH_AUTH_SOCK | cut -d. -f2) + 1))
         else
@@ -60,52 +60,17 @@ init_ssh_key() {
 }
 
 init_gpg_key() {
-    # kill -0 checks to see if the pid exists
-    if test -f /tmp/gpg-agent-info && kill -0 $(cut -d: -f 2 /tmp/gpg-agent-info) 2>/dev/null; then
-        GPG_AGENT_INFO=$(cat /tmp/gpg-agent-info | cut -c 16-)
-    else
-        # No, gpg-agent not available; start gpg-agent
-        eval `gpg-agent --daemon --no-grab --write-env-file /tmp/gpg-agent-info`
+    if ! is_arg_present "$IS_PREVIEW"; then
+      # kill -0 checks to see if the pid exists
+      if test -f /tmp/gpg-agent-info && kill -0 $(cut -d: -f 2 /tmp/gpg-agent-info) 2>/dev/null; then
+          GPG_AGENT_INFO=$(cat /tmp/gpg-agent-info | cut -c 16-)
+      else
+          # No, gpg-agent not available; start gpg-agent
+          eval `gpg-agent --daemon --no-grab --write-env-file /tmp/gpg-agent-info`
+      fi
+      export GPG_TTY=$(tty)
+      export GPG_AGENT_INFO
     fi
-    export GPG_TTY=$(tty)
-    export GPG_AGENT_INFO
-}
-
-# }}}
-
-# {{{ android
-
-capture_png() {
-  local name
-  local device
-  local is_emu=false
-  while getopts "is:eo:" option; do
-    case $option in
-      i) read name\?"Enter the path: " ;;
-      s) device=$OPTARG ;;
-      e) is_emu=true ;;
-      o) name=$OPTARG ;;
-    esac
-  done
-  if [ "x$name" = "x" ]; then # fallback if there is no input
-    name="`pwd`/screen-`date "+%d-%m-%Y-%H-%M-%S"`.png"
-  fi
-  eval name="$name" # expand path
-  local adb_switches
-  if [ "$is_emu" = true ]; then
-    adb_switches+=" -e"
-  elif [ "x$device" != "x" ]; then
-    adb_switches+=" -s $device"
-  fi
-  set -o pipefail
-  eval adb $adb_switches shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > $name
-  local result=$?
-  if [ $result -eq 0 ]; then
-    echo "Successfully saved to $name"
-  else
-    rm $name # todo: wtf
-    return $result
-  fi
 }
 
 # }}}

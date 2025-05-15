@@ -13,7 +13,6 @@ return {
         "lua-language-server",
 
         -- install any other package
-        -- "tree-sitter-cli",
         "marksman",
         "stylua",
         "prettier",

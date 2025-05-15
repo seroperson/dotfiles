@@ -1,9 +1,9 @@
 #!/bin/zsh
 
-# Configuration for zsh-autosuggestions
-
 # Change suggestion strategy: history first, then completion
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# 'completion' doesn't work right now
+# https://github.com/zsh-users/zsh-autosuggestions/issues/751
+ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 # Set the suggestion highlight style (default is underline)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8a8a8a,bold"
@@ -14,5 +14,5 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # Only consider recent history entries more relevant
 ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|pwd|exit"
 
-# Disable suggestion for large buffers
+# Disabling automatic widget re-binding
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1

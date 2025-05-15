@@ -71,24 +71,16 @@ return {
     config = function()
       vim.g.strip_whitespace_confirm = 0
       vim.g.strip_whitespace_on_save = 1
+      vim.g.strip_only_modified_lines = 1
+    end,
+    init = function()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "SnacksDashboardOpened",
+        callback = function() vim.cmd [[DisableWhitespace]] end,
+      })
     end,
   },
 
-  {
-    "ravitemer/mcphub.nvim",
-    -- uncomment the following line to load hub lazily
-    --cmd = "MCPHub",  -- lazy load
-    -- uncomment this if you don't want mcp-hub to be available globally or can't use -g
-    build = "bundled_build.lua", -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
-    config = function()
-      require("mcphub").setup {
-        use_bundled_binary = true,
-        extensions = {
-          avante = {
-            make_slash_commands = true, -- make /slash commands from MCP server prompts
-          },
-        },
-      }
-    end,
-  },
+  -- lua spellfile.vim port
+  { "cuducos/spellfile.nvim" },
 }

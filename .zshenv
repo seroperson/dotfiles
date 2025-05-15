@@ -74,4 +74,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # 'ls' coloring
 export LS_COLORS="di=34;40:ln=35;40:so=32;40:pi=33;40:"
 
+# Skipping compinit for zsh-autocomplete
+skip_global_compinit=1
+
 # }}}

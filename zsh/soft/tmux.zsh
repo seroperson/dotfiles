@@ -2,7 +2,7 @@
 
 # Autostart tmux
 
-if ! is_in_tmux && ! is_arg_present "$IS_PREVIEW"; then
+if ! is_arg_present "$IS_PREVIEW" && ! is_in_tmux; then
     if [[ $TERM != "linux" ]]; then
         if is_command_present tmuxinator; then
             tmuxinator start pekingese

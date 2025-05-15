@@ -41,8 +41,7 @@ return {
         relativenumber = true, -- sets vim.opt.relativenumber
         number = true, -- sets vim.opt.number
         signcolumn = "auto", -- sets vim.opt.signcolumn
-        spell = true, -- sets vim.opt.spell
-        spelllang = "en_us,ru",
+        spell = false, -- sets vim.opt.spell
         wrap = true, -- sets vim.opt.wrap
         showbreak = "↪ ",
         -- set Treesitter based folding
@@ -77,11 +76,24 @@ return {
         icons_enabled = true,
         -- disable notifications when toggling UI elements
         ui_notifications_enabled = true,
-        -- enable experimental resession.nvim session management (will be default in AstroNvim v4)
+        -- enable experimental resession.nvim session management
         resession_enabled = false,
         -- When a file is opened, Nvim searches all parent directories of that file for ".editorconfig" files,
         -- parses them, and applies any properties that match the opened file
         editorconfig = true,
+      },
+    },
+    autocmds = {
+      markdown_spell = {
+        {
+          event = { "FileType" },
+          desc = "Enable spell checking for markdown files",
+          pattern = { "markdown", "md" },
+          callback = function()
+            vim.opt_local.spell = true
+            vim.opt_local.spelllang = "en_us,ru"
+          end,
+        },
       },
     },
     -- Mappings can be configured through AstroCore as well.
