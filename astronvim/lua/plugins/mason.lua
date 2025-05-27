@@ -16,6 +16,9 @@ return {
         "marksman",
         "stylua",
         "prettier",
+
+        -- somewhy doesn't included in astrocommunity.pack.nix
+        "nixpkgs-fmt",
       },
     },
   },

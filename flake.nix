@@ -44,7 +44,8 @@
             }
           ];
         };
-    in {
+    in
+    {
       devShells.${system}.default = pkgs.mkShell rec {
         homeDirectory = builtins.getEnv "HOME";
         username = builtins.getEnv "USER";

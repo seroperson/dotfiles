@@ -1,16 +1,16 @@
-{
-  config,
-  pkgs,
-  useSymlinks,
-  homeDirectory,
-  username,
-  dotfilesDirectory,
-  ...
+{ config
+, pkgs
+, useSymlinks
+, homeDirectory
+, username
+, dotfilesDirectory
+, ...
 }:
 let
   inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; })
     fileReference;
-in {
+in
+{
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (pkgs.lib.getName pkg) [
       "yandex-cloud"
@@ -56,6 +56,7 @@ in {
     pkgs.gnumake
     pkgs.iconv
     pkgs.tree-sitter
+    pkgs.cargo
 
     # pekingese control
     kubectl

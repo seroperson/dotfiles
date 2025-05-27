@@ -1,27 +1,28 @@
 # CTRL+C / CTRL+V https://github.com/NixOS/nix/blob/master/docker.nix
 # with minor edits
 
-{
-  pkgs,
-  lib ? pkgs.lib,
-  name ? "nix",
-  tag ? "latest",
-  bundleNixpkgs ? true,
-  channelName ? "nixpkgs",
-  channelURL ? "https://nixos.org/channels/nixpkgs-unstable",
-  extraContents ? [ ],
-  extraPkgs ? [ ],
-  maxLayers ? 100,
-  nixConf ? { },
-  flake-registry ? null,
-  extraEnv ? [ ],
-  extraFakeRootCommands ? null,
-  cmd ? [ ], # [ "/root/.nix-profile/bin/bash" ]
-  rootShell ? "${pkgs.bashInteractive}/bin/bash",
-  uid ? 0,
-  gid ? 0,
-  uname ? "root",
-  gname ? "root",
+{ pkgs
+, lib ? pkgs.lib
+, name ? "nix"
+, tag ? "latest"
+, bundleNixpkgs ? true
+, channelName ? "nixpkgs"
+, channelURL ? "https://nixos.org/channels/nixpkgs-unstable"
+, extraContents ? [ ]
+, extraPkgs ? [ ]
+, maxLayers ? 100
+, nixConf ? { }
+, flake-registry ? null
+, extraEnv ? [ ]
+, extraFakeRootCommands ? null
+, cmd ? [ ]
+, # [ "/root/.nix-profile/bin/bash" ]
+  rootShell ? "${pkgs.bashInteractive}/bin/bash"
+, uid ? 0
+, gid ? 0
+, uname ? "root"
+, gname ? "root"
+,
 }:
 let
   defaultPkgs =
@@ -66,15 +67,17 @@ let
       };
     }
     // lib.listToAttrs (
-      map (n: {
-        name = "nixbld${toString n}";
-        value = {
-          uid = 30000 + n;
-          gid = 30000;
-          groups = [ "nixbld" ];
-          description = "Nix build user ${toString n}";
-        };
-      }) (lib.lists.range 1 32)
+      map
+        (n: {
+          name = "nixbld${toString n}";
+          value = {
+            uid = 30000 + n;
+            gid = 30000;
+            groups = [ "nixbld" ];
+            description = "Nix build user ${toString n}";
+          };
+        })
+        (lib.lists.range 1 32)
     );
 
   groups =
@@ -89,13 +92,13 @@ let
 
   userToPasswd = (
     k:
-    {
-      uid,
-      gid ? 65534,
-      home ? "/var/empty",
-      description ? "",
-      shell ? "/bin/false",
-      groups ? [ ],
+    { uid
+    , gid ? 65534
+    , home ? "/var/empty"
+    , description ? ""
+    , shell ? "/bin/false"
+    , groups ? [ ]
+    ,
     }:
     "${k}:x:${toString uid}:${toString gid}:${description}:${home}:${shell}"
   );
@@ -112,25 +115,32 @@ let
     let
       # Create a flat list of user/group mappings
       mappings = (
-        builtins.foldl' (
-          acc: user:
-          let
-            groups = users.${user}.groups or [ ];
-          in
-          acc
-          ++ map (group: {
-            inherit user group;
-          }) groups
-        ) [ ] (lib.attrNames users)
+        builtins.foldl'
+          (
+            acc: user:
+              let
+                groups = users.${user}.groups or [ ];
+              in
+              acc
+              ++ map
+                (group: {
+                  inherit user group;
+                })
+                groups
+          ) [ ]
+          (lib.attrNames users)
       );
     in
-    (builtins.foldl' (
-      acc: v:
-      acc
-      // {
-        ${v.group} = acc.${v.group} or [ ] ++ [ v.user ];
-      }
-    ) { } mappings)
+    (builtins.foldl'
+      (
+        acc: v:
+          acc
+          // {
+            ${v.group} = acc.${v.group} or [ ] ++ [ v.user ];
+          }
+      )
+      { }
+      mappings)
   );
 
   groupToGroup =
@@ -150,13 +160,15 @@ let
 
   nixConfContents =
     (lib.concatStringsSep "\n" (
-      lib.mapAttrsFlatten (
-        n: v:
-        let
-          vStr = if builtins.isList v then lib.concatStringsSep " " v else v;
-        in
-        "${n} = ${vStr}"
-      ) (defaultNixConf // nixConf)
+      lib.mapAttrsFlatten
+        (
+          n: v:
+            let
+              vStr = if builtins.isList v then lib.concatStringsSep " " v else v;
+            in
+            "${n} = ${vStr}"
+        )
+        (defaultNixConf // nixConf)
     ))
     + "\n";
 
@@ -307,7 +319,7 @@ pkgs.dockerTools.buildLayeredImageWithNixDb {
     uname
     gname;
 
-  contents = extraContents ++ [ baseSystem ] ;
+  contents = extraContents ++ [ baseSystem ];
 
   extraCommands = ''
     rm -rf nix-support
