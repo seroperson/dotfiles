@@ -43,6 +43,8 @@ in
     aider-chat # AI Assistant
     comma # Runs programs without installing them
     nix-index
+    delta
+    concurrently
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -60,8 +62,9 @@ in
 
     # pekingese control
     kubectl
-    fluxcd
+    kubevpn
     kubernetes-helm
+    fluxcd
     sops
     postgresql_16
     awscli2

@@ -57,8 +57,11 @@ return {
         mouse = "a",
         -- some additional metals config
         completeopt = { "menuone", "noinsert", "noselect" },
+        shortmess = vim.opt.shortmess:append "W",
+        cmdheight = 1,
+        messagesopt = "wait:0,history:1",
       },
-      g = { -- vim.g.<key>
+      g = {
         -- configure global vim variables (vim.g)
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
         -- This can be found in the `lua/lazy_setup.lua` file

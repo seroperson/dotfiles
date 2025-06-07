@@ -5,6 +5,7 @@
 [core]
     excludesfile = "~/.config/git/ignore"
     editor = nvim
+    pager = delta
 [alias]
     cl = clone
     a = add --all
@@ -68,3 +69,10 @@
     postBuffer = 1048576000
 [init]
 	defaultBranch = main
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    dark = true
+[merge]
+    conflictstyle = zdiff3

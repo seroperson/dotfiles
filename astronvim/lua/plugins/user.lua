@@ -35,6 +35,18 @@ return {
       debounce_delay = 3000,
       -- don't trigger autoformat
       noautocmd = true,
+      -- disable save notifications
+      trigger_events = { "InsertLeave", "TextChanged" },
+      condition = function(buf)
+        local fn = vim.fn
+        local utils = require("auto-save.utils.data")
+        if fn.getbufvar(buf, "&modifiable") == 1 and utils.not_in(fn.getbufvar(buf, "&filetype"), {}) then
+          return true
+        end
+        return false
+      end,
+      write_all_buffers = false,
+      debounce_delay = 3000,
     },
   },
 
@@ -72,6 +84,8 @@ return {
       vim.g.strip_whitespace_confirm = 0
       vim.g.strip_whitespace_on_save = 1
       vim.g.strip_only_modified_lines = 1
+      -- disable whitespace strip messages
+      vim.g.better_whitespace_verbosity = 0
     end,
     init = function()
       vim.api.nvim_create_autocmd("User", {

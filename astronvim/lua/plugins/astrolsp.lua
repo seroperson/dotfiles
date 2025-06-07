@@ -113,6 +113,15 @@ return {
     on_attach = function(client, bufnr)
       -- this would disable semanticTokensProvider for all clients
       -- client.server_capabilities.semanticTokensProvider = nil
+
+      -- disable LSP formatting messages
+      local original_notify = vim.notify
+      vim.notify = function(msg, level, opts)
+        if msg and (msg:match("formatted") or msg:match("Format") or msg:match("write")) then
+          return
+        end
+        original_notify(msg, level, opts)
+      end
     end,
   },
 }
