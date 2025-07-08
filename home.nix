@@ -31,6 +31,7 @@ in
     # Shell and tools
     git
     zsh
+    tmux
     tmuxinator
     ripgrep # Searching file content
     jq # Json manipulation
@@ -45,6 +46,9 @@ in
     nix-index
     delta
     concurrently
+    jujutsu # Git-compatible DVCS that is both simple and powerful
+    dua # Disk usage
+    htop
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -71,17 +75,21 @@ in
     yandex-cloud
 
     # Java / Scala
-    pkgs.jre
+    jdk
     coursier
     metals
     bloop
     sbt
     scala-cli
+    scala-next
+    scalafix
+    scalafmt
     mill
 
     # JS
     nodejs
     yarn
+    bun
 
     # Ruby
     ruby

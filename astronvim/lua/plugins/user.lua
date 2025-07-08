@@ -39,15 +39,19 @@ return {
       trigger_events = { "InsertLeave", "TextChanged" },
       condition = function(buf)
         local fn = vim.fn
-        local utils = require("auto-save.utils.data")
+        local utils = require "auto-save.utils.data"
         if fn.getbufvar(buf, "&modifiable") == 1 and utils.not_in(fn.getbufvar(buf, "&filetype"), {}) then
           return true
         end
         return false
       end,
       write_all_buffers = false,
-      debounce_delay = 3000,
     },
+  },
+
+  {
+    "johmsalas/text-case.nvim",
+    opts = {},
   },
 
   {
@@ -97,4 +101,35 @@ return {
 
   -- lua spellfile.vim port
   { "cuducos/spellfile.nvim" },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    config = function(plugin, opts)
+      -- run default AstroNvim nvim-dap-ui configuration function
+      require "astronvim.plugins.configs.nvim-dap-ui"(plugin, opts)
+
+      -- disable dap events that are created
+      local dap = require "dap"
+      dap.listeners.after.event_initialized.dapui_config = nil
+      dap.listeners.before.event_terminated.dapui_config = nil
+      dap.listeners.before.event_exited.dapui_config = nil
+    end,
+  },
+
+  {
+    "stevanmilic/neotest-scala",
+    opts = function(_, opts)
+      opts.args = { "-v" }
+      opts.runner = "bloop"
+    end,
+  },
+
+  {
+    "nvim-neotest/neotest",
+    dependencies = { "stevanmilic/neotest-scala", config = function() end },
+    opts = function(_, opts)
+      if not opts.adapters then opts.adapters = {} end
+      table.insert(opts.adapters, require "neotest-scala"(require("astrocore").plugin_opts "neotest-scala"))
+    end,
+  },
 }

@@ -17,6 +17,11 @@ export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.nix-profile/bin
 
 export LANG=en_US.UTF-8
 
+# Fixes weird WSL symbols
+# https://github.com/microsoft/WSL/issues/4446
+export LESSCHARSET="utf-8"
+
+
 # }}}
 
 # {{{ typeset
@@ -55,7 +60,7 @@ java_opts=("-XX:+OptimizeStringConcat" \
 
 export EDITOR="nvim"
 export VISUAL=$EDITOR
-export PAGER="less -FX"
+export PAGER="less -FXR"
 export BROWSER="chromium"
 export EMAIL="seroperson@gmail.com"
 

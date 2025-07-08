@@ -21,6 +21,8 @@ export ZGEN_CUSTOM_COMPDUMP="$XDG_DATA_HOME/zcompdump_$ZSH_VERSION"
 
 source $zgenom_file
 if ! zgenom saved; then
+  # lazy sourcing
+  zgenom load romkatv/zsh-defer
   # change directory to git root
   zgenom load mollifier/cd-gitroot
   # the best theme ever
@@ -48,7 +50,8 @@ MNML_USER_CHAR="$"
 MNML_INSERT_CHAR=">"
 MNML_NORMAL_CHAR="-"
 MNML_ELLIPSIS_CHAR="..."
-MNML_RPROMPT=('mnml_cwd 2 256' mnml_git git_count_modified_files)
+MNML_PROMPT=(mnml_status mnml_keymap)
+MNML_RPROMPT=("mnml_cwd 2 256" mnml_git git_count_modified_files)
 
 function git_count_modified_files() {
   local has_git="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
@@ -78,17 +81,18 @@ include_source() {
   [ "x$2" != "x" ] && include_source $2
 }
 
-include_source "machine-based.zsh"
-
 include_source "func.zsh" "func.$OS.zsh"
 include_source "opt.zsh" "opt.$OS.zsh"
 include_source "zstyle.zsh" "zstyle.$OS.zsh"
-include_source "alias.zsh" "alias.$OS.zsh"
 include_source "bindkey.zsh" "bindkey.$OS.zsh"
+
+include_source "machine-based.zsh"
+include_source "alias.zsh" "alias.$OS.zsh"
 
 # {{{ Including soft-based configurations
 
 is_tmux_enabled && source "$ZDOTDIR/soft/tmux.zsh"
+is_command_present jj && zsh-defer -p source "$ZDOTDIR/soft/jj.zsh"
 
 # Load autosuggestions config
 source "$ZDOTDIR/soft/autosuggestions.zsh"
@@ -113,8 +117,12 @@ zshaddhistory() {
 
 # }}}
 
+# {{{ Other
+
 rationalize_path path
 
-init_ssh_key >&/dev/null
-init_gpg_key >&/dev/null
+# -p disables 'zle reset-prompt' call
+zsh-defer -p init_ssh_key >&/dev/null
+zsh-defer -p init_gpg_key >&/dev/null
 
+# }}}
