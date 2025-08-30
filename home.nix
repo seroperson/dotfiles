@@ -75,16 +75,15 @@ in
     yandex-cloud
 
     # Java / Scala
-    jdk
-    coursier
+    pkgs.jdk
+    pkgs.coursier
     metals
-    bloop
-    sbt
-    scala-cli
-    scala-next
-    scalafix
-    scalafmt
-    mill
+    pkgs.bloop
+    pkgs.sbt
+    pkgs.scala-cli
+    pkgs.scalafix
+    pkgs.scalafmt
+    pkgs.mill
 
     # JS
     nodejs

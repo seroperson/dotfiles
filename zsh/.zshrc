@@ -31,12 +31,14 @@ if ! zgenom saved; then
   zgenom load rupa/z
   # zsh anything.el-like widget
   zgenom load zsh-users/zaw
-  # missing completions
-  zgenom load zsh-users/zsh-completions
+
   # history-based autosuggestions
   zgenom load zsh-users/zsh-autosuggestions
   # autocomplete
   zgenom load marlonrichert/zsh-autocomplete
+  # missing completions
+  zgenom load zsh-users/zsh-completions
+  zgenom load carlosedp/mill-zsh-completions
 
   zgenom compile $ZDOTDIR
 

@@ -32,8 +32,16 @@
             ./home.nix
             {
               nixpkgs.overlays = [
-                (self: super: {
-                  jre = super.jdk17;
+                (self: super: rec {
+                  myJdk = self.jdk21;
+                  jdk = myJdk;
+                  jre = myJdk;
+                  sbt = super.sbt.override {
+                    jre = myJdk;
+                  };
+                  mill = super.mill.override {
+                    jre = myJdk;
+                  };
                   tmux = nixpkgs-unstable.legacyPackages.${system}.tmux;
                   unstable = import nixpkgs-unstable {
                     inherit (self.stdenv.hostPlatform) system;
