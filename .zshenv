@@ -76,7 +76,7 @@ export LESSHISTFILE=-
 # awesomewm filled window fix
 export _JAVA_AWT_WM_NONREPARENTING=1
 # JDK17 sbt warning fix
-export JDK_JAVA_OPTIONS="--add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED"
+export JDK_JAVA_OPTIONS="--add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
 
 # 'ls' coloring
 export LS_COLORS="di=34;40:ln=35;40:so=32;40:pi=33;40:"

@@ -10,7 +10,7 @@ let
   inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; })
     fileReference;
 in
-{
+rec {
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (pkgs.lib.getName pkg) [
       "yandex-cloud"
@@ -19,6 +19,9 @@ in
   imports = [
     ./nix/tmux.nix
   ];
+
+  sbt-override-expr = (import ./nix/sbt.nix);
+  sbt-override = pkgs.callPackage sbt-override-expr { };
 
   home = {
     inherit homeDirectory username;
@@ -49,6 +52,9 @@ in
     jujutsu # Git-compatible DVCS that is both simple and powerful
     dua # Disk usage
     htop
+    just
+    comrak
+    busybox
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -79,20 +85,17 @@ in
     pkgs.coursier
     metals
     pkgs.bloop
-    pkgs.sbt
+    sbt-override
     pkgs.scala-cli
     pkgs.scalafix
     pkgs.scalafmt
-    pkgs.mill
+    mill
+    gradle_9
 
     # JS
     nodejs
     yarn
     bun
-
-    # Ruby
-    ruby
-    vips
 
     # Python
     pkgs.uv

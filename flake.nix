@@ -8,7 +8,7 @@
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
     nixpkgs = {
-      url = "github:nixos/nixpkgs/release-24.05";
+      url = "github:nixos/nixpkgs/release-25.05";
     };
     nixpkgs-unstable = {
       url = "github:nixos/nixpkgs/nixos-unstable";
@@ -33,13 +33,15 @@
             {
               nixpkgs.overlays = [
                 (self: super: rec {
+                  # myJdk = nixpkgs-unstable.legacyPackages.${system}.jdk24;
                   myJdk = self.jdk21;
+                  # myJdk = self.jdk17;
                   jdk = myJdk;
                   jre = myJdk;
-                  sbt = super.sbt.override {
+                  mill = super.mill.override {
                     jre = myJdk;
                   };
-                  mill = super.mill.override {
+                  gradle_9 = super.mill.override {
                     jre = myJdk;
                   };
                   tmux = nixpkgs-unstable.legacyPackages.${system}.tmux;

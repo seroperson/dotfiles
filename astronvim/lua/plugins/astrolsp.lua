@@ -53,8 +53,10 @@ return {
       },
       metals = {
         settings = {
-          useGlobalExecutable = true,
           superMethodLensesEnabled = false,
+          serverVersion = "1.6.2+72-9082775a-SNAPSHOT",
+          -- ["javaFormat.eclipseConfigPath"] = "/home/seroperson/eclipse-java-google-style.xml",
+          -- ["javaFormat.eclipseProfile"] = "GoogleStyle",
         },
       },
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
@@ -117,9 +119,7 @@ return {
       -- disable LSP formatting messages
       local original_notify = vim.notify
       vim.notify = function(msg, level, opts)
-        if msg and (msg:match("formatted") or msg:match("Format") or msg:match("write")) then
-          return
-        end
+        if msg and (msg:match "formatted" or msg:match "Format" or msg:match "write") then return end
         original_notify(msg, level, opts)
       end
     end,
