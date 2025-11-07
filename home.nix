@@ -9,8 +9,9 @@
 let
   inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; })
     fileReference;
+  sbt-override-expr = (import ./nix/sbt.nix);
 in
-rec {
+{
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (pkgs.lib.getName pkg) [
       "yandex-cloud"
@@ -19,9 +20,6 @@ rec {
   imports = [
     ./nix/tmux.nix
   ];
-
-  sbt-override-expr = (import ./nix/sbt.nix);
-  sbt-override = pkgs.callPackage sbt-override-expr { };
 
   home = {
     inherit homeDirectory username;
@@ -47,14 +45,15 @@ rec {
     aider-chat # AI Assistant
     comma # Runs programs without installing them
     nix-index
-    delta
+    delta # Enhanced git-diff
     concurrently
     jujutsu # Git-compatible DVCS that is both simple and powerful
     dua # Disk usage
-    htop
-    just
-    comrak
+    htop # Enhanced top
+    just # Enhanced make
+    comrak # .md -> .html
     busybox
+    act # Running GitHub Actions locally
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -85,7 +84,7 @@ rec {
     pkgs.coursier
     metals
     pkgs.bloop
-    sbt-override
+    (pkgs.callPackage sbt-override-expr { })
     pkgs.scala-cli
     pkgs.scalafix
     pkgs.scalafmt

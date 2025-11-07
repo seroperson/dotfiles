@@ -1,0 +1,10 @@
+---
+name: empty
+windows:
+  - ".dotfiles":
+      root: "/home/seroperson/.dotfiles"
+      layout: main-vertical
+      panes:
+        - echo "Started"
+        - echo "Started"
+        - echo "Started"
