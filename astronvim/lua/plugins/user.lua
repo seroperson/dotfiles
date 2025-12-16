@@ -132,4 +132,13 @@ return {
       table.insert(opts.adapters, require "neotest-scala"(require("astrocore").plugin_opts "neotest-scala"))
     end,
   },
+
+  {
+    "saghen/blink.cmp",
+    opts = function(_, opts)
+      opts.sources = {
+        default = { "lsp" },
+      }
+    end,
+  },
 }

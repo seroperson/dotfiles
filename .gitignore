@@ -10,6 +10,7 @@ machine-based.*
 viminfo
 # spelling files
 *.spl
+*.sug
 
 # temporary files
 *.tmp

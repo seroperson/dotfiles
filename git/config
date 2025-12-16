@@ -68,11 +68,11 @@
     # https://stackoverflow.com/a/6849424/5246998
     postBuffer = 1048576000
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [interactive]
-    diffFilter = delta --color-only
+    diffFilter = delta --color-only --line-numbers
 [delta]
     navigate = true
     dark = true
 [merge]
-    conflictstyle = zdiff3
+    conflictStyle = zdiff3

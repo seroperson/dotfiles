@@ -60,7 +60,7 @@ java_opts=("-XX:+OptimizeStringConcat" \
 
 export EDITOR="nvim"
 export VISUAL=$EDITOR
-export PAGER="less -FXR"
+export PAGER="moor"
 export BROWSER="chromium"
 export EMAIL="seroperson@gmail.com"
 

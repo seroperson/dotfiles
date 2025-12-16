@@ -5,6 +5,8 @@ alias -g L='|less'
 
 alias reload_zshrc=". $HOME/.zshenv && echo 'Reloaded'"
 
+alias less="moor"
+
 # {{{ 'ls' aliases
 
 # sorts by time change
@@ -41,6 +43,7 @@ alias dmesg='dmesg -L'
 alias ping='ping -c 4 -v'
 alias df='df -h'
 alias du='du -ch'
+export MOOR='--statusbar=bold --no-linenumbers'
 
 # }}}
 

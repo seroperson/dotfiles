@@ -23,7 +23,7 @@ in
 
   home = {
     inherit homeDirectory username;
-    stateVersion = "24.05";
+    stateVersion = "25.11";
   };
 
   # The home.packages option allows you to install Nix packages into your
@@ -52,8 +52,9 @@ in
     htop # Enhanced top
     just # Enhanced make
     comrak # .md -> .html
-    busybox
     act # Running GitHub Actions locally
+    socat # For proxying SSH
+    moor # Rust pager
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -68,6 +69,7 @@ in
     pkgs.iconv
     pkgs.tree-sitter
     pkgs.cargo
+    pkgs.ruby
 
     # pekingese control
     kubectl
@@ -114,6 +116,10 @@ in
   xdg.configFile = {
     "git" = {
       source = fileReference ./git;
+      recursive = true;
+    };
+    "jj" = {
+      source = fileReference ./jj;
       recursive = true;
     };
     "ideavim" = {
