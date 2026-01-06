@@ -34,7 +34,7 @@
               nixpkgs.overlays = [
                 (self: super: rec {
                   # myJdk = nixpkgs-unstable.legacyPackages.${system}.jdk24;
-                  myJdk = self.jdk21;
+                  myJdk = self.jdk17;
                   # myJdk = self.jdk17;
                   jdk = myJdk;
                   jre = myJdk;

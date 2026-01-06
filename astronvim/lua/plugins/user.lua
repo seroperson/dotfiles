@@ -32,20 +32,7 @@ return {
     "okuuva/auto-save.nvim",
     opts = {
       -- delay after which a pending save is executed
-      debounce_delay = 3000,
-      -- don't trigger autoformat
-      noautocmd = true,
-      -- disable save notifications
-      trigger_events = { "InsertLeave", "TextChanged" },
-      condition = function(buf)
-        local fn = vim.fn
-        local utils = require "auto-save.utils.data"
-        if fn.getbufvar(buf, "&modifiable") == 1 and utils.not_in(fn.getbufvar(buf, "&filetype"), {}) then
-          return true
-        end
-        return false
-      end,
-      write_all_buffers = false,
+      debounce_delay = 500,
     },
   },
 

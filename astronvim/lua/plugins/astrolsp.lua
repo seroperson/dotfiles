@@ -54,9 +54,9 @@ return {
       metals = {
         settings = {
           superMethodLensesEnabled = false,
-          serverVersion = "1.6.2+72-9082775a-SNAPSHOT",
-          -- ["javaFormat.eclipseConfigPath"] = "/home/seroperson/eclipse-java-google-style.xml",
-          -- ["javaFormat.eclipseProfile"] = "GoogleStyle",
+          serverVersion = "1.6.4+61-c24f6c4b-SNAPSHOT",
+          ["javaFormat.eclipseConfigPath"] = "/home/seroperson/eclipse-java-google-style.xml",
+          ["javaFormat.eclipseProfile"] = "GoogleStyle",
         },
       },
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },

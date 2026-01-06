@@ -15,4 +15,5 @@ return {
   { import = "astrocommunity.pack.tailwindcss" },
   { import = "astrocommunity.completion.cmp-emoji" },
   { import = "astrocommunity.test.neotest" },
+  { import = "astrocommunity.editing-support.auto-save-nvim" },
 }

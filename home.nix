@@ -32,6 +32,7 @@ in
     # Shell and tools
     git
     zsh
+    busybox
     tmux
     tmuxinator
     ripgrep # Searching file content
@@ -55,6 +56,7 @@ in
     act # Running GitHub Actions locally
     socat # For proxying SSH
     moor # Rust pager
+    nix-search-cli # Use search.nixos.org directly from CLI
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped

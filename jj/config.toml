@@ -3,7 +3,10 @@
 [ui]
 pager = "delta --color-only --line-numbers"
 diff-formatter = ":git"
-default-command = "log"
+default-command = ["log", "--no-pager"]
+
+[alias]
+l = ["log", "--no-pager"]
 
 [user]
 name = "seroperson"

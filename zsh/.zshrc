@@ -32,6 +32,11 @@ if ! zgenom saved; then
   # zsh anything.el-like widget
   zgenom load zsh-users/zaw
 
+  # Automatically starts ssh-agent
+  if ! is_arg_present "$IS_PREVIEW"; then
+    zgenom ohmyzsh plugins/ssh-agent
+  fi
+
   # history-based autosuggestions
   zgenom load zsh-users/zsh-autosuggestions
   # autocomplete
@@ -124,7 +129,6 @@ zshaddhistory() {
 rationalize_path path
 
 # -p disables 'zle reset-prompt' call
-zsh-defer -p init_ssh_key >&/dev/null
 zsh-defer -p init_gpg_key >&/dev/null
 
 # }}}

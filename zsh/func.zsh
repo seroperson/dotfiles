@@ -45,20 +45,6 @@ is_in_tmux() {
 
 # {{{ init_* functions
 
-init_ssh_key() {
-    # TODO improve logic
-    if ! is_arg_present "$IS_PREVIEW" && ! is_arg_present "$SSH_AUTH_SOCK"; then
-        SSH_AUTH_SOCK=$(find /tmp/ -name "agent.*" -user $(whoami) -print -quit)
-        if is_arg_present "$SSH_AUTH_SOCK"; then
-            export SSH_AUTH_SOCK
-            export SSH_AGENT_PID=$(($(echo $SSH_AUTH_SOCK | cut -d. -f2) + 1))
-        else
-            eval `ssh-agent -s`
-            ssh-add "$SSH_KEY_PATH"
-        fi
-    fi
-}
-
 init_gpg_key() {
     if ! is_arg_present "$IS_PREVIEW"; then
       # kill -0 checks to see if the pid exists
