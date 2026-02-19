@@ -131,4 +131,7 @@ rationalize_path path
 # -p disables 'zle reset-prompt' call
 zsh-defer -p init_gpg_key >&/dev/null
 
+# Setup fnm
+eval "$(fnm env --use-on-cd --shell zsh)"
+
 # }}}

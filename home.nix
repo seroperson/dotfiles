@@ -98,6 +98,7 @@ in
     nodejs
     yarn
     bun
+    fnm # like nvm, but better
 
     # Python
     pkgs.uv
