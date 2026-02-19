@@ -9,12 +9,12 @@
 let
   inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; })
     fileReference;
-  sbt-override-expr = (import ./nix/sbt.nix);
 in
 {
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (pkgs.lib.getName pkg) [
       "yandex-cloud"
+      "claude-code"
     ];
 
   imports = [
@@ -43,7 +43,6 @@ in
     eza # Enhanced ls
     ouch # Universal archiver
     wsl-open
-    aider-chat # AI Assistant
     comma # Runs programs without installing them
     nix-index
     delta # Enhanced git-diff
@@ -52,11 +51,11 @@ in
     dua # Disk usage
     htop # Enhanced top
     just # Enhanced make
-    comrak # .md -> .html
-    act # Running GitHub Actions locally
     socat # For proxying SSH
     moor # Rust pager
     nix-search-cli # Use search.nixos.org directly from CLI
+    grpcurl # curl for grpc
+    claude-code # it actually happened.
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -88,7 +87,7 @@ in
     pkgs.coursier
     metals
     pkgs.bloop
-    (pkgs.callPackage sbt-override-expr { })
+    (pkgs.callPackage (import ./nix/sbt.nix) { })
     pkgs.scala-cli
     pkgs.scalafix
     pkgs.scalafmt
@@ -102,6 +101,8 @@ in
 
     # Python
     pkgs.uv
+    python313
+    # (pkgs.callPackage (import ./nix/python.nix) { })
 
     # nix
     pkgs.nixd

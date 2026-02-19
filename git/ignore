@@ -1,3 +1,5 @@
 # sometimes i place such files somewhere to extend my zsh features in bounds of
 # appropriate directory
 .autoenv.zsh
+
+**/.claude/settings.local.json
