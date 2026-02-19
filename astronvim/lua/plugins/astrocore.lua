@@ -161,6 +161,13 @@ return {
         ["<Leader>fF"] = false,
         -- Disable 'Find words in all files'
         ["<Leader>fW"] = false,
+        ["<Leader>go"] = { function() require("gitblame").copy_commit_url_to_clipboard() end, desc = "Copy blame URL" },
+        -- Disabling terminal completely
+        ["<Leader>tf"] = false,
+        ["<Leader>tn"] = false,
+        ["<Leader>tv"] = false,
+        ["<Leader>tp"] = false,
+        ["<Leader>th"] = false,
         ["<Leader>fw"] = {
           function() require("snacks.picker").grep() end,
           desc = "Find words in all git files",
@@ -170,8 +177,8 @@ return {
           desc = ":q",
         },
       },
+      -- stackoverflow.com/a/10757148
       i = {
-        -- stackoverflow.com/a/10757148
         ["<C-C>"] = "<ESC>",
       },
     },
