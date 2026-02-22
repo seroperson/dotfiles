@@ -56,6 +56,7 @@ in
     nix-search-cli # Use search.nixos.org directly from CLI
     grpcurl # curl for grpc
     claude-code # it actually happened.
+    gh # GitHub client
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -80,7 +81,7 @@ in
     sops
     postgresql_16
     awscli2
-    yandex-cloud
+    # yandex-cloud
 
     # Java / Scala
     pkgs.jdk

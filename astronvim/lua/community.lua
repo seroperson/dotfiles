@@ -13,6 +13,7 @@ return {
   { import = "astrocommunity.pack.typescript-all-in-one" },
   { import = "astrocommunity.pack.svelte" },
   { import = "astrocommunity.pack.tailwindcss" },
+  { import = "astrocommunity.pack.python" },
   { import = "astrocommunity.completion.cmp-emoji" },
   { import = "astrocommunity.test.neotest" },
   { import = "astrocommunity.editing-support.auto-save-nvim" },

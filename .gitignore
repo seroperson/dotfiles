@@ -1,7 +1,7 @@
 # my history
 .zsh_history
 # some completion stuff
-.zcompdump
+.zcompdump*
 .zcompcache
 # machine based stuff
 machine-based.*
@@ -17,6 +17,7 @@ viminfo
 
 # nix output
 result
+out
 
 # AI configuration
 .cursor/

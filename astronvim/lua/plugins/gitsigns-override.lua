@@ -31,6 +31,7 @@ return {
 
         maps.n[prefix .. "L"] =
           { function() require("gitsigns").blame_line { full = true } end, desc = "View Git Blame window" }
+        maps.n[prefix .. "p"] = { function() require("gitsigns").preview_hunk_inline() end, desc = "Preview Git hunk" }
         maps.n[prefix .. "r"] = { function() require("gitsigns").reset_hunk() end, desc = "Reset Git hunk" }
         maps.v[prefix .. "r"] = {
           function() require("gitsigns").reset_hunk { vim.fn.line ".", vim.fn.line "v" } end,

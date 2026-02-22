@@ -63,7 +63,7 @@ bindkey -M filterselect '^t' accept-search
 
 # Key bindings for accepting suggestions
 bindkey '^ ' autosuggest-accept   # Ctrl+Space to accept full suggestion
-bindkey '^g' forward-word         # Ctrl+g to accept one word
+bindkey '^w' forward-word         # Ctrl+w to accept one word
 
 # }}}
 

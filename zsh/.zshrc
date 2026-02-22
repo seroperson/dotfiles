@@ -2,6 +2,20 @@
 
 export PATH="$PATH:$ZDOTDIR/bin"
 
+case `uname` in
+  'Linux') OS='lin' ;;
+  'Darwin') OS='osx' ;;
+  'FreeBSD') OS='bsd' ;;
+  *) OS='unk' ;;
+esac
+
+include_source() {
+  [ -f "$ZDOTDIR/$1" ] && source "$ZDOTDIR/$1"
+  [ "x$2" != "x" ] && include_source $2
+}
+
+include_source "func.zsh" "func.$OS.zsh"
+
 # {{{ zgenom configuration
 
 local zgenom_file=$XDG_DATA_HOME/zgenom/zgenom.zsh
@@ -21,6 +35,11 @@ export ZGEN_CUSTOM_COMPDUMP="$XDG_DATA_HOME/zcompdump_$ZSH_VERSION"
 
 source $zgenom_file
 if ! zgenom saved; then
+  zgenom compdef
+
+  # loading base library
+  zgenom ohmyzsh
+
   # lazy sourcing
   zgenom load romkatv/zsh-defer
   # change directory to git root
@@ -31,19 +50,27 @@ if ! zgenom saved; then
   zgenom load rupa/z
   # zsh anything.el-like widget
   zgenom load zsh-users/zaw
+  # faster git + zsh
+  zgenom ohmyzsh plugins/gitfast
 
   # Automatically starts ssh-agent
   if ! is_arg_present "$IS_PREVIEW"; then
     zgenom ohmyzsh plugins/ssh-agent
   fi
 
+  # automatically activate python venv
+  zgenom load MichaelAquilina/zsh-autoswitch-virtualenv
+
   # history-based autosuggestions
   zgenom load zsh-users/zsh-autosuggestions
+
   # autocomplete
   zgenom load marlonrichert/zsh-autocomplete
+
   # missing completions
   zgenom load zsh-users/zsh-completions
   zgenom load carlosedp/mill-zsh-completions
+  zgenom ohmyzsh plugins/gh
 
   zgenom compile $ZDOTDIR
 
@@ -76,19 +103,6 @@ function git_count_modified_files() {
 
 # {{{ Including sources
 
-case `uname` in
-  'Linux') OS='lin' ;;
-  'Darwin') OS='osx' ;;
-  'FreeBSD') OS='bsd' ;;
-  *) OS='unk' ;;
-esac
-
-include_source() {
-  [ -f "$ZDOTDIR/$1" ] && source "$ZDOTDIR/$1"
-  [ "x$2" != "x" ] && include_source $2
-}
-
-include_source "func.zsh" "func.$OS.zsh"
 include_source "opt.zsh" "opt.$OS.zsh"
 include_source "zstyle.zsh" "zstyle.$OS.zsh"
 include_source "bindkey.zsh" "bindkey.$OS.zsh"
@@ -114,7 +128,7 @@ export HISTFILE="$XDG_DATA_HOME/zsh_history"
 export HISTSIZE=2147483647 # LONG_MAX
 export SAVEHIST=$HISTSIZE
 
-HISTORY_IGNORE='(ls *|ls|cd *|cd|cdu|pwd|cat *|history|clear|cls|exit)'
+HISTORY_IGNORE='(ls|cd|cdu|pwd|history|clear|cls|exit)'
 
 zshaddhistory() {
   emulate -L zsh

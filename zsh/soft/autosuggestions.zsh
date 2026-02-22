@@ -3,7 +3,7 @@
 # Change suggestion strategy: history first, then completion
 # 'completion' doesn't work right now
 # https://github.com/zsh-users/zsh-autosuggestions/issues/751
-ZSH_AUTOSUGGEST_STRATEGY=(history)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # Set the suggestion highlight style (default is underline)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8a8a8a,bold"
