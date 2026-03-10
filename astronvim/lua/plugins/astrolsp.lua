@@ -54,7 +54,7 @@ return {
       metals = {
         settings = {
           superMethodLensesEnabled = false,
-          serverVersion = "1.6.4+61-c24f6c4b-SNAPSHOT",
+          serverVersion = "1.6.6",
           ["javaFormat.eclipseConfigPath"] = "/home/seroperson/eclipse-java-google-style.xml",
           ["javaFormat.eclipseProfile"] = "GoogleStyle",
         },

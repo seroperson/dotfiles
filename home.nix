@@ -57,6 +57,13 @@ in
     grpcurl # curl for grpc
     claude-code # it actually happened.
     gh # GitHub client
+    nushell # Advanced shell
+    deno
+
+    # Building deno
+    cmakeMinimal
+    libclang
+    glib
 
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
@@ -70,7 +77,6 @@ in
     pkgs.gnumake
     pkgs.iconv
     pkgs.tree-sitter
-    pkgs.cargo
     pkgs.ruby
 
     # pekingese control
@@ -100,6 +106,13 @@ in
     yarn
     bun
     fnm # like nvm, but better
+    pnpm
+
+    # Go
+    go
+
+    # Rust
+    rustup
 
     # Python
     pkgs.uv
@@ -112,6 +125,17 @@ in
     pkgs.deadnix
     pkgs.statix
   ];
+
+  home.sessionVariables = with pkgs; {
+    LD_LIBRARY_PATH = lib.concatStringsSep ":" [
+      (lib.makeLibraryPath [
+        libclang
+        glib
+      ])
+      "$HOME/.nix-profile/lib"
+      "$LD_LIBRARY_PATH"
+    ];
+  };
 
   home.file.".zshenv" = {
     source = fileReference ./.zshenv;

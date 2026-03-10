@@ -140,6 +140,10 @@ return {
           function() vim.lsp.buf.hover() end,
           desc = "Hover information",
         },
+        ["<Leader>s"] = {
+          function() vim.lsp.buf.signature_help() end,
+          desc = "Signature help",
+        },
         ["<C-S>"] = {
           function() vim.lsp.buf.definition() end,
           desc = "Jump to definition",

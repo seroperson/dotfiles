@@ -43,7 +43,7 @@ alias dmesg='dmesg -L'
 alias ping='ping -c 4 -v'
 alias df='df -h'
 alias du='du -ch'
-export MOOR='--statusbar=bold --no-linenumbers'
+export MOOR='--statusbar=bold --no-linenumbers --mousemode scroll'
 
 # }}}
 
@@ -71,6 +71,8 @@ if is_command_present kubectx; then
 fi
 
 # }}}
+
+alias claudex="claude --dangerously-skip-permissions"
 
 if is_command_present mutt; then
     alias mutt="mutt -F $HOME/.config/mutt/muttrc"

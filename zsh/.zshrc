@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# Load home-manager session variables (e.g. LD_LIBRARY_PATH)
+[ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ] && source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
 export PATH="$PATH:$ZDOTDIR/bin"
 
 case `uname` in
@@ -31,6 +34,14 @@ _Z_CMD=j
 
 # }}}
 
+# {{{ per-directory-history plugin configuration
+
+# Set history toggle to ^H
+export PER_DIRECTORY_HISTORY_TOGGLE="^H"
+export HISTORY_START_WITH_GLOBAL=true
+
+# }}}
+
 export ZGEN_CUSTOM_COMPDUMP="$XDG_DATA_HOME/zcompdump_$ZSH_VERSION"
 
 source $zgenom_file
@@ -52,6 +63,9 @@ if ! zgenom saved; then
   zgenom load zsh-users/zaw
   # faster git + zsh
   zgenom ohmyzsh plugins/gitfast
+
+  # ^H to swtich between global and per-directory history
+  zgenom ohmyzsh plugins/per-directory-history
 
   # Automatically starts ssh-agent
   if ! is_arg_present "$IS_PREVIEW"; then
