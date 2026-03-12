@@ -58,9 +58,10 @@ in
     claude-code # it actually happened.
     gh # GitHub client
     nushell # Advanced shell
-    deno
+    act # Running GitHub Actions locally
 
-    # Building deno
+    # deno + build dependencies
+    deno
     cmakeMinimal
     libclang
     glib
@@ -77,7 +78,6 @@ in
     pkgs.gnumake
     pkgs.iconv
     pkgs.tree-sitter
-    pkgs.ruby
 
     # pekingese control
     kubectl
@@ -114,6 +114,11 @@ in
     # Rust
     rustup
 
+    # Ruby
+    rbenv
+    rubocop
+    libyaml
+
     # Python
     pkgs.uv
     python313
@@ -131,10 +136,13 @@ in
       (lib.makeLibraryPath [
         libclang
         glib
+        libyaml.out
       ])
       "$HOME/.nix-profile/lib"
       "$LD_LIBRARY_PATH"
     ];
+    CPATH = lib.makeSearchPath "include" [ libyaml.dev ];
+    LIBRARY_PATH = lib.makeLibraryPath [ libyaml.out ];
   };
 
   home.file.".zshenv" = {

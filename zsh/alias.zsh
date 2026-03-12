@@ -18,7 +18,7 @@ alias lx='ls -X'
 
 if is_command_present exa; then
     # the.exa.website/docs
-    alias ls='exa -lh --all --group-directories-first --sort=mod --time-style=long-iso --git --icons'
+    alias ls='exa -lh --all --group-directories-first --sort=mod --time-style=long-iso --icons'
 else
     alias ls='ls -Failh'
 fi

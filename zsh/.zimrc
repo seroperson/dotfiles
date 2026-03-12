@@ -1,0 +1,39 @@
+#!/bin/zsh
+
+# lazy sourcing
+zmodule romkatv/zsh-defer
+# change directory to git root
+zmodule mollifier/cd-gitroot
+
+# minimal's dependencies
+zmodule zimfw/prompt-pwd
+zmodule zimfw/git-info
+# the best theme ever
+zmodule zimfw/minimal
+
+# jumping around (alternative to fasd)
+zmodule rupa/z --source z.sh
+# zsh anything.el-like widget
+zmodule zsh-users/zaw
+# faster git + zsh
+zmodule ohmyzsh/ohmyzsh --root plugins/gitfast
+
+# ^H to switch between global and per-directory history
+zmodule ohmyzsh/ohmyzsh --root plugins/per-directory-history
+
+# automatically starts ssh-agent
+zmodule ohmyzsh/ohmyzsh --root plugins/ssh-agent
+
+# automatically activate python venv
+zmodule MichaelAquilina/zsh-autoswitch-virtualenv
+
+# history-based autosuggestions
+zmodule zsh-users/zsh-autosuggestions
+
+# missing completions (must be before autocomplete)
+zmodule zsh-users/zsh-completions
+zmodule carlosedp/mill-zsh-completions
+# zmodule ohmyzsh/ohmyzsh --root plugins/gh
+
+# autocomplete
+zmodule marlonrichert/zsh-autocomplete

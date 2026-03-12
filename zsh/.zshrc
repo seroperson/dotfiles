@@ -19,13 +19,6 @@ include_source() {
 
 include_source "func.zsh" "func.$OS.zsh"
 
-# {{{ zgenom configuration
-
-local zgenom_file=$XDG_DATA_HOME/zgenom/zgenom.zsh
-
-if ! [ -e $zgenom_file ]; then
-  git clone https://github.com/jandamm/zgenom.git $XDG_DATA_HOME/zgenom/
-fi
 
 # {{{ z configuration
 
@@ -42,76 +35,22 @@ export HISTORY_START_WITH_GLOBAL=true
 
 # }}}
 
-export ZGEN_CUSTOM_COMPDUMP="$XDG_DATA_HOME/zcompdump_$ZSH_VERSION"
+# {{{ zimfw configuration
 
-source $zgenom_file
-if ! zgenom saved; then
-  zgenom compdef
+ZIM_HOME=$XDG_DATA_HOME/zim
 
-  # loading base library
-  zgenom ohmyzsh
-
-  # lazy sourcing
-  zgenom load romkatv/zsh-defer
-  # change directory to git root
-  zgenom load mollifier/cd-gitroot
-  # the best theme ever
-  zgenom load subnixr/minimal
-  # jumping around (alternative to fasd)
-  zgenom load rupa/z
-  # zsh anything.el-like widget
-  zgenom load zsh-users/zaw
-  # faster git + zsh
-  zgenom ohmyzsh plugins/gitfast
-
-  # ^H to swtich between global and per-directory history
-  zgenom ohmyzsh plugins/per-directory-history
-
-  # Automatically starts ssh-agent
-  if ! is_arg_present "$IS_PREVIEW"; then
-    zgenom ohmyzsh plugins/ssh-agent
-  fi
-
-  # automatically activate python venv
-  zgenom load MichaelAquilina/zsh-autoswitch-virtualenv
-
-  # history-based autosuggestions
-  zgenom load zsh-users/zsh-autosuggestions
-
-  # autocomplete
-  zgenom load marlonrichert/zsh-autocomplete
-
-  # missing completions
-  zgenom load zsh-users/zsh-completions
-  zgenom load carlosedp/mill-zsh-completions
-  zgenom ohmyzsh plugins/gh
-
-  zgenom compile $ZDOTDIR
-
-  zgenom save
+# Download zimfw plugin manager if missing
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+    https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
 fi
 
-# {{{ Theme configuration
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
 
-MNML_MAGICENTER=(mnml_me_git)
-MNML_USER_CHAR="$"
-MNML_INSERT_CHAR=">"
-MNML_NORMAL_CHAR="-"
-MNML_ELLIPSIS_CHAR="..."
-MNML_PROMPT=(mnml_status mnml_keymap)
-MNML_RPROMPT=("mnml_cwd 2 256" mnml_git git_count_modified_files)
-
-function git_count_modified_files() {
-  local has_git="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
-  if [ -n "$has_git" ]; then
-    local count=$(git diff --numstat)
-    if [ "x$count" != "x" ]; then
-      echo $count | awk "{add+=\$1; del+=\$2} END {printf \"%%{\\033[3${MNML_OK_COLOR}m%%}+%s %%{\\033[3${MNML_ERR_COLOR}m%%}-%s%%{\\033[0m%%}\", add, del}"
-    fi
-  fi
-}
-
-# }}}
+source ${ZIM_HOME}/init.zsh
 
 # }}}
 
@@ -161,5 +100,8 @@ zsh-defer -p init_gpg_key >&/dev/null
 
 # Setup fnm
 eval "$(fnm env --use-on-cd --shell zsh)"
+
+# rbenv init
+eval "$(rbenv init - --no-rehash zsh)"
 
 # }}}
