@@ -7,7 +7,7 @@
 , ...
 }:
 let
-  inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; })
+  inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; sourceDirectory = ./.; })
     fileReference;
 in
 {
@@ -110,6 +110,9 @@ in
 
     # Go
     go
+    golangci-lint
+    gofumpt
+    go-task
 
     # Rust
     rustup
@@ -174,6 +177,9 @@ in
     "tmuxinator" = {
       source = fileReference ./tmuxinator;
       recursive = true;
+    };
+    "gh/config.yml" = {
+      source = fileReference ./gh/config.yml;
     };
   };
 

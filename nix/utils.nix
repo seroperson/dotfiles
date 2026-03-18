@@ -1,22 +1,18 @@
 { dotfilesDirectory
 , config
 , useSymlinks
+, sourceDirectory
 }: rec {
-  baseName = p:
+  relativePath = p:
     let
-      removeNixStorePrefix = nsp:
-        let
-          m = builtins.match "/nix/store/[^-]+-(.*)" (toString nsp);
-        in
-        if m == null then
-          nsp
-        else
-          (builtins.head m);
+      full = toString p;
+      base = toString sourceDirectory;
+      baseLen = builtins.stringLength base;
     in
-    builtins.baseNameOf (removeNixStorePrefix p);
+    builtins.substring (baseLen + 1) (-1) full;
 
   fileReference = path:
     if useSymlinks
-    then config.lib.file.mkOutOfStoreSymlink "${dotfilesDirectory}/${baseName path}"
+    then config.lib.file.mkOutOfStoreSymlink "${dotfilesDirectory}/${relativePath path}"
     else path;
 }

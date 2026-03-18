@@ -1,0 +1,48 @@
+# The current version of the config schema
+version: 1
+# What protocol to use when performing git operations. Supported values: ssh, https
+git_protocol: https
+# When to interactively prompt. This is a global config that cannot be overridden by hostname. Supported values: enabled, disabled
+prompt: enabled
+# Preference for editor-based interactive prompting. This is a global config that cannot be overridden by hostname. Supported values: enabled, disabled
+prefer_editor_prompt: disabled
+# A pager program to send command output to, e.g. "less". If blank, will refer to environment. Set the value to "cat" to disable the pager.
+pager:
+# Aliases allow you to create nicknames for gh commands
+aliases:
+    co: pr checkout
+    discussion-list: 'api graphql -f owner="$1" -f repo="$2" -f query="query($owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { discussions(first: 100) { nodes { number title author { login } comments { totalCount } } } } }" --jq ''.data.repository.discussions.nodes[] | "#\(.number) \(.title) by @\(.author.login) [\(.comments.totalCount) comments]"'''
+    discussion-view: 'api graphql -f owner="$1" -f repo="$2" -F number=$3 -f query="query($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { discussion(number: $number) { title body author { login } comments(first: 100) { nodes { author { login } body createdAt } totalCount } } } }" --jq ''.data.repository.discussion | "Title: \(.title)\n\nAuthor: @\(.author.login)\nTotal Comments: \(.comments.totalCount)\n\nDiscussion:\n\(.body)\n\nComments:\n\(.comments.nodes | map("---\nBy @\(.author.login) on \(.createdAt)\n\n\(.body)") | join("\n\n"))"'''
+    clone-fork: |-
+        !f() {
+          if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+            repo="${1:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
+            gh repo fork "$repo" --clone=false &&
+            fork_owner="$(gh api user --jq .login)" &&
+            repo_name="$(basename "$repo")" &&
+            fork_ssh="$(gh api "repos/$fork_owner/$repo_name" --jq .ssh_url)" &&
+            upstream_ssh="$(gh api "repos/$repo" --jq .ssh_url)" &&
+            git remote set-url origin "$fork_ssh" &&
+            git remote remove upstream 2>/dev/null; git remote add upstream "$upstream_ssh" &&
+            git fetch --all &&
+            default_branch="$(gh api "repos/$repo" --jq .default_branch)" &&
+            git branch --set-upstream-to="upstream/$default_branch" "$default_branch"
+          else
+            gh repo fork "$1" --clone=false &&
+            repo_name="$(basename "$1")" &&
+            gh repo clone "$repo_name" &&
+            cd "$repo_name" &&
+            git remote add upstream "$(gh api "repos/$1" --jq .ssh_url)" &&
+            git fetch --all &&
+            default_branch="$(gh api "repos/$1" --jq .default_branch)" &&
+            git branch --set-upstream-to="upstream/$default_branch" "$default_branch"
+          fi
+        }; f
+# Whether to display labels using their RGB hex color codes in terminals that support truecolor. Supported values: enabled, disabled
+color_labels: disabled
+# Whether customizable, 4-bit accessible colors should be used. Supported values: enabled, disabled
+accessible_colors: disabled
+# Whether an accessible prompter should be used. Supported values: enabled, disabled
+accessible_prompter: disabled
+# Whether to use a animated spinner as a progress indicator. If disabled, a textual progress indicator is used instead. Supported values: enabled, disabled
+spinner: enabled
