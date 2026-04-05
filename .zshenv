@@ -82,4 +82,19 @@ export JDK_JAVA_OPTIONS="--add-opens=java.base/java.util=ALL-UNNAMED --add-opens
 # 'ls' coloring
 export LS_COLORS="di=34;40:ln=35;40:so=32;40:pi=33;40:"
 
+# Enabling LSP for claude-code
+export ENABLE_LSP_TOOL=1
+
+# }}}
+
+# {{{ machine-based
+
+[ -f "$ZDOTDIR/machine-based.zshenv" ] && source "$ZDOTDIR/machine-based.zshenv"
+
+# }}}
+
+# {{{ proxy
+
+[ -f "$ZDOTDIR/proxy.zsh" ] && source "$ZDOTDIR/proxy.zsh"
+
 # }}}

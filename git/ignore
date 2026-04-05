@@ -3,3 +3,7 @@
 .autoenv.zsh
 
 **/.claude/settings.local.json
+
+uv.lock
+
+scripts/calculate_token_score.py

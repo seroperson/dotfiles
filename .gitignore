@@ -5,6 +5,8 @@
 .zcompcache
 # machine based stuff
 machine-based.*
+# machine-based scripts
+zsh/bin/
 
 # vim file info stuff
 viminfo

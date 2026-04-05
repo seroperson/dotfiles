@@ -58,7 +58,7 @@ in
     claude-code # it actually happened.
     gh # GitHub client
     nushell # Advanced shell
-    act # Running GitHub Actions locally
+    gdu # Disk Usage
 
     # deno + build dependencies
     deno
@@ -100,6 +100,8 @@ in
     pkgs.scalafmt
     mill
     gradle_9
+    maven
+    jdt-language-server
 
     # JS
     nodejs

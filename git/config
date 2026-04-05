@@ -53,6 +53,8 @@
     # pseudo-random commit message
     fix = "!am() { curl -s http://whatthecommit.com/ | grep '<p>' | cut -c4-; }; git commit -em \"# $(am)\" \"$@\""
     amend-to = "!f() { SHA=`git rev-parse \"$1\"`; git stash -k && git commit --fixup \"$SHA\" && GIT_SEQUENCE_EDITOR=true git rebase --interactive --autosquash \"$SHA^\" && git stash pop; }; f"
+    # updates parent branch from remote and rebases current branch on it
+    update-parent-and-rebase = "!f() { CURRENT=$(git symbolic-ref --short HEAD) && PARENT=$(git show-branch -a 2>/dev/null | grep '\\*' | grep -v \"$CURRENT\" | head -1 | sed 's/.*\\[\\(.*\\)\\].*/\\1/' | sed 's/[~^].*//') && REMOTE=$(git config branch.\"$PARENT\".remote) && git fetch \"$REMOTE\" \"$PARENT\":\"$PARENT\" --force && git rebase \"$PARENT\"; }; f"
 [color]
     diff = auto
     status = auto
@@ -76,11 +78,17 @@
     dark = true
 [merge]
     conflictStyle = zdiff3
+    tool = diffview
+[mergetool]
+    prompt = false
+    keepBackup = false
+[mergetool "diffview"]
+    cmd = nvim -n -c "DiffviewOpen" "$MERGE"
 [credential "https://github.com"]
-	helper =
-	helper = !gh auth git-credential
+    helper =
+    helper = !gh auth git-credential
 [credential "https://gist.github.com"]
-	helper =
-	helper = !gh auth git-credential
+    helper =
+    helper = !gh auth git-credential
 [pull]
-	rebase = true
+    rebase = true

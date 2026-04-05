@@ -3,7 +3,7 @@
 # lazy sourcing
 zmodule romkatv/zsh-defer
 # change directory to git root
-zmodule mollifier/cd-gitroot
+zmodule mollifier/cd-gitroot --fpath . --autoload cd-gitroot
 
 # minimal's dependencies
 zmodule zimfw/prompt-pwd
