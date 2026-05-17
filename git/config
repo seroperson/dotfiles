@@ -54,7 +54,22 @@
     fix = "!am() { curl -s http://whatthecommit.com/ | grep '<p>' | cut -c4-; }; git commit -em \"# $(am)\" \"$@\""
     amend-to = "!f() { SHA=`git rev-parse \"$1\"`; git stash -k && git commit --fixup \"$SHA\" && GIT_SEQUENCE_EDITOR=true git rebase --interactive --autosquash \"$SHA^\" && git stash pop; }; f"
     # updates parent branch from remote and rebases current branch on it
-    update-parent-and-rebase = "!f() { CURRENT=$(git symbolic-ref --short HEAD) && PARENT=$(git show-branch -a 2>/dev/null | grep '\\*' | grep -v \"$CURRENT\" | head -1 | sed 's/.*\\[\\(.*\\)\\].*/\\1/' | sed 's/[~^].*//') && REMOTE=$(git config branch.\"$PARENT\".remote) && git fetch \"$REMOTE\" \"$PARENT\":\"$PARENT\" --force && git rebase \"$PARENT\"; }; f"
+    update-parent-and-rebase = "!f() { CURRENT=$(git symbolic-ref --short HEAD) || { echo 'not on a branch' >&2; exit 1; }; PARENT=$(git show-branch -a 2>/dev/null | grep '\\*' | grep -v \"$CURRENT\" | head -1 | sed 's/.*\\[\\(.*\\)\\].*/\\1/' | sed 's/[~^].*//'); [ -n \"$PARENT\" ] || { echo 'could not detect parent branch' >&2; exit 1; }; REMOTE=$(git config --default origin branch.\"$PARENT\".remote); if git ls-remote --exit-code --heads \"$REMOTE\" \"$PARENT\" >/dev/null 2>&1; then echo \"updating $REMOTE/$PARENT, then rebasing $CURRENT on $PARENT\" >&2; git fetch \"$REMOTE\" \"$PARENT\":\"$PARENT\" --force || exit 1; else echo \"$PARENT not on $REMOTE, rebasing $CURRENT on local $PARENT\" >&2; fi; git rebase \"$PARENT\"; }; f"
+    wt = worktree
+    wtl = worktree list
+    # prints the worktree path for <branch> if one exists, else empty (consumed by `gco` shell shim)
+    # skips prunable entries (porcelain still lists worktrees whose directory was deleted)
+    wt-path = "!f() { git worktree list --porcelain | awk -v b=\"refs/heads/$1\" 'function emit() { if (!found && branch == b && !prunable) { print path; found = 1; exit } } /^worktree / { path = substr($0, 10); branch = \"\"; prunable = 0 } /^branch / { branch = $2 } /^prunable/ { prunable = 1 } /^$/ { emit() } END { emit() }'; }; f"
+    # adds a worktree with --lock so it survives `worktree prune` and `gc`
+    wta = "!f() { git worktree add --lock \"$@\"; }; f"
+    # removes worktree(s), unlocking first so locked ones can be removed without --force
+    # accepts either a worktree path or a branch name (resolved via `wt-path`)
+    wtr = "!f() { count=$#; i=0; while [ $i -lt $count ]; do arg=\"$1\"; shift; i=$((i+1)); case \"$arg\" in -*) set -- \"$@\" \"$arg\";; *) if [ -d \"$arg\" ]; then set -- \"$@\" \"$arg\"; else resolved=$(git wt-path \"$arg\" 2>/dev/null); if [ -n \"$resolved\" ]; then set -- \"$@\" \"$resolved\"; else set -- \"$@\" \"$arg\"; fi; fi;; esac; done; for arg in \"$@\"; do case \"$arg\" in -*) ;; *) git worktree unlock \"$arg\" 2>/dev/null;; esac; done; git worktree remove \"$@\"; }; f"
+    wtp = worktree prune
+    wtm = worktree move
+    # adds a worktree under $XDG_DATA_HOME (persistent, not /tmp) named after the repo and prints its path
+    # locked so `worktree prune` and `gc` cannot reap it
+    wtt = "!f() { if [ -z \"$1\" ]; then echo \"Usage: git wtt <dirname> [git worktree add args]\" >&2; return 1; fi; ROOT=$(git rev-parse --show-toplevel) || return 1; BASE=\"${XDG_DATA_HOME:-$HOME/.local/share}/worktrees\"; TARGET=\"$BASE/$(basename \"$ROOT\")/$1\"; mkdir -p \"$BASE/$(basename \"$ROOT\")\" || return 1; shift; git worktree add --lock \"$TARGET\" \"$@\" >&2 && echo \"$TARGET\"; }; f"
 [color]
     diff = auto
     status = auto
@@ -92,3 +107,7 @@
     helper = !gh auth git-credential
 [pull]
     rebase = true
+[rebase]
+    autoStash = true
+[blame]
+	ignoreRevsFile = .git-blame-ignore-revs

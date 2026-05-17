@@ -17,9 +17,12 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-claude-code = {
+      url = "github:ryoppippi/nix-claude-code";
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nix-claude-code, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -32,6 +35,7 @@
             ./home.nix
             {
               nixpkgs.overlays = [
+                nix-claude-code.overlays.default
                 (self: super: rec {
                   # myJdk = nixpkgs-unstable.legacyPackages.${system}.jdk24;
                   myJdk = self.jdk21;

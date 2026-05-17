@@ -15,6 +15,7 @@ in
     builtins.elem (pkgs.lib.getName pkg) [
       "yandex-cloud"
       "claude-code"
+      "claude"
     ];
 
   imports = [
@@ -55,10 +56,12 @@ in
     moor # Rust pager
     nix-search-cli # Use search.nixos.org directly from CLI
     grpcurl # curl for grpc
-    claude-code # it actually happened.
+    pkgs.claude-code # it actually happened.
     gh # GitHub client
     nushell # Advanced shell
     gdu # Disk Usage
+    radare2
+    rtk # Improved CLI tools for LLMs
 
     # deno + build dependencies
     deno
@@ -182,6 +185,16 @@ in
     };
     "gh/config.yml" = {
       source = fileReference ./gh/config.yml;
+    };
+  };
+
+  nix = {
+    enable = true;
+    package = pkgs.nix;
+    settings = {
+      connect-timeout = 5;
+      download-attempts = 3;
+      fallback = true;
     };
   };
 

@@ -107,5 +107,112 @@ function timezsh() {
   for i in $(seq 1 10); do , time $shell -i -c exit; done
 }
 
+# switches local git authorship and gpg signing for the current repo
+# profiles come from GAUTH_<KEY>_{NAME,EMAIL,GH_USER,SSH_KEY,SIGN,ALIASES} env vars
+# `gauth` prints current author, `gauth <profile>` switches
+gauth() {
+  if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
+    echo "gauth: not a git repository" >&2
+    return 1
+  fi
+
+  # discover available profiles from GAUTH_*_EMAIL env vars
+  local -a profiles
+  local var
+  for var in ${(M)${(k)parameters}:#GAUTH_*_EMAIL}; do
+    profiles+=("${${var#GAUTH_}%_EMAIL}")
+  done
+
+  local key name email sign
+  case "$1" in
+    "") ;;
+    -h|--help)
+      echo "usage: gauth [${(j:|:)${(L)profiles}}]" >&2
+      return 0
+      ;;
+    *)
+      # match argument against profile names or aliases (case-insensitive)
+      local arg="${(U)1}" candidate alias_var
+      for candidate in $profiles; do
+        if [ "$candidate" = "$arg" ]; then
+          key="$candidate"; break
+        fi
+        alias_var="GAUTH_${candidate}_ALIASES"
+        if [[ " ${(L)${(P)alias_var}} " == *" ${(L)1} "* ]]; then
+          key="$candidate"; break
+        fi
+      done
+      if [ -z "$key" ]; then
+        echo "gauth: unknown profile '$1' (try: ${(j:, :)${(L)profiles}})" >&2
+        return 1
+      fi
+      ;;
+  esac
+  if [ -n "$key" ]; then
+    local var_name="GAUTH_${key}_NAME" var_email="GAUTH_${key}_EMAIL" var_gh="GAUTH_${key}_GH_USER" var_ssh="GAUTH_${key}_SSH_KEY" var_sign="GAUTH_${key}_SIGN"
+    name="${(P)var_name}"
+    email="${(P)var_email}"
+    local gh_user="${(P)var_gh}"
+    local ssh_key="${(P)var_ssh}"
+    sign="${(P)var_sign:-true}"
+    if [ -z "$name" ] || [ -z "$email" ]; then
+      echo "gauth: $var_name / $var_email not set (machine-based.zshenv)" >&2
+      return 1
+    fi
+    git config user.name "$name"
+    git config user.email "$email"
+    git config commit.gpgsign "$sign"
+    if [ -n "$ssh_key" ]; then
+      git config core.sshCommand "ssh -i ${ssh_key} -o IdentitiesOnly=yes -o ControlPath=$HOME/.ssh/agent/cm-%C-${ssh_key:t}"
+    else
+      git config --unset core.sshCommand 2>/dev/null
+    fi
+    if [ -n "$gh_user" ] && is_command_present gh; then
+      gh auth switch -u "$gh_user" 2>&1 | sed 's/^/gauth: gh: /' >&2
+    fi
+  fi
+  [ "$(git config commit.gpgsign)" = "true" ] && sign=" [signed]" || sign=" [unsigned]"
+  local gh_active=""
+  if is_command_present gh; then
+    gh_active="$(gh auth status --active 2>/dev/null | awk '/Logged in to .* account/ {print $7; exit}')"
+    [ -n "$gh_active" ] && gh_active=" gh:$gh_active"
+  fi
+  local ssh_info=""
+  local current_ssh="$(git config core.sshCommand)"
+  if [ -n "$current_ssh" ]; then
+    ssh_info=" ssh:$(echo "$current_ssh" | grep -oE '\-i [^ ]+' | awk '{print $2}')"
+  fi
+  printf "%s <%s>%s%s%s\n" \
+    "$(git config user.name)" \
+    "$(git config user.email)" \
+    "$sign" \
+    "$gh_active" \
+    "$ssh_info"
+}
+
+# wraps git so `git co <branch>` cd's into an existing worktree for that branch
+# (git aliases run in a subshell and cannot change the parent shell's cwd, so the
+# behavior lives here while `co` and `wt-path` stay declared in git/config)
+git() {
+  if [ "$1" = "co" ] && [ -n "$2" ] && [ "${2#-}" = "$2" ]; then
+    local wt
+    wt="$(command git wt-path "$2" 2>/dev/null)"
+    if [ -n "$wt" ] && [ -d "$wt" ]; then
+      cd -- "$wt"
+      return
+    fi
+    if [ -n "$wt" ]; then
+      # porcelain claims a worktree at $wt but the directory is gone (e.g. a
+      # locked --lock worktree under /tmp that got wiped - lock survives prune).
+      # release it so the branch becomes checkout-able in place
+      command git worktree unlock "$wt" 2>/dev/null
+      command git worktree remove --force "$wt" 2>/dev/null
+    fi
+    # plus drop any plain-prunable entries holding the branch
+    command git worktree prune 2>/dev/null
+  fi
+  command git "$@"
+}
+
 # }}}
 

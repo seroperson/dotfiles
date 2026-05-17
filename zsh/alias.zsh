@@ -38,7 +38,7 @@ alias cdu='cd-gitroot'
 # {{{ aliases just with additional parameters
 
 alias mkdir='mkdir -pv'
-alias grep='egrep -ai --color=auto'
+alias grep='grep -Eai --color=auto'
 alias dmesg='dmesg -L'
 alias ping='ping -c 4 -v'
 alias df='df -h'

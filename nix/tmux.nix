@@ -64,6 +64,8 @@ in
       set -g set-titles-string '#{b:pane_current_path}'
       # upgrading current terminal
       set -g terminal-overrides ",xterm-256color:Tc"
+      # allow escape sequence passthrough for terminal image protocols (Sixel, etc)
+      set -g allow-passthrough on
       # no spaces between windows in statusline
       set -g window-status-separator ""
       # status line update interval

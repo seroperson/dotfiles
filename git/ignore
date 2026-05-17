@@ -7,3 +7,13 @@
 uv.lock
 
 scripts/calculate_token_score.py
+scripts/crash_repros/
+
+.claude/
+.cursorrules
+.mcp.json
+.opencode.json
+.windsurfrules
+GEMINI.md
+
+graphify-out/

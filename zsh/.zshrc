@@ -59,6 +59,7 @@ source ${ZIM_HOME}/init.zsh
 include_source "opt.zsh" "opt.$OS.zsh"
 include_source "zstyle.zsh" "zstyle.$OS.zsh"
 include_source "bindkey.zsh" "bindkey.$OS.zsh"
+include_source "prompt.zsh"
 
 include_source "machine-based.zsh"
 include_source "alias.zsh" "alias.$OS.zsh"
@@ -67,6 +68,11 @@ include_source "alias.zsh" "alias.$OS.zsh"
 
 is_tmux_enabled && source "$ZDOTDIR/soft/tmux.zsh"
 is_command_present jj && zsh-defer -p source "$ZDOTDIR/soft/jj.zsh"
+is_command_present alw && zsh-defer -p source "$ZDOTDIR/soft/alw.zsh"
+is_command_present gitt && zsh-defer -p source "$ZDOTDIR/soft/gitt.zsh"
+is_command_present just && zsh-defer -p source "$ZDOTDIR/soft/just.zsh"
+is_command_present kubectl && zsh-defer -p source "$ZDOTDIR/soft/kubectl.zsh"
+is_command_present gh && zsh-defer -p source "$ZDOTDIR/soft/gh.zsh"
 
 # Load autosuggestions config
 source "$ZDOTDIR/soft/autosuggestions.zsh"
@@ -93,15 +99,17 @@ zshaddhistory() {
 
 # {{{ Other
 
+source "$ZDOTDIR/python.zsh"
+
 rationalize_path path
 
 # -p disables 'zle reset-prompt' call
 zsh-defer -p init_gpg_key >&/dev/null
 
 # Setup fnm
-eval "$(fnm env --use-on-cd --shell zsh)"
+zsh-defer -c 'eval "$(fnm env --use-on-cd --shell zsh)"'
 
 # rbenv init
-eval "$(rbenv init - --no-rehash zsh)"
+zsh-defer -c 'eval "$(rbenv init - --no-rehash zsh)"'
 
 # }}}
