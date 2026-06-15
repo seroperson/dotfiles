@@ -37,15 +37,10 @@
               nixpkgs.overlays = [
                 nix-claude-code.overlays.default
                 (self: super: rec {
-                  # myJdk = nixpkgs-unstable.legacyPackages.${system}.jdk24;
                   myJdk = self.jdk21;
-                  # myJdk = self.jdk17;
                   jdk = myJdk;
                   jre = myJdk;
                   mill = super.mill.override {
-                    jre = myJdk;
-                  };
-                  gradle_9 = super.mill.override {
                     jre = myJdk;
                   };
                   tmux = nixpkgs-unstable.legacyPackages.${system}.tmux;

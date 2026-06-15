@@ -23,7 +23,7 @@ aliases:
             fork_ssh="$(gh api "repos/$fork_owner/$repo_name" --jq .ssh_url)" &&
             upstream_ssh="$(gh api "repos/$repo" --jq .ssh_url)" &&
             git remote set-url origin "$fork_ssh" &&
-            git remote remove upstream 2>/dev/null; git remote add upstream "$upstream_ssh" &&
+            (git remote add upstream "$upstream_ssh" 2>/dev/null || git remote set-url upstream "$upstream_ssh") &&
             git fetch --all &&
             default_branch="$(gh api "repos/$repo" --jq .default_branch)" &&
             git branch --set-upstream-to="upstream/$default_branch" "$default_branch"

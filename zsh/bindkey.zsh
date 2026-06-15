@@ -52,10 +52,8 @@ bindkey '^j' cd_up
 bindkey '^g' zaw-git-recent-branches
 
 bindkey '^r' zaw-history
-bindkey -M filterselect '^r' down-line-or-history
-bindkey -M filterselect '^j' down-line-or-history
-bindkey -M filterselect '^k' up-line-or-history
-bindkey -M filterselect '^t' accept-search
+# `filterselect` keymap is created by zaw.zsh, which is defer-sourced from .zshrc;
+# bindings into that keymap are also deferred from there
 
 # }}}
 

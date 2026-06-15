@@ -22,37 +22,22 @@ return {
       virtual_text = true,
       underline = true,
     },
-    -- passed to `vim.filetype.add`
-    filetypes = {
-      -- see `:h vim.filetype.add` for usage
-      extension = {
-        foo = "fooscript",
-      },
-      filename = {
-        [".foorc"] = "fooscript",
-      },
-      pattern = {
-        [".*/etc/foo/.*"] = "fooscript",
-      },
-    },
     -- vim options can be configured here
     options = {
       opt = { -- vim.opt.<key>
         relativenumber = true, -- sets vim.opt.relativenumber
         number = true, -- sets vim.opt.number
-        signcolumn = "auto", -- sets vim.opt.signcolumn
+        signcolumn = "yes", -- sets vim.opt.signcolumn
         spell = false, -- sets vim.opt.spell
         wrap = true, -- sets vim.opt.wrap
         showbreak = "↪ ",
         -- set Treesitter based folding
-        -- foldexpr = "nvim_treesitter#foldexpr()",
+        foldexpr = "v:lua.vim.treesitter.foldexpr()",
         foldmethod = "expr",
         -- linebreak soft wrap at words
         linebreak = true,
         -- show whitespace characters
         list = true,
-        -- don't redraw immediately (helps with macros)
-        lazyredraw = true,
         -- enable mouse, sometimes it's just more comfortable
         mouse = "a",
         -- some additional metals config

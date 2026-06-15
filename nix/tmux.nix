@@ -14,7 +14,7 @@ in
 {
   programs.tmux = {
     enable = true;
-    historyLimit = 4096;
+    historyLimit = 100000;
     keyMode = "vi";
     # address vim mode switching delay
     # https://superuser.com/a/252717/65504
@@ -68,18 +68,18 @@ in
       set -g allow-passthrough on
       # no spaces between windows in statusline
       set -g window-status-separator ""
-      # status line update interval
-      set -g status-interval 1
 
       # automatically set window name to current git directory
       set -g automatic-rename on
       set -g automatic-rename-format '#(basename "$(git -C #{pane_current_path} rev-parse --show-toplevel 2>/dev/null || echo "#{pane_current_path}")")'
 
-      set -g window-status-separator ""
       set -g status-left-length 0
       set -g status-left ""
       set -ga status-left "#{?client_prefix,#[fg=#{@thm_red} bold]PREFIX ,#{?#{==:#{pane_mode},copy-mode},#[fg=#{@thm_yellow} bold]COPY ,#[fg=#{@thm_green} bold]NORMAL }}"
       set -g status-right ""
+
+      set -s extended-keys on
+      set -as terminal-features 'xterm*:extkeys'
 
       set-option -g mouse on
 

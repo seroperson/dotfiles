@@ -1,9 +1,11 @@
 #!/bin/zsh
 
-# Change suggestion strategy: history first, then completion
-# 'completion' doesn't work right now
-# https://github.com/zsh-users/zsh-autosuggestions/issues/751
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# History-only strategy; the `completion` fallback triggers completion
+# machinery on every keystroke and is too expensive
+ZSH_AUTOSUGGEST_STRATEGY=(history)
+
+# Compute suggestions in a worker thread so typing latency stays flat
+ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # Set the suggestion highlight style (default is underline)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8a8a8a,bold"

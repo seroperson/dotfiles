@@ -6,9 +6,8 @@
 _PYTHON_VENV_HOME="$XDG_DATA_HOME/python-venv"
 _PYTHON_VENV_PACKAGES=(
   bittensor-cli
-  graphifyy
-  'graphifyy[kimi]'
 )
+_PYTHON_VENV_SENTINEL="$_PYTHON_VENV_HOME/.installed"
 
 # Create venv if it doesn't exist
 if [[ ! -d "$_PYTHON_VENV_HOME" ]]; then
@@ -19,24 +18,18 @@ fi
 # (zimfw/minimal theme renders VIRTUAL_ENV basename in PS1)
 path=("$_PYTHON_VENV_HOME/bin" $path)
 
-# Install missing packages in background (deferred to avoid blocking shell startup)
-zsh-defer -c '
-  _pv="'"$_PYTHON_VENV_HOME"'"
-  _pp=('"${(j: :)${(qq)_PYTHON_VENV_PACKAGES[@]}}"')
-  installed="$("$_pv/bin/pip" freeze 2>/dev/null)"
-  missing=()
-  for pkg in "${_pp[@]}"; do
-    if ! echo "$installed" | grep -qi "^${pkg}=="; then
-      missing+=("$pkg")
-    fi
-  done
-  if (( ${#missing} )); then
-    "$_pv/bin/pip" install -q "${missing[@]}" &>/dev/null &!
-  fi
-  unset _pv _pp installed missing pkg
-'
+_pyvenv_install() {
+  "$_PYTHON_VENV_HOME/bin/pip" install -q "${_PYTHON_VENV_PACKAGES[@]}" >/dev/null 2>&1 \
+    && print -r -- "${(F)_PYTHON_VENV_PACKAGES}" > "$_PYTHON_VENV_SENTINEL"
+}
+
+# Run pip only when the tracked package list has changed since last install
+if [[ ! -f "$_PYTHON_VENV_SENTINEL" ]] || [[ "$(<$_PYTHON_VENV_SENTINEL)" != "${(F)_PYTHON_VENV_PACKAGES}" ]]; then
+  zsh-defer -c '_pyvenv_install &!'
+fi
 
 # upgrades every tracked package to its latest version
 python-venv-update() {
-  "$_PYTHON_VENV_HOME/bin/pip" install -U "${_PYTHON_VENV_PACKAGES[@]}"
+  "$_PYTHON_VENV_HOME/bin/pip" install -U "${_PYTHON_VENV_PACKAGES[@]}" \
+    && print -r -- "${(F)_PYTHON_VENV_PACKAGES}" > "$_PYTHON_VENV_SENTINEL"
 }

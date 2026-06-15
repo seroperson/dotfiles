@@ -16,4 +16,5 @@ scripts/crash_repros/
 .windsurfrules
 GEMINI.md
 
-graphify-out/
+issue-drafts/
+feature-jrebel-mvp.md

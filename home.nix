@@ -79,7 +79,6 @@ in
     pkgs.gcc
     pkgs.gnutar
     pkgs.gnumake
-    pkgs.iconv
     pkgs.tree-sitter
 
     # pekingese control
@@ -97,7 +96,7 @@ in
     pkgs.coursier
     metals
     pkgs.bloop
-    (pkgs.callPackage (import ./nix/sbt.nix) { })
+    sbt
     pkgs.scala-cli
     pkgs.scalafix
     pkgs.scalafmt
@@ -196,10 +195,19 @@ in
       download-attempts = 3;
       fallback = true;
     };
+    # machine-local file holding `access-tokens = github.com=...` so
+    # flake fetches authenticate (5000/hr vs 60/hr unauthenticated)
+    # populated by the `nix-refresh-token` zsh helper; the activation
+    # script below ensures it always exists so `!include` never errors
+    extraOptions = ''
+      !include ${pkgs.lib.removeSuffix "/" homeDirectory}/.config/nix/extra.conf
+    '';
   };
 
-  # https://github.com/nix-community/home-manager/issues/2995
-  programs.man.enable = false;
+  home.activation.ensureNixExtraConf = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    run mkdir -p ${pkgs.lib.removeSuffix "/" homeDirectory}/.config/nix
+    run touch ${pkgs.lib.removeSuffix "/" homeDirectory}/.config/nix/extra.conf
+  '';
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

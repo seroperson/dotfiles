@@ -14,11 +14,6 @@ is_command_present() {
 is_arg_present() {
   [ "x$1" != "x" ]
 }
-# `get_or_else $A $B`
-get_or_else() {
-  is_arg_present "$1" && echo "$1" || echo "$2"
-}
-
 # }}}
 
 # {{{ 'is_*_(available|enabled)' functions
@@ -26,17 +21,11 @@ get_or_else() {
 is_tmux_enabled() {
   is_command_present tmux
 }
-is_fasd_enabled() {
-  is_command_present fasd
-}
 
 # }}}
 
 # {{{ 'is_in_*' functions
 
-is_in_x() {
-  is_arg_present "$DISPLAY"
-}
 is_in_tmux() {
   is_arg_present "$TMUX"
 }
@@ -81,9 +70,29 @@ rationalize_path () {
     '
 }
 
-# quick search.
-search() {
+# quick search by filename substring
+ffind() {
   find . -iname "*$1*"
+}
+
+# writes the active gh token into ~/.config/nix/extra.conf so flake
+# fetches use the authenticated GitHub rate limit (5000/hr vs 60/hr)
+# re-run after `gh auth switch` or when the token rotates
+nix-refresh-token() {
+  if ! is_command_present gh; then
+    echo "nix-refresh-token: gh not installed" >&2
+    return 1
+  fi
+  local token
+  token="$(gh auth token 2>/dev/null)"
+  if [ -z "$token" ]; then
+    echo "nix-refresh-token: not authenticated (run \`gh auth login\`)" >&2
+    return 1
+  fi
+  mkdir -p "$HOME/.config/nix"
+  print -r -- "access-tokens = github.com=$token" > "$HOME/.config/nix/extra.conf"
+  chmod 600 "$HOME/.config/nix/extra.conf"
+  echo "nix-refresh-token: wrote $HOME/.config/nix/extra.conf"
 }
 
 # kills anyone who is using the given port
@@ -98,7 +107,7 @@ free_port() {
 
 # reloads sber GigaChat token using SBER_API_KEY variable
 reload_gigachat_api_token() {
-  export OPENAI_API_KEY=`curl -L -X POST --silent 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/json' -H 'RqUID: b1ddb72c-039f-4fae-ae32-ed3867b76b9d' -H "Authorization: Basic $SBER_API_KEY" --data-urlencode 'scope=GIGACHAT_API_PERS' --insecure | jq -r .access_token`
+  export OPENAI_API_KEY=`curl -L -X POST --silent 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/json' -H 'RqUID: b1ddb72c-039f-4fae-ae32-ed3867b76b9d' -H "Authorization: Basic $SBER_API_KEY" --data-urlencode 'scope=GIGACHAT_API_PERS' | jq -r .access_token`
 }
 
 # https://www.joshyin.cc/blog/speeding-up-zsh

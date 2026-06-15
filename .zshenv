@@ -38,15 +38,8 @@ sbt_opts=("-Xmx4096M"\
     "-XX:MaxPermSize=4G")
 
 typeset -TU _JAVA_OPTIONS java_opts " "
-java_opts=("-XX:+OptimizeStringConcat" \
-    "-XX:+CMSClassUnloadingEnabled" \
-    "-XX:+UseConcMarkSweepGC" \
-    "-XX:+AggressiveOpts" \
-    "-XX:+UseBiasedLocking" \
-    "-XX:+DisableExplicitGC " \
+java_opts=("-XX:+DisableExplicitGC" \
     "-XX:+HeapDumpOnOutOfMemoryError" \
-    "-XX:MaxJavaStackTraceDepth=-1" \
-    "-Xquickstart" \
     # don't keep my intellij file history
     "-DlocalHistory.daysToKeep=0" \
     "-Dawt.useSystemAAFontSettings=lcd" \
@@ -74,8 +67,6 @@ export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 # don't create .lesshst
 export LESSHISTFILE=-
 
-# awesomewm filled window fix
-export _JAVA_AWT_WM_NONREPARENTING=1
 # JDK17 sbt warning fix
 export JDK_JAVA_OPTIONS="--add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
 

@@ -22,13 +22,13 @@ Configuration which I use for my daily development purposes.
 ## ✨ Features
 
 - Installation and building is fully managed by `nix`.
-- Powered by [jandamm/zgenom][19] plugin manager (see `zsh/.zshrc` for all used plugins) lightweight `zsh` shell.
-- [subnixr/minimal][16] theme.
+- Powered by [zimfw/zimfw][19] plugin manager (see `zsh/.zimrc` for all used plugins) lightweight `zsh` shell.
+- [zimfw/minimal][16] theme.
 - [rupa/z][18] to jump around most used directories (mapped to `j` command).
 - Automatically starts `tmux` using predefined `tmuxinator` config.
 - Automatically inits `gpg` and `ssh-agent` sessions.
 - Store sensitive settings under untracked `zsh/machine-based.zsh` file.
-- Comes with many development utils, like [exa][2], [rg][4], [jq][3], [yq][11], [ouch][12] (see `home.nix` for complete list).
+- Comes with many development utils, like [eza][2], [rg][4], [jq][3], [yq][11], [ouch][12] (see `home.nix` for complete list).
 - [nix-community/comma][17] to run software without installation (like `, tree` to download and run `tree`).
 - Customized [AstroNvim][1] community distribution.
 
@@ -145,7 +145,7 @@ Here are some of them:
 - [Shebang Scripts in Nix Derivations][6]
 
 [1]: https://astronvim.com/
-[2]: https://github.com/ogham/exa
+[2]: https://github.com/eza-community/eza
 [3]: https://github.com/jqlang/jq
 [4]: https://github.com/BurntSushi/ripgrep
 [5]: https://nixos-and-flakes.thiscute.world/nixos-with-flakes/introduction-to-flakes
@@ -159,8 +159,8 @@ Here are some of them:
 [13]: https://github.com/marlonrichert/zsh-autocomplete
 [14]: https://github.com/ryanoasis/nerd-fonts
 [15]: https://github.com/catppuccin
-[16]: https://github.com/subnixr/minimal
+[16]: https://github.com/zimfw/minimal
 [17]: https://github.com/nix-community/comma
 [18]: https://github.com/rupa/z
-[19]: https://github.com/jandamm/zgenom
+[19]: https://github.com/zimfw/zimfw
 [20]: https://seroperson.me/2024/01/16/managing-dotfiles-with-nix/

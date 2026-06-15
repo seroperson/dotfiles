@@ -16,9 +16,9 @@ alias lk='ls -S'
 # sorts by extension
 alias lx='ls -X'
 
-if is_command_present exa; then
-    # the.exa.website/docs
-    alias ls='exa -lh --all --group-directories-first --sort=mod --time-style=long-iso --icons'
+if is_command_present eza; then
+    # eza.rocks
+    alias ls='eza -lh --all --group-directories-first --sort=mod --time-style=long-iso --icons'
 else
     alias ls='ls -Failh'
 fi

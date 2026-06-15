@@ -27,14 +27,6 @@ _Z_CMD=j
 
 # }}}
 
-# {{{ per-directory-history plugin configuration
-
-# Set history toggle to ^H
-export PER_DIRECTORY_HISTORY_TOGGLE="^H"
-export HISTORY_START_WITH_GLOBAL=true
-
-# }}}
-
 # {{{ zimfw configuration
 
 ZIM_HOME=$XDG_DATA_HOME/zim
@@ -51,6 +43,20 @@ if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR}/.zimrc ]]; then
 fi
 
 source ${ZIM_HOME}/init.zsh
+
+# Defer-source plugins we don't need on the first prompt (saves ~13ms sync)
+# zaw widgets are bound in bindkey.zsh and only
+# resolve at key-press time, so the binding survives the deferred load.
+# fpath + autoload still need to happen synchronously so zaw's autoloaded
+# functions resolve when its source eventually runs
+fpath=("${ZIM_HOME}/modules/zaw/functions" $fpath)
+autoload -Uz filter-select fill-vars-or-accept
+zsh-defer source "${ZIM_HOME}/modules/zaw/zaw.zsh"
+# Bindings into zaw's filterselect keymap have to happen after the source above
+zsh-defer bindkey -M filterselect '^r' down-line-or-history
+zsh-defer bindkey -M filterselect '^j' down-line-or-history
+zsh-defer bindkey -M filterselect '^k' up-line-or-history
+zsh-defer bindkey -M filterselect '^t' accept-search
 
 # }}}
 
@@ -105,6 +111,10 @@ rationalize_path path
 
 # -p disables 'zle reset-prompt' call
 zsh-defer -p init_gpg_key >&/dev/null
+
+# WSL proxy auto-enable - body is cache-only now, the slow host detection
+# runs in a detached background job (see __wsl_host_fast in proxy.zsh)
+zsh-defer _proxy_auto_enable
 
 # Setup fnm
 zsh-defer -c 'eval "$(fnm env --use-on-cd --shell zsh)"'

@@ -5,6 +5,12 @@
 # The max number of lines shown
 zstyle ':autocomplete:*:*' list-lines 10
 
+# Skip compaudit (-C) - we trust nix-managed completion paths; saves ~11ms at startup
+zstyle ':autocomplete::compinit' arguments -C
+
+# Disable the recent-dirs feature (saves ~5ms at first prompt)
+zstyle ':autocomplete:*' recent-dirs no
+
 # }}}
 
 
