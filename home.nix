@@ -4,6 +4,8 @@
 , homeDirectory
 , username
 , dotfilesDirectory
+, onLinux
+, onDarwin
 , ...
 }:
 let
@@ -29,11 +31,10 @@ in
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs.unstable; [
+  home.packages = (with pkgs.unstable; [
     # Shell and tools
     git
     zsh
-    busybox
     tmux
     tmuxinator
     ripgrep # Searching file content
@@ -43,11 +44,8 @@ in
     bat # Enhanced cat
     eza # Enhanced ls
     ouch # Universal archiver
-    wsl-open
     comma # Runs programs without installing them
-    nix-index
     delta # Enhanced git-diff
-    concurrently
     jujutsu # Git-compatible DVCS that is both simple and powerful
     dua # Disk usage
     htop # Enhanced top
@@ -56,9 +54,8 @@ in
     moor # Rust pager
     nix-search-cli # Use search.nixos.org directly from CLI
     grpcurl # curl for grpc
-    pkgs.claude-code # it actually happened.
+    pkgs.claude-code
     gh # GitHub client
-    nushell # Advanced shell
     gdu # Disk Usage
     radare2
     rtk # Improved CLI tools for LLMs
@@ -136,9 +133,15 @@ in
     pkgs.alejandra
     pkgs.deadnix
     pkgs.statix
-  ];
+  ]) ++ onLinux (with pkgs.unstable; [
+    # busybox has no darwin platform support; wsl-open is WSL-only
+    busybox
+    wsl-open
+  ]);
 
-  home.sessionVariables = with pkgs; {
+  # LD_LIBRARY_PATH is a no-op on macOS (the dyld loader ignores it), so these
+  # native-linking hints only make sense on Linux
+  home.sessionVariables = pkgs.lib.optionalAttrs pkgs.stdenv.isLinux (with pkgs; {
     LD_LIBRARY_PATH = lib.concatStringsSep ":" [
       (lib.makeLibraryPath [
         libclang
@@ -150,7 +153,7 @@ in
     ];
     CPATH = lib.makeSearchPath "include" [ libyaml.dev ];
     LIBRARY_PATH = lib.makeLibraryPath [ libyaml.out ];
-  };
+  });
 
   home.file.".zshenv" = {
     source = fileReference ./.zshenv;

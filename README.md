@@ -93,7 +93,27 @@ export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 nix run github:nix-community/home-manager -- init --switch $HOME/.dotfiles/ --flake $HOME/.dotfiles/
 ```
 
-Next, you should do `chsh $USER -s $HOME/.nix-profile/bin/zsh` and re-login.
+> **macOS (Apple Silicon):** the commands above resolve to the Linux
+> configuration. On macOS, target the darwin home configuration explicitly:
+>
+> ```sh
+> home-manager switch --flake $HOME/.dotfiles#seroperson@darwin
+> ```
+>
+> or, if `home-manager` is unavailable:
+>
+> ```sh
+> export NIX_CONFIG="extra-experimental-features = nix-command flakes"
+> nix run github:nix-community/home-manager -- switch --flake $HOME/.dotfiles#seroperson@darwin
+> ```
+
+Next, you should do `chsh $USER -s $HOME/.nix-profile/bin/zsh` and re-login. On
+macOS the shell must be listed in `/etc/shells` before `chsh` will accept it:
+
+```sh
+echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
+chsh -s "$HOME/.nix-profile/bin/zsh"
+```
 
 Finally, be sure to install [Nerd Font][14] and [Catpuccin theme][15] (`mocha` variant) for your terminal.
 

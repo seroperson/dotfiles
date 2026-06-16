@@ -24,12 +24,23 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nix-claude-code, ... }:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      # linux is the system used for the preview-only outputs (devShell + docker)
+      linuxSystem = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${linuxSystem};
 
-      myHomeManagerConfiguration = { useSymlinks, homeDirectory, username, dotfilesDirectory }@extraSpecialArgs:
+      myHomeManagerConfiguration = { system, useSymlinks, homeDirectory, username, dotfilesDirectory }:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
         home-manager.lib.homeManagerConfiguration {
-          inherit pkgs extraSpecialArgs;
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit useSymlinks homeDirectory username dotfilesDirectory;
+            # platform package filters, used inline in home.nix as
+            # `onLinux [ ... ]` / `onDarwin [ ... ]` (each yields [] off-platform)
+            onLinux = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux;
+            onDarwin = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin;
+          };
 
           modules = [
             ./home.nix
@@ -55,12 +66,13 @@
         };
     in
     {
-      devShells.${system}.default = pkgs.mkShell rec {
+      devShells.${linuxSystem}.default = pkgs.mkShell rec {
         homeDirectory = builtins.getEnv "HOME";
         username = builtins.getEnv "USER";
 
         activationPackage = (myHomeManagerConfiguration {
           inherit homeDirectory username;
+          system = linuxSystem;
           useSymlinks = false;
           dotfilesDirectory = "";
         }).activationPackage;
@@ -81,7 +93,7 @@
         '';
       };
 
-      packages.${system}.docker = (import ./nix/docker.nix {
+      packages.${linuxSystem}.docker = (import ./nix/docker.nix {
         pkgs = pkgs;
         name = "seroperson.me/dotfiles";
         tag = "latest";
@@ -93,6 +105,7 @@
 
         extraContents = [
           (myHomeManagerConfiguration {
+            system = linuxSystem;
             useSymlinks = false;
             homeDirectory = "/root";
             username = "root";
@@ -118,10 +131,18 @@
 
       homeConfigurations = {
         "seroperson" = myHomeManagerConfiguration {
+          system = linuxSystem;
           useSymlinks = true;
           homeDirectory = "/home/seroperson/";
           username = "seroperson";
           dotfilesDirectory = "/home/seroperson/.dotfiles";
+        };
+        "seroperson@darwin" = myHomeManagerConfiguration {
+          system = "aarch64-darwin";
+          useSymlinks = true;
+          homeDirectory = "/Users/seroperson";
+          username = "seroperson";
+          dotfilesDirectory = "/Users/seroperson/.dotfiles";
         };
       };
     };
