@@ -38,6 +38,7 @@ in
     tmux
     tmuxinator
     ripgrep # Searching file content
+    nix-index
     jq # Json manipulation
     yq # Yaml manipulation
     fd # Enhanced find
@@ -60,12 +61,6 @@ in
     radare2
     rtk # Improved CLI tools for LLMs
 
-    # deno + build dependencies
-    deno
-    cmakeMinimal
-    libclang
-    glib
-
     # using unwrapped nvim allows you to easily use it outside of NixOS
     neovim-unwrapped
 
@@ -85,7 +80,6 @@ in
     fluxcd
     sops
     postgresql_16
-    awscli2
     # yandex-cloud
 
     # Java / Scala
@@ -137,6 +131,7 @@ in
     # busybox has no darwin platform support; wsl-open is WSL-only
     busybox
     wsl-open
+    awscli2
   ]);
 
   # LD_LIBRARY_PATH is a no-op on macOS (the dyld loader ignores it), so these

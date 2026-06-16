@@ -140,9 +140,9 @@
         "seroperson@darwin" = myHomeManagerConfiguration {
           system = "aarch64-darwin";
           useSymlinks = true;
-          homeDirectory = "/Users/seroperson";
-          username = "seroperson";
-          dotfilesDirectory = "/Users/seroperson/.dotfiles";
+          homeDirectory = "/Users/daniil.sivak";
+          username = "daniil.sivak";
+          dotfilesDirectory = "/Users/daniil.sivak/.dotfiles";
         };
       };
     };
