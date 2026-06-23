@@ -12,6 +12,16 @@ case `uname` in
   *) OS='unk' ;;
 esac
 
+# Raise the soft file-descriptor limit. macOS GUI shells inherit launchd's
+# default of 256, which zsh-autocomplete + zsh-autosuggestions exhaust almost
+# instantly (zpty/sysopen/zselect per keystroke) -> "too many open files" and
+# `sysopen ... /dev/fd/-1`. Bump well under the per-process kernel cap
+# (kern.maxfilesperproc). Only ever raise; no-op where the limit is already high
+# (e.g. Linux). The hard limit is unlimited here, so this needs no privilege.
+if [ "$(ulimit -Sn)" -lt 10240 ]; then
+  ulimit -Sn 10240 2>/dev/null
+fi
+
 include_source() {
   [ -f "$ZDOTDIR/$1" ] && source "$ZDOTDIR/$1"
   [ "x$2" != "x" ] && include_source $2
@@ -109,11 +119,12 @@ source "$ZDOTDIR/python.zsh"
 
 rationalize_path path
 
-# -p disables 'zle reset-prompt' call
-zsh-defer -p init_gpg_key >&/dev/null
+# gpg auto-starts its agent on demand; we only need GPG_TTY so pinentry can
+# prompt on the right terminal.
+export GPG_TTY=$TTY
 
-# WSL proxy auto-enable - body is cache-only now, the slow host detection
-# runs in a detached background job (see __wsl_host_fast in proxy.zsh)
+# Proxy auto-enable - cache-only body; slow WSL host detection runs in the
+# background so it never blocks ZLE (see proxy.zsh).
 zsh-defer _proxy_auto_enable
 
 # Setup fnm

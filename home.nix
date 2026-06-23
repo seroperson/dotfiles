@@ -11,6 +11,13 @@
 let
   inherit (import ./nix/utils.nix { inherit config useSymlinks dotfilesDirectory; sourceDirectory = ./.; })
     fileReference;
+
+  # gpg-agent has no reliable PATH when launched on demand, so point it at the
+  # pinentry store path directly (GUI prompt on darwin, terminal one on Linux)
+  pinentryProgram =
+    if pkgs.stdenv.isDarwin
+    then "${pkgs.unstable.pinentry_mac}/bin/pinentry-mac"
+    else "${pkgs.unstable.pinentry-all}/bin/pinentry";
 in
 {
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -56,7 +63,10 @@ in
     nix-search-cli # Use search.nixos.org directly from CLI
     grpcurl # curl for grpc
     pkgs.claude-code
+    opencode # AI coding agent for the terminal
     gh # GitHub client
+    gnupg # GPG (pinentry installed per-platform below)
+    gitlab-runner # GitLab CI runner (registered locally, runs via launchd)
     gdu # Disk Usage
     radare2
     rtk # Improved CLI tools for LLMs
@@ -76,7 +86,6 @@ in
     # pekingese control
     kubectl
     kubevpn
-    kubernetes-helm
     fluxcd
     sops
     postgresql_16
@@ -132,6 +141,11 @@ in
     busybox
     wsl-open
     awscli2
+    # Linux-only: helm 4.2.0's darwin build is broken and uncached
+    kubernetes-helm
+    pinentry-all
+  ]) ++ onDarwin (with pkgs.unstable; [
+    pinentry_mac
   ]);
 
   # LD_LIBRARY_PATH is a no-op on macOS (the dyld loader ignores it), so these
@@ -156,6 +170,18 @@ in
 
   xdg.mime.enable = false;
   xdg.configFile = {
+    # GNUPGHOME is set to ~/.config/gnupg in .zshenv, so gpg reads its config
+    # (and keeps keys/sockets) here instead of ~/.gnupg. Generated rather than
+    # symlinked from a file so the pinentry store path can be interpolated.
+    "gnupg/gpg-agent.conf".text = ''
+      # Remember an entered passphrase for 7 days (604800s). default = idle TTL,
+      # max = hard cap; the *-ssh pair covers the agent's ssh-key cache.
+      default-cache-ttl 604800
+      max-cache-ttl 604800
+      default-cache-ttl-ssh 604800
+      max-cache-ttl-ssh 604800
+      pinentry-program ${pinentryProgram}
+    '';
     "git" = {
       source = fileReference ./git;
       recursive = true;
@@ -206,6 +232,39 @@ in
     run mkdir -p ${pkgs.lib.removeSuffix "/" homeDirectory}/.config/nix
     run touch ${pkgs.lib.removeSuffix "/" homeDirectory}/.config/nix/extra.conf
   '';
+
+  # GitLab CI runner as a darwin launchd agent. Registered out-of-band via
+  # `gitlab-runner register` (writes the auth token to config.toml, untracked);
+  # this just keeps it running.
+  launchd.agents = pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin (
+    let
+      home = pkgs.lib.removeSuffix "/" homeDirectory;
+    in
+    {
+      gitlab-runner = {
+        enable = true;
+        config = {
+          ProgramArguments = [
+            "${pkgs.unstable.gitlab-runner}/bin/gitlab-runner"
+            "run"
+            "--working-directory"
+            "${home}/.gitlab-runner"
+            "--config"
+            "${home}/.gitlab-runner/config.toml"
+          ];
+          RunAtLoad = true;
+          KeepAlive = true;
+          EnvironmentVariables = {
+            # Docker Desktop's socket, not the default /var/run/docker.sock
+            DOCKER_HOST = "unix://${home}/.docker/run/docker.sock";
+            PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin";
+          };
+          StandardOutPath = "${home}/.gitlab-runner/runner.log";
+          StandardErrorPath = "${home}/.gitlab-runner/runner.log";
+        };
+      };
+    }
+  );
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

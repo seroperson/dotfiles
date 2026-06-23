@@ -32,24 +32,6 @@ is_in_tmux() {
 
 # }}}
 
-# {{{ init_* functions
-
-init_gpg_key() {
-    if ! is_arg_present "$IS_PREVIEW"; then
-      # kill -0 checks to see if the pid exists
-      if test -f /tmp/gpg-agent-info && kill -0 $(cut -d: -f 2 /tmp/gpg-agent-info) 2>/dev/null; then
-          GPG_AGENT_INFO=$(cat /tmp/gpg-agent-info | cut -c 16-)
-      else
-          # No, gpg-agent not available; start gpg-agent
-          eval `gpg-agent --daemon --no-grab --write-env-file /tmp/gpg-agent-info`
-      fi
-      export GPG_TTY=$(tty)
-      export GPG_AGENT_INFO
-    fi
-}
-
-# }}}
-
 # {{{ other
 
 # removes nonexistent directories from an array

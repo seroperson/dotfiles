@@ -12,7 +12,8 @@
     bc = branch
     bd = branch -d
     phf = push --force
-    ph = push
+    # push; on rejection, rebase onto upstream and retry
+    ph = "!f() { git push \"$@\" || { git pull --rebase --autostash && git push \"$@\"; }; }; f"
     uc = reset --soft HEAD^
     clear = clean -fd
     cm = commit

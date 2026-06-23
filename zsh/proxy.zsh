@@ -1,5 +1,22 @@
 #!/bin/zsh
 
+# SOCKS/HTTP inbound port of the local proxy (v2ray/xray, etc.)
+__PROXY_PORT=10808
+
+# True only under WSL (elsewhere the proxy is on localhost).
+__proxy_is_wsl() {
+  [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]
+}
+
+# Default proxy host: the Windows gateway under WSL, otherwise localhost.
+__proxy_default_host() {
+  if __proxy_is_wsl; then
+    __detect_wsl_host
+  else
+    echo "127.0.0.1"
+  fi
+}
+
 __detect_wsl_host() {
   # Newer WSL2 versions set this automatically
   if [[ -n "$WSL_HOST_IP" ]]; then
@@ -57,17 +74,25 @@ __wsl_host_fast() {
   fi
 }
 
-# Quick TCP probe with hard timeout so we don't export a dead proxy URL
-# Uses timeout(1) + bash /dev/tcp because zsh's ztcp has no native connect timeout
+# Quick TCP probe with a hard timeout so we never export a dead proxy URL.
+# timeout(1)+bash /dev/tcp on Linux/WSL, else nc (ships with macOS); fails
+# closed when neither is available.
 __proxy_reachable() {
-  command -v timeout >/dev/null 2>&1 || return 0
-  command -v bash >/dev/null 2>&1 || return 0
-  timeout 1 bash -c ">/dev/tcp/$1/$2" 2>/dev/null
+  local host="$1" port="$2"
+  if command -v timeout >/dev/null 2>&1 && command -v bash >/dev/null 2>&1; then
+    timeout 1 bash -c ">/dev/tcp/$host/$port" 2>/dev/null
+    return
+  fi
+  if command -v nc >/dev/null 2>&1; then
+    nc -z -w1 "$host" "$port" >/dev/null 2>&1
+    return
+  fi
+  return 1
 }
 
 proxy_on() {
-  local proxy_host="${1:-$(__detect_wsl_host)}"
-  local proxy_port="${2:-10808}"
+  local proxy_host="${1:-$(__proxy_default_host)}"
+  local proxy_port="${2:-$__PROXY_PORT}"
   if [[ -z "$proxy_host" ]]; then
     echo "proxy_on: could not detect host IP" >&2
     return 1
@@ -83,13 +108,15 @@ proxy_off() {
   unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
 }
 
-# Auto-enable proxy in WSL only when the proxy port answers
-# Uses __wsl_host_fast (cache-only, background refresh) instead of the blocking
-# powershell.exe probe - zsh-defer runs tasks synchronously and cannot interrupt
-# one mid-flight, so a slow body here freezes ZLE for its full duration
+# Auto-enable the proxy when its port answers. Under WSL the host comes from
+# __wsl_host_fast (cache-only; the blocking powershell probe would freeze ZLE,
+# since zsh-defer can't interrupt a running task); elsewhere it's localhost.
 _proxy_auto_enable() {
-  [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]] || return
   local h
-  h="$(__wsl_host_fast)"
-  [[ -n "$h" ]] && __proxy_reachable "$h" 10808 && proxy_on "$h" 10808
+  if __proxy_is_wsl; then
+    h="$(__wsl_host_fast)"
+  else
+    h="127.0.0.1"
+  fi
+  [[ -n "$h" ]] && __proxy_reachable "$h" "$__PROXY_PORT" && proxy_on "$h" "$__PROXY_PORT"
 }

@@ -14,6 +14,9 @@ in
 {
   programs.tmux = {
     enable = true;
+    # default ("screen") has incomplete terminfo; breaks alt-screen TUI
+    # rendering/scrollback (e.g. Claude Code) under tmux
+    terminal = "tmux-256color";
     historyLimit = 100000;
     keyMode = "vi";
     # address vim mode switching delay

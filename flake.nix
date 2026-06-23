@@ -141,7 +141,9 @@
           system = "aarch64-darwin";
           useSymlinks = true;
           homeDirectory = "/Users/daniil.sivak";
-          username = "daniil.sivak";
+          # login name is daniil.sivak.2 though $HOME is /Users/daniil.sivak;
+          # home-manager asserts $USER == username
+          username = "daniil.sivak.2";
           dotfilesDirectory = "/Users/daniil.sivak/.dotfiles";
         };
       };

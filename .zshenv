@@ -10,6 +10,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 # managing zsh dot directory
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
+# keep gnupg (config, keys, sockets) under XDG instead of ~/.gnupg
+export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
+
 export PATH=$PATH:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.nix-profile/bin:/opt/cuda/bin:$HOME/.cargo/bin
 
 # }}}
